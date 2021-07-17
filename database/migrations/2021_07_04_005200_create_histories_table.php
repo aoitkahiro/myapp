@@ -19,7 +19,8 @@ class CreateHistoriesTable extends Migration
             $table->string('users_name');
             $table->string('front'); // 科目/ユーザーごとの表面（問題文）を保存するカラム
             $table->string('back');  // 科目/ユーザーごとの裏面（答え）を保存するカラム
-            $table->integer('memorized'); // 科目/ユーザーごと「未暗記(0)」「暗記済み(1)」「完璧(2)」を保存するカラム
+            $table->integer('hide_learned'); // 科目/ユーザーごと「覚えたけど出す(0)」「覚えたから消す(1)を保存するカラム
+            $table->integer('hide_known'); // 科目/ユーザーごと「最初から知ってるけど出す(0)」「最初から知ってるので消す(1)」を保存するカラム
             $table->timestamps();
         });
     }

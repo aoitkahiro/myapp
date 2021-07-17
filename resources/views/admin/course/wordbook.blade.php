@@ -11,10 +11,10 @@
           <br><br>
             <div class="row justify-content-around">
               <div class="col-4">
-                <a href="">暗記済みにする☑</a>
+                <a href=""></a>
               </div>
               <div class="col-4">
-                <a href="">覚えにくい単語にする☑</a>
+                <a href="">最初から知ってる</a>
               </div>
               <div class="col-4">
                 <a href="">編集</a>
@@ -25,22 +25,47 @@
             <div class="row">
               <div class="col-6 offset-3">
                  <button type="button" class="btn btn-warning"><font size="4">@front_text</font></button>
+                 <br>
+                 <br>
+                 <h1>{{ $post->front }}</h1>
+                  {{-- JavaScript --}} 
+                                <p id="p1">{{ $post->back }}</p>
+                  <input type="button" value={{$post->front}} onclick="clickBtn1()" />
+                  <script>
+                  //初期表示は非表示
+                  document.getElementById("p1").style.display ="none";
+                  
+                  function clickBtn1(){
+                  	const p1 = document.getElementById("p1");
+                  
+                  	if(p1.style.display=="block"){
+                  		// noneで非表示
+                  		p1.style.display ="none";
+                  	}else{
+                  		// blockで表示
+                  		p1.style.display ="block";
+                  	}
+                  }
+                  </script>
                  <br><br>
                  <button type="button" class="btn btn-warning"><font size="3">@image をヒントとして表示するボタン</font></button>
               </div>
             </div>
           <br><br>
             <div class="row justify-content-center">
-                <div class="col col-lg-1">
-                  <button type="button" class="btn btn-warning"><font size="1">◀</font></button>
+                <div class="col col-lg-2">
+                  <button type="button" class="btn btn-warning"><font size="1">◀</font></button><br>
+                  <a href="{{ action('Admin\CourseController@wordbook', ['abc' =>$post->id -1]) }}">前へ</a>
                 </div>
                 <div class="col-auto">
-                  ＠今のページ / ＠今の科目の全ページ
+                  {{--＠今何ページ目か表示--}}{{$page_num}} / {{--＠全何ページか表示--}}{{$all_courses_count}}
                 </div>
-                <div class="col col-lg-1">
-                  <button type="button" class="btn btn-warning"><font size="1">▶</font></button>
+                <div class="col col-lg-2">
+                  <button type="button" class="btn btn-warning"><font size="1">▶</font></button><br>
+                  <a href="{{ action('Admin\CourseController@wordbook', ['abc' =>$post->id + 1]) }}">次へ</a><br>
+                  <a href="{{ action('Admin\CourseController@wordbook', ['abc' =>$post->id + 2]) }}">２個次へ</a>
                 </div>
             </div>
         </div>
-
+ {{$hoge}}
 @endsection

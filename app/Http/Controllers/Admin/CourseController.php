@@ -30,10 +30,23 @@ class CourseController extends Controller
       return view('admin.course.select'); // 
   }
        // 7.10 単語帳画面を作るために追加
-  public function wordbook()  // 
-  {     
-      return view('admin.course.wordbook'); // 
+  public function wordbook(Request $request)  // 
+  {
+        $courses = Course::all(); // 全部取り出したものを$coursesへ代入
+        $count = 0; // 最終的にページ数になる変数
+       foreach($courses as $tmp){ // ＄tmpに1件ずつ$coursesで取り出したものを入れていきます
+          $count += 1; // ループが回るたびに$countが1増えていく
+          if($tmp->id == $request->abc){ // id abc (ex.372)比較して同じであれば表示する
+            $course = $tmp; // $courseは、Viewファイルでpostへ渡す変数。これに結果を渡す
+            break; // ここを通ると強制的にループが終わる。あまりいい実装ではない（特殊なケースが増える）
+          }
+        }
+        if(empty($course)){ // URLから直接アクセスがあり 'abc' =>$post->id + 1 がなかったときのif文。$courseが空の時、trueを返します。
+          $course = $courses[0];
+        }
+      return view('admin.course.wordbook', ['post' => $course, "all_courses_count" => $courses->count(),'page_num' => $count, 'hoge' =>'hello']); //
   }
+  
   
   // 7.3 csv作成画面を作るために追加(その１)
   public function csv()  // 
@@ -98,51 +111,9 @@ class CourseController extends Controller
     return redirect('admin.course.csv')->with('flashmessage','CSVの送信エラーが発生しましたので、送信を中止しました。');
   }
   
-  
-  
-   // 7.10 csvインポートメソッドを作るために追加(その２)
-  /*public function inportCsv(Request $request)
-{
-    // CSV ファイル保存
-    $tmpName = mt_rand().".".$request->file('csv')->guessExtension(); //TMPファイル名
-    $request->file('csv')->move(public_path()."/csv/tmp",$tmpName);
-    $tmpPath = public_path()."/csv/tmp/".$tmpName;
- 
-    //Goodby CSVのconfig設定
-    $config = new LexerConfig();
-    $interpreter = new Interpreter();
-    $lexer = new Lexer($config);
- 
-    //CharsetをUTF-8に変換、CSVのヘッダー行を無視
-    $config->setToCharset("UTF-8");
-    $config->setFromCharset("sjis-win");
-    $config->setIgnoreHeaderLine(true);
- 
-    $dataList = [];
-     
-    // 新規Observerとして、$dataList配列に値を代入
-    $interpreter->addObserver(function (array $row) use (&$dataList){
-        // 各列のデータを取得
-        $dataList[] = $row;
-    });
- 
-    // CSVデータをパース（エラーがないか解析）
-    $lexer->parse($tmpPath, $interpreter);
- 
-    // TMPファイル削除
-    unlink($tmpPath);
- 
-    // 登録処理
-    $count = 0;
-    foreach($dataList as $row){
-        Book::insert(['title' => $row[0], 'price' => $row[1]]);
-        $count++;
-    }
- 
-    return redirect()->action('CourseController@csv2')->with('flash_message', $count . '枚のカードを登録しました！');
-} */
 
-   // 7.13 csvインポートメソッドを作るために追加(その３)
+
+   // 7.13 csvインポートメソッドを作るために追加(その２)
   public function inportCsv(Request $request)
 {
     // CSV ファイル保存
@@ -192,5 +163,9 @@ class CourseController extends Controller
     }
  
     return redirect('admin/course/csv2')->with('done', count($dataList) . '件のデータを登録しました！');
+}
+   // 7.13 csvインポートメソッドを作るために追加(その２)
+  public function flashcard()
+{
 }
 }
