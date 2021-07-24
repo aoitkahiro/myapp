@@ -14,16 +14,19 @@ class CreateUsersTable extends Migration
     public function up()
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->bigIncrements('id'); // プライマリーキー
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable(); // メール認証をする際に、それをした日付を入れる部分。これを入れる決まりになっている。（Usersの中で）
             $table->string('password');
-            $table->integer('learned_btn')->default(0);//default(0) 覚えた(1)
-            $table->integer('known_btn')->default(0);//default(0) 最初から知っている(1)
-            $table->integer('order')->default(0);//カスタム順(0) ランダム順(1)
-            $table->integer('show_pictures')->default(0);//最初は非表示(0) 表示にする(1)
             $table->string('mygoal');//目標を記録するところ
+            $table->boolean('has_learned')->default(false);//default(0) 覚えた(1)
+            $table->boolean('has_known')->default(false);//default(0) 最初から知っている(1)
+            $table->boolean('is_hard')->default(false);//カスタム順(0) ランダム順(1)
+            $table->boolean('is_image_displayed')->default(false);//写真表示
+            
+             // $table->integer('course_id');が必要なのでは？
+             
             $table->rememberToken();
             $table->timestamps();
         });

@@ -13,7 +13,12 @@
               <div class="col-4">
                 <a href=""></a>
               </div>
+             <form action="{{-- action('Admin\StatusController@store') --}}" method="post" enctype="multipart/form-data">
+               @csrf  {{--  セキュリティに関係するもので、必要--}} 
               <div class="col-4">
+                <input type="submit" class="btn btn-primary" value="覚えた">{{-- bool値 trueを送りたい--}}
+                 {{-- hiddenタグをinputタグより前に置く --}} 
+             </form>
                 <a href="">最初から知ってる</a>
               </div>
               <div class="col-4">
@@ -55,17 +60,19 @@
             <div class="row justify-content-center">
                 <div class="col col-lg-2">
                   <button type="button" class="btn btn-warning"><font size="1">◀</font></button><br>
-                  <a href="{{ action('Admin\CourseController@wordbook', ['abc' =>$post->id -1]) }}">前へ</a>
+                 {{-- <a href="{{ action('Admin\CourseController@wordbook', ['abc' =>$post->id -1]) }}">前へ</a> --}}
                 </div>
                 <div class="col-auto">
-                  {{--＠今何ページ目か表示--}}{{$page_num}} / {{--＠全何ページか表示--}}{{$all_courses_count}}
+                 {{-- {{--＠今何ページ目か表示--}}{{$page_num}} / {{--＠全何ページか表示--}}{{$all_courses_count}} --}}
                 </div>
                 <div class="col col-lg-2">
                   <button type="button" class="btn btn-warning"><font size="1">▶</font></button><br>
-                  <a href="{{ action('Admin\CourseController@wordbook', ['abc' =>$post->id + 1]) }}">次へ</a><br>
-                  <a href="{{ action('Admin\CourseController@wordbook', ['abc' =>$post->id + 2]) }}">２個次へ</a>
+                 {{-- <a href="{{ action('Admin\CourseController@wordbook', ['abc' =>$post->id + 1]) }}">次へ</a><br> --}}
+                 {{-- <a href="{{ action('Admin\CourseController@wordbook', ['abc' =>$post->id + 2]) }}">２個次へ</a> --}}
                 </div>
             </div>
         </div>
+ {{$user->id}}
+ {{$user->name}}
  {{$hoge}}
 @endsection

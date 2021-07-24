@@ -11,6 +11,7 @@ use Goodby\CSV\Import\Standard\Lexer;
 use Goodby\CSV\Import\Standard\Interpreter;
 
 use App\Course;
+use App\User;
 
 class CourseController extends Controller
 {
@@ -30,21 +31,38 @@ class CourseController extends Controller
       return view('admin.course.select'); // 
   }
        // 7.10 単語帳画面を作るために追加
-  public function wordbook(Request $request)  // 
+  //public function wordbook(Request $request)
+  public function wordbook($id)  // 
   {
+        //$user = User::where('id', $request->id)->get(); //説明 $requestの中のidとUserモデルの'id'が一致するか確認。一致する場合、該当idのレコードを取得。$userに代入する。
+        $user = User::where('id', $id)->get(); //説明 $requestの中のidとUserモデルの'id'が一致するか確認。一致する場合、該当idのレコードを取得。$userに代入する。
+        
+        $count = 1; // 最終的にページ数になる変数
+        /*if(Course::all() -> count() == 0){
+            $course = array('id' => 1,'front' => 2,'back' => 1);
+            $course = array(0);
+        }else{
         $courses = Course::all(); // 全部取り出したものを$coursesへ代入
-        $count = 0; // 最終的にページ数になる変数
-       foreach($courses as $tmp){ // ＄tmpに1件ずつ$coursesで取り出したものを入れていきます
-          $count += 1; // ループが回るたびに$countが1増えていく
-          if($tmp->id == $request->abc){ // id abc (ex.372)比較して同じであれば表示する
-            $course = $tmp; // $courseは、Viewファイルでpostへ渡す変数。これに結果を渡す
-            break; // ここを通ると強制的にループが終わる。あまりいい実装ではない（特殊なケースが増える）
-          }
-        }
-        if(empty($course)){ // URLから直接アクセスがあり 'abc' =>$post->id + 1 がなかったときのif文。$courseが空の時、trueを返します。
-          $course = $courses[0];
-        }
-      return view('admin.course.wordbook', ['post' => $course, "all_courses_count" => $courses->count(),'page_num' => $count, 'hoge' =>'hello']); //
+            foreach($courses as $tmp){ // ＄tmpに1件ずつ$coursesで取り出したものを入れていきます
+              $count += 1; // ループが回るたびに$countが1増えていく
+              if($tmp->id == $request->abc){ // id abc (ex.372)比較して同じであれば表示する
+                $course = $tmp; // $courseは、Viewファイルでpostへ渡す変数。これに結果を渡す
+                break; // ここを通ると強制的にループが終わる。あまりいい実装ではない（特殊なケースが増える）
+              }
+            }
+        }*/
+        /*$course['id'] = 1;
+        $course['front'] = 'フロント'; //まずは、frontがないというエラーが最初に出る。これから解決したい
+        $course['back'] = 1;*/
+        
+        $course = new Course;
+        $course->id = 1;
+        $course->front = 'フロント';
+        $course->back = 1;
+
+        $courses = 1;
+        return view('admin.course.wordbook', ['user' => $user, 'post' => $course, "all_courses_count" => $courses, 'page_num' => $count, 'hoge' =>'hello']);
+      //return view('admin.course.wordbook', ['post' => $course, "all_courses_count" => $courses->count(),'page_num' => $count, 'hoge' =>'hello']); //
   }
   
   
