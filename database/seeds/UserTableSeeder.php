@@ -14,9 +14,14 @@ class UserTableSeeder extends Seeder
     {
         DB::table('users')->insert([
            'name' => 'tester',
-           'email' => 'tester@hoge.com',
+           'email' => 'tt@t.jp',
            'password' => Hash::make('abcd1234'),
            'mygoal' => "TOEIC score 750",
+        ],[
+           'name' => 'testuser',
+           'email' => 'tt@t.jp',
+           'password' => Hash::make('password'),
+           'mygoal' => "",
         ]);    
     }
 }
