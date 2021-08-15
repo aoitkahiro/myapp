@@ -32,6 +32,8 @@ class StatusController extends Controller
       //saveメソッドが呼ばれると新しいレコードがデータベースに挿入される
       $history->save();
       
-      return view('admin.course.wordbook');
+      //return view('admin.course.wordbook');
+      //return redirect()->action('Admin\CourseController@wordbook');
+      return redirect('admin/course/wordbook?tango_id=' . $request->course_id);
    }
 }

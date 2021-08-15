@@ -12,8 +12,8 @@
                 <br><br>
                 <button type="button" class="btn btn-warning">TOEIC単語 目標500点</button>
                 <br><br>
-                <a href="https://f6003bf85196481c9df5c1f7e84f45ff.vfs.cloud9.us-east-2.amazonaws.com/admin/course/wordbook?abc=1">wordbook.blade.phpへ（idを持っていく）</a>
-                 {{-- <a href="{{ action('Admin\CourseController@wordbook', ['id' => 1]) }}">wordbook.blade.phpへ（idを持っていく）</a> --}} 
+                {{--<a href="https://f6003bf85196481c9df5c1f7e84f45ff.vfs.cloud9.us-east-2.amazonaws.com/admin/course/wordbook?abc=1">wordbook.blade.phpへ（idを持っていく）</a>--}}
+                <a href="{{ action('Admin\CourseController@wordbook', ['tango_id' => 0]) }}">wordbook.blade.phpへ（idを持っていく）</a>  
             </div>
         </div>
 @endsection

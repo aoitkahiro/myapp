@@ -25,9 +25,6 @@ class CreateUsersTable extends Migration
             $table->boolean('has_known')->default(false);//default(0) 最初から知っている(1)
             $table->boolean('is_hard')->default(false);//カスタム順(0) ランダム順(1)
             $table->boolean('is_image_displayed')->default(false);//写真表示
-            
-             // $table->integer('course_id');が必要なのでは？
-             
             $table->rememberToken();
             $table->timestamps();
         });
