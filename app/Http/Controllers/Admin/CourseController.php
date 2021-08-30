@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
 use Goodby\CSV\Import\Standard\LexerConfig;
 use Goodby\CSV\Import\Standard\Lexer;
 use Goodby\CSV\Import\Standard\Interpreter;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Auth;//Laravel ではデフォルトでクラスをオートロードしている。設定は app.php に記述有。∴use Auth でも宣言できる。
 use App\Course;
 use App\User;
 use App\History;
@@ -18,16 +18,19 @@ class CourseController extends Controller
   // 7.24 スタート画面を作るために追加
   public function start()  
   {
-      $users = User::where('name', "tester")->get(); //戻り値を配列にして、Viewに渡す場合のコード。これに対して、インスタンスでViewに渡すのが↓の行
-      $user = User::where('name', "tester")->first(); //->first() は、1件だけ取り出すメソッド。もし複数見つかったら、1件目 対して->get()は一致するすべてのデータを取り出す。
+      
+      $users = User::where('id', Auth::id())->get(); //戻り値を配列にして、Viewに渡す場合のコード。これに対して、インスタンスでViewに渡すのが↓の行
+      $user = User::where('id', Auth::id())->first(); //->first() は、1件だけ取り出すメソッド。もし複数見つかったら、1件目 対して->get()は一致するすべてのデータを取り出す。
                                                      //->first() はUserクラスのインスタンスを取得 ->get()はUserクラスのコレクション（配列の型）で取得する
       return view('admin.course.start', ['user' => $user, 'users' =>$users]); // userはインスタンスを渡している。usersは配列としてインスタンスを渡している
   }   
   // 7.28 プロフィール編集画面を作るために追加
-  public function profile() 
-  {     
-        return view('admin.course.profile'); 
-  }
+  public function profile(Request $request)
+  {
+    $a_user = Auth::user();
+    //dd($a_user);
+    return view('admin.course.profile',['a_user'=>$a_user]); 
+  } 
   /*1．storeメソッドの引数（？）で、任意の名前で画像を保存する方法を調べて実装する（まずはhallo.jpgなど）
                 $path = $request->file('image')->storeAs('public/tango', hallo);
   　　store/image にtango フォルダを作った方が「何の1か？」が管理しやすい
@@ -40,6 +43,7 @@ class CourseController extends Controller
   public function profileUpdate(Request $request)  
   {     
         $user = Auth::user(); // ログインユーザーのインスタンスの獲得
+        $a_user = Auth::user();
          // $id= Auth::id(); 【参考】ログインユーザーのidの獲得　【参考２】Auth::user() == User::find(Auth::id()); 同じことをしている
          // idはinputではなく、サーバーからuserに与えられる値。ゆえにnameとmygoalだけでOK
         $profile_data = $request->all();//ユーザーが入力した項目  名前、目標、画像選択のみが連想配列で渡されている
@@ -64,7 +68,7 @@ class CourseController extends Controller
             // 該当するデータを上書きして保存する
             // $user->fill($profile_data)->save(); 
             // ユーザーの入力したデータを$userに渡して（fill）保存（save）
-        return view('admin.course.profile', ['user' => $user]);  
+        return view('admin.course.profile', ['user' => $user, 'a_user' =>$user]);  
   } 
   
   //━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━　↑ プロフィール機能　━━━━　↓ 単語帳機能　━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -82,29 +86,41 @@ class CourseController extends Controller
   // 7.10 単語帳画面を作るために追加
   public function wordbook(Request $request)  
   {
-    $users = User::where('name', "tester")->get(); //戻り値を配列にして、Viewに渡す場合のコード。これに対して、インスタンスでViewに渡すのが↓の行
-    $user = User::where('name', "tester")->first(); //->first() は、1件だけ取り出すメソッド。もし複数見つかったら1件目取得。対して->get()は一致するすべてのデータを取り出す。
+    $users = User::where('id', Auth::id())->get(); //戻り値を配列にして、Viewに渡す場合のコード。これに対して、インスタンスでViewに渡すのが↓の行
+    //$user = User::where('id', Auth::id())->first(); //->first() は、1件だけ取り出すメソッド。もし複数見つかったら1件目取得。対して->get()は一致するすべてのデータを取り出す。
                                                     //->first() はUserクラスのインスタンスを取得 ->get()はUserクラスのコレクション（配列の型）で取得する
+    $user = Auth::user(); //2行上のuserの取り方と同じ
     $count = 0; // 最終的にページ数になる変数
     //$course = Course::find($request->tango_id); // URLの"?tango_id=整数値"で送った値を($request ->tango_id)で取得している。 例えばURLが、?tango_id=10であれば、find(10)になる 
         // ちなみにfindは DB内のレコードを「id」で検索・取得するための、Laravelのメソッド。今回はCourseというDBを tango_idで検索・取得している
     $tango_id = $request->tango_id;
-    $known_swich = $user->has_known; // 特定のuserレコードの、has_knownが"0"か"1"かを$known_swich に取得
+    $known_switch = $user->has_known; // 特定のuserレコードの、has_knownが"0"か"1"かを$known_switch に取得
+    $learnd_switch = $user->has_learnd; 
     $some_history = History::where('user_id', $user->id)->get();//historiesテーブル内を$user->id で検索して特定userのhistoriesレコードを取得している
-    $course_id_in_histories = [];
-    if($known_swich == 1 and $some_history != NULL){ //あるuserの $know_swich が"1"でかつ、当ユーザーのhistoriesテーブルの値があれば
-      foreach($some_history as $a_history){
-        if($a_history->hide_known == 1){
-          $course_id_in_histories[]= $a_history->course_id; //配列を入れる
-        } //elseはなし
+    $history = History::where('user_id',$user->id)->where('course_id', $tango_id + 1)->first();
+    //dd($history);
+    $course_id_in_histories1 = [];
+    $course_id_in_histories1 = [];
+    foreach($some_history as $a_history)
+    {
+      if($a_history->hide_known == 1){
+        $course_id_in_histories1[]= $a_history->course_id; //配列を入れる
+      }elseif($a_history->hide_learned == 1){
+        $course_id_in_histories2[]= $a_history->course_id;
       }
-      $courses = Course::whereNotIn('id', $course_id_in_histories)->get(); //抜き出したid を全て除外して$courses に取得する。getがないと、問合せるだけで、引っ張ってきてくれない
-    }else{
-      $courses = Course::all();      
-    }      
+    }
+    if($some_history != NULL){
+      if($known_switch == 1){
+          $courses = Course::whereNotIn('id', $course_id_in_histories1)->get();
+      }elseif($known_switch == 0 and $learnd_switch == 1){
+          $courses = Course::whereNotIn('id', $course_id_in_histories2)->get();
+      }elseif($known_switch == 0 and $learnd_switch == 0){
+          $courses = Course::all();
+      }
+    }
     if($courses->count() == 0){ //もし、courseテーブルの全てのデータを取得してデータ件数が0だったら（大前提として0ではない。開発中のエラーを回避するためのif文）
         $massage ="この科目にはデータがありません";
-     }else{
+    }else{
         $massage = "";
         // 以下、ページングのコード
         /*foreach($courses as $tmp){ // ＄tmpに1件ずつ$courses（配列）から取り出して入れていきます。foreach文は配列の数だけ回すfor文です。
@@ -118,30 +134,39 @@ class CourseController extends Controller
     
     /*【usersテーブルの$has_known が 1 で且つ、Historyクラスのレコードである$historyの $hide_known が 1 の時、
     　　$historyの$hide_knownが1じゃないレコードまで回すコード】目的：使い道が　である値を取得
-     1st, 取得したuserレコードのhas_known の値が 0or1 を取得して、$known_swich に代入する
-     2nd, もし、$known_swich が0なら何もしない　←書かない。1の時だけ書く
-     3rd, もし、$known_swich が1なら$history の ->hide_known が1かどうかを判定する
+     1st, 取得したuserレコードのhas_known の値が 0or1 を取得して、$known_switch に代入する
+     2nd, もし、$known_switch が0なら何もしない ←書かない。1の時だけ書く
+     3rd, もし、$known_switch が1なら$history の ->hide_known が1かどうかを判定する
      4th, もし、3rd の判定結果が TRUE なら（ページを表示せず）$course に次の id のレコードを代入する。その後、3rd へ戻る）
      5th, もし、3rd の判定結果が FALSEなら $courseに代入されているレコードをViewに渡す
     */
-    return view('admin.course.wordbook', ['tango_id'=> $tango_id, 'post' => $courses,  'user' => $user, 'users' =>$users, 'message' => $massage]); 
+    return view('admin.course.wordbook', ['history'=>$history, 'tango_id'=> $tango_id, 'post' => $courses,  'user' => $user, 'users' =>$users, 'message' => $massage]); 
     //return view('admin.course.wordbook', ['post' => $course, "all_courses_count" => $courses->count(),'page_num' => $count, 'user' => $user, 'users' =>$users , 'hoge' =>'hello']);
- }                                         //$course にはid,front,back,kind,category,degree の値等が入っている。 
+  }                                         //$course にはid,front,back,kind,category,degree の値等が入っている。 
   // 7.10 書き込み画面を作るために追加
   public function write(Request $request)  // writeからGETできたらこちら
-  {     
+  {
+    $a_course = Course::where('id',$request->tango_id)->first();
   //dd(session('extention')); // ->with で渡された場合は settion('xxxxx')で受ける
-    return view('admin.course.write',['tango_idd'=>$request->tango_id, 'ext'=> session('extention')]); // $request->tango_id の中身は整数値。URLの?tango_id=1 ならば、1）
+    return view('admin.course.write',['tango_id_for_write'=>$request->tango_id, 'a_course'=>$a_course, 'ext'=> session('extention')]); // $request->tango_id の中身は整数値。URLの?tango_id=1 ならば、1）
   }                                 //　　↑次のViewで使う値に↑getパラメータのtango_idを取得している
   
   public function update(Request $request)  // writeからPOSTでRoutingされたらこちら
-  {     
+  {
     $tango_data = $request->all();//ユーザーが入力した項目が連想配列で渡されている
     if ($request->file('image')) { //=file()ファイル選択ダイアログで、画像(bladeでnameに設定した"image"）を選択したか true or false で返す
       $ext = $request->file('image')->extension();
       $path = $request->file('image')->storeAs('public/tango', $request->course_id . "." . $ext);
     } //falseの場合何もしない
-    return redirect('admin/course/write');//->with(['extention'=>$ext]); // "with"実装してみたかったが、エラーになりそうだったので一旦コメントアウト2021.8.7
+    $a_course = Course::where('id',$request->course_id)->first();
+    if($request->front != NULL){
+      $a_course->update(['front'=> $request->front]);
+    }
+    if($request->back != NULL){
+      $a_course->update(['back'=> $request->back]);
+    }
+    $correct_id = $request->course_id - 1; // この文がないと、値を渡せない？
+    return redirect('admin/course/wordbook?tango_id=' . $correct_id );//->with(['extention'=>$ext]); // "with"実装してみたかったが、エラーになりそうだったので一旦コメントアウト2021.8.7
   }
   
   //━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━　↑ 単語帳機能　━━　↓ 単語帳新規作成機能　━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -205,6 +230,10 @@ class CourseController extends Controller
         $hoge->save();
     }
   return redirect('admin/course/csv2')->with('done', count($dataList) . '件のデータを登録しました！');
+  }
+  public function practice()   
+  {     
+    return view('admin.course.practice');  
   }
 }
 

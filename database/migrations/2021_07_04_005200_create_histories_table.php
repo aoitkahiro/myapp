@@ -21,7 +21,7 @@ class CreateHistoriesTable extends Migration
             $table->integer('hide_known'); // 科目/ユーザーごと「最初から知ってるけど出す(0)」「最初から知ってるので消す(1)」を保存するカラム // booleanの方が良い？
             $table->timestamps();
             //$table->string('user_name'); //7.26 なくても大丈夫という指摘を受け、、変更の手間を減らすために削除
-            $table->unique(['user_id', 'course_id']);
+            $table->unique(['user_id', 'course_id']); //二つ合わせてunique、という書き方
         });
     }
 

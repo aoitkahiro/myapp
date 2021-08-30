@@ -34,6 +34,8 @@ Route::group(['prefix' => 'admin'], function() {
     Route::get('course/csv2', 'Admin\CourseController@csv2'); //csv表示
     Route::post('course/csv2', 'Admin\CourseController@inportCsv'); //csv取込み-登録
     
+    //CSS練習用のページ（削除予定）
+    Route::get('course/practice', 'Admin\CourseController@practice');
     
 });
 Auth::routes();

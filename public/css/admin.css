@@ -1,8 +1,5 @@
 .container {
-  border: 2px solid #1b0303;
-  box-sizing: border-box;
-  width: 700px;
-  height: 500px;
+  border: 1px solid #1b0303;
 }
 
 .box {
