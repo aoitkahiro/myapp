@@ -27,11 +27,11 @@
         <link href="{{ secure_asset('css/admin.css') }}" rel="stylesheet">
     </head>
     <body>
-        <div id="app"> {{-- ？？？ --}}
-            <main class="py-4">
-                {{-- コンテンツをここに入れるため、@yieldで空けておきます。 --}}
-                @yield('content')
-            </main>
-        </div>
+        <div id="app"></div>
+        <main class="py-4">
+            {{-- コンテンツをここに入れるため、@yieldで空けておきます。 --}}
+            @yield('content')
+        </main>
+    @yield('js')
     </body>
 </html>

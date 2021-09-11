@@ -62,7 +62,7 @@ class CourseController extends Controller
         //unsetは、以下のように1件ずつ代入する場合は不要。fillメソッドを使う場合は必要
         $user->name = $profile_data["name"];
         $user->mygoal = $profile_data["mygoal"];
-        $user->has_known = $profile_data["has_known"];
+        $user->looking_level = $profile_data["looking_level"];
         $user->image_path = $profile_data['image_path'];
         $user->save();
             // 該当するデータを上書きして保存する
@@ -94,28 +94,36 @@ class CourseController extends Controller
     //$course = Course::find($request->tango_id); // URLの"?tango_id=整数値"で送った値を($request ->tango_id)で取得している。 例えばURLが、?tango_id=10であれば、find(10)になる 
         // ちなみにfindは DB内のレコードを「id」で検索・取得するための、Laravelのメソッド。今回はCourseというDBを tango_idで検索・取得している
     $tango_id = $request->tango_id;
-    $known_switch = $user->has_known; // 特定のuserレコードの、has_knownが"0"か"1"かを$known_switch に取得
-    $learnd_switch = $user->has_learnd; 
+    $looking_level = $user->looking_level; // 特定のuserレコードの、looking_level"0~2"を$looking_level に取得
     $some_history = History::where('user_id', $user->id)->get();//historiesテーブル内を$user->id で検索して特定userのhistoriesレコードを取得している
     $history = History::where('user_id',$user->id)->where('course_id', $tango_id + 1)->first();
-    //dd($history);
-    $course_id_in_histories1 = [];
-    $course_id_in_histories1 = [];
-    foreach($some_history as $a_history)
+    
+    $course_id_in_histories_1 = [];
+    $course_id_in_histories_2 = [];
+    foreach($some_history as $a_history) // 当ユーザーのhistoryを一つずつ入れていって…
     {
-      if($a_history->hide_known == 1){
-        $course_id_in_histories1[]= $a_history->course_id; //配列を入れる
-      }elseif($a_history->hide_learned == 1){
-        $course_id_in_histories2[]= $a_history->course_id;
+    if($a_history->learning_level == 2){ // もし一つのhistoryのlearning_levelが2なら
+      $course_id_in_histories_2[]= $a_history->course_id; //この配列に、learning_levelが2（覚えた）のhistoryのcourse_idを入れる
+    }elseif($a_history->learning_level == 1){ // もし一つのhistoryのlearning_levelが1なら
+      $course_id_in_histories_1[]= $a_history->course_id; //この配列に、learning_levelが1（最初から知ってる）のhistoryのcourse_idを入れる
       }
     }
+    \Log::info("tango_id");
+    \Log::info($tango_id);
+    \Log::info("some_history");
+    \Log::info($some_history);
+    \Log::info("course_id_in_histories_1");
+    \Log::info($course_id_in_histories_1);
+    \Log::info("history");
+    \Log::info($history);
+    
     if($some_history != NULL){
-      if($known_switch == 1){
-          $courses = Course::whereNotIn('id', $course_id_in_histories1)->get();
-      }elseif($known_switch == 0 and $learnd_switch == 1){
-          $courses = Course::whereNotIn('id', $course_id_in_histories2)->get();
-      }elseif($known_switch == 0 and $learnd_switch == 0){
-          $courses = Course::all();
+      if($looking_level == 2){ // もし、looking_levelが 2 なら
+        $courses = Course::whereNotIn('id', $course_id_in_histories_2)->orWhereNotIn('id', $course_id_in_histories_1)->get(); //learning_levelが2or1のcourse_id以外を表示させる
+      }elseif($looking_level == 1){ // もし、looking_levelが 1なら
+        $courses = Course::whereNotIn('id', $course_id_in_histories_1)->get(); //learning_levelが1のcourse_id以外を表示させる
+      }elseif($looking_level == 0){ // もし、looking_levelが初期値の 0 なら
+        $courses = Course::all();
       }
     }
     if($courses->count() == 0){ //もし、courseテーブルの全てのデータを取得してデータ件数が0だったら（大前提として0ではない。開発中のエラーを回避するためのif文）
@@ -131,16 +139,13 @@ class CourseController extends Controller
             }                     
         }*///以上、ページングのコード
     }//if文の終わり
-    
-    /*【usersテーブルの$has_known が 1 で且つ、Historyクラスのレコードである$historyの $hide_known が 1 の時、
-    　　$historyの$hide_knownが1じゃないレコードまで回すコード】目的：使い道が　である値を取得
-     1st, 取得したuserレコードのhas_known の値が 0or1 を取得して、$known_switch に代入する
-     2nd, もし、$known_switch が0なら何もしない ←書かない。1の時だけ書く
-     3rd, もし、$known_switch が1なら$history の ->hide_known が1かどうかを判定する
-     4th, もし、3rd の判定結果が TRUE なら（ページを表示せず）$course に次の id のレコードを代入する。その後、3rd へ戻る）
-     5th, もし、3rd の判定結果が FALSEなら $courseに代入されているレコードをViewに渡す
-    */
-    return view('admin.course.wordbook', ['history'=>$history, 'tango_id'=> $tango_id, 'post' => $courses,  'user' => $user, 'users' =>$users, 'message' => $massage]); 
+    \Log::info("courses[$tango_id]->id");
+    \Log::info($courses[$tango_id]->id);
+    $value = History::where('user_id',$user->id)->where('course_id', $courses[$tango_id]->id)->first();
+    \Log::info("courses[$tango_id]->id");
+    \Log::info($courses[$tango_id]->id);
+    //dd($value);
+    return view('admin.course.wordbook', ['value'=>$value, 'history'=>$history, 'tango_id'=> $tango_id, 'post' => $courses,  'user' => $user, 'users' =>$users, 'message' => $massage]); 
     //return view('admin.course.wordbook', ['post' => $course, "all_courses_count" => $courses->count(),'page_num' => $count, 'user' => $user, 'users' =>$users , 'hoge' =>'hello']);
   }                                         //$course にはid,front,back,kind,category,degree の値等が入っている。 
   // 7.10 書き込み画面を作るために追加
@@ -223,7 +228,7 @@ class CourseController extends Controller
         $hoge = new Course();
         $hoge->kind = $row[0];
         $hoge->category = $row[1];
-        $hoge->degree = $row[2];
+        $hoge->difficulty = $row[2];
         $hoge->front = $row[3];
         $hoge->back = $row[4];
         //$hoge->fill(['front' => $row[3]]);//Course モデルのインスタンスに、
@@ -234,6 +239,23 @@ class CourseController extends Controller
   public function practice()   
   {     
     return view('admin.course.practice');  
+  }
+  public function quiz()
+  {
+    
+    $course = Course::find(1);
+    // dd($course);
+    $question_front = $course->front;
+    $answer_back = $course->back;
+    // dd($value);
+    
+    $word = "デバッグ用のワード";
+    $question = "デバッグ用のクエスチョン";  
+    return view('admin.course.quiz', ['question_front'=>$question_front, 'answer_back'=>$answer_back, 'word'=>$word, 'question'=>$question]); 
+  }
+  public function quiz2()
+  {     
+    return view('admin.course.quiz2');  
   }
 }
 

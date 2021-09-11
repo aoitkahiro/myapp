@@ -14,17 +14,16 @@ class CreateUsersTable extends Migration
     public function up()
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->bigIncrements('id'); // プライマリーキー
+            $table->bigIncrements('id');
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable(); // メール認証をする際に、それをした日付を入れる部分。これを入れる決まりになっている。（Usersの中で）
             $table->string('password');
-            $table->string('mygoal')->nullable();//目標を記録するところ
-            $table->string('image_path')->nullable();  // 画像のパスを保存するカラム
-            $table->boolean('has_learned')->default(false);//default(0) 覚えた(1)
-            $table->boolean('has_known')->default(false);//default(0) 最初から知っている(1)
-            $table->boolean('is_hard')->default(false);//カスタム順(0) ランダム順(1)
-            $table->boolean('is_image_displayed')->default(false);//写真表示
+            $table->string('mygoal')->nullable();//目標を記録するカラム
+            $table->string('image_path')->nullable();
+            $table->integer('looking_level')->default(0);//全部表示(0) 「最初から知っている」語だけ消す(1) 「覚えた」も消す(2)
+            $table->boolean('word_ordering')->default(TRUE);//カスタム順(TRUE) ランダム順(FALSE)
+            $table->boolean('is_image_displayed')->default(FALSE);//ヒント画像を最初から表示する(TRUE),しない(false)
             $table->rememberToken();
             $table->timestamps();
         });

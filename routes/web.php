@@ -36,6 +36,9 @@ Route::group(['prefix' => 'admin'], function() {
     
     //CSS練習用のページ（削除予定）
     Route::get('course/practice', 'Admin\CourseController@practice');
+    //JavaScriptで作ってみたページ
+    Route::get('course/quiz', 'Admin\CourseController@quiz');
+    Route::get('course/quiz2', 'Admin\CourseController@quiz2');
     
 });
 Auth::routes();

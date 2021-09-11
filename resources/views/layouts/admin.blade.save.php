@@ -27,35 +27,33 @@
         <link href="{{ secure_asset('css/admin.css') }}" rel="stylesheet">
     </head>
     <body>
-        <div id="app">
-            {{-- 画面上部に表示するナビゲーションバーです。 --}}
-            <nav class="navbar navbar-expand-md navbar-dark navbar-laravel">
-                <div class="container">
-                    <a class="navbar-brand" href="{{ url('/') }}"> {{-- url(“パス”)は、そのままURLを返すメソッド --}} 
-                        {{ config('app.name', 'Laravel') }} {{-- configフォルダのapp.phpにあるnameにアクセスする（Laravelという名前） --}} 
-                    </a>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
+        {{-- 画面上部に表示するナビゲーションバーです。 --}}
+        <nav class="navbar navbar-expand-md navbar-dark navbar-laravel">
+            <div class="container">
+                <a class="navbar-brand" href="{{ url('/') }}"> {{-- url(“パス”)は、そのままURLを返すメソッド --}} 
+                    {{ config('app.name', 'Laravel') }} {{-- configフォルダのapp.phpにあるnameにアクセスする（Laravelという名前） --}} 
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <!-- Left Side Of Navbar -->
-                        <ul class="navbar-nav mr-auto">
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <!-- Left Side Of Navbar -->
+                    <ul class="navbar-nav mr-auto">
 
-                        </ul>
+                    </ul>
 
-                        <!-- Right Side Of Navbar -->
-                        <ul class="navbar-nav ml-auto">
-                        </ul>
-                    </div>
+                    <!-- Right Side Of Navbar -->
+                    <ul class="navbar-nav ml-auto">
+                    </ul>
                 </div>
-            </nav>
-            {{-- ここまでナビゲーションバー --}}
+            </div>
+        </nav>
+        {{-- ここまでナビゲーションバー --}}
 
-            <main class="py-4">
-                {{-- コンテンツをここに入れるため、@yieldで空けておきます。 --}}
-                @yield('content')
-            </main>
-        </div>
+        <main class="py-4">
+            {{-- コンテンツをここに入れるため、@yieldで空けておきます。 --}}
+            @yield('content')
+        </main>
     </body>
 </html>

@@ -1,7 +1,7 @@
 {{-- layouts/admin.blade.phpを読み込む --}}
 @extends('layouts.admin')
 
-@section('title', 'CSS練習場')
+@section('title', 'コード練習場')
 
 @section('content')
 <div class="container">

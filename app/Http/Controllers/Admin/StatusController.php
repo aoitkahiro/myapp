@@ -22,8 +22,9 @@ class StatusController extends Controller
       //->get();だとインスタンスの「配列」が返ってきてしまうのでエラーになる
       //historiesテーブルを検索して、user_id , couse_idのカラム２つで検索している（whereは複数件のインスタンスを返すが、この場合firstだけ返してくる）
       
+      //dd($history,$request->course_id,Auth::id(),$request->all());
       if($history != NULL){
-         $history->update(['hide_known'=>$request->hide_known]);
+         $history->update(['learning_level'=>$request->learning_level]);
          return redirect('admin/course/wordbook?tango_id=' . $request->tango_id);
       }else{
          //インスタンス作成

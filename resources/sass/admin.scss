@@ -7,5 +7,46 @@
   background-color: #f53838;
   width: 300px;
   height: 200px;
-  
+}
+
+.div{
+  color: #006DD9;
+	width: 400px;
+	height: 100px;
+	background-color: #aaa;
+}
+
+.btn-orange,a.btn-orange {
+  color: #fff;
+  background-color: #eb6100;
+}
+.btn-orange:hover,a.btn-orange:hover {
+  color: #fff;
+  background: #f56500;
+}
+
+
+
+.btn-black,a.btn-black {
+  color: #fff;
+  background-color: #333333;
+}
+.btn-black:hover,a.btn-black:hover {
+  color: #fff;
+  background: #333333;
+}
+
+
+
+a.btn--yellow {
+  color: #000;
+  background-color: #fff100;
+  border-bottom: 5px solid #ccc100;
+}
+
+a.btn--yellow:hover {
+  margin-top: 3px;
+  color: #000;
+  background: #fff20a;
+  border-bottom: 2px solid #ccc100;
 }
