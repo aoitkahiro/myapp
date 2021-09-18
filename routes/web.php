@@ -38,6 +38,7 @@ Route::group(['prefix' => 'admin'], function() {
     Route::get('course/practice', 'Admin\CourseController@practice');
     //JavaScriptで作ってみたページ
     Route::get('course/quiz', 'Admin\CourseController@quiz');
+    Route::post('course/quiz', 'Admin\CourseController@PostQuizTime');
     Route::get('course/quiz2', 'Admin\CourseController@quiz2');
     
 });

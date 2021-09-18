@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;//Laravel ではデフォルトでクラス�
 use App\Course;
 use App\User;
 use App\History;
+use App\Users_quiz_result;
 
 class CourseController extends Controller
 {
@@ -242,17 +243,32 @@ class CourseController extends Controller
   }
   public function quiz()
   {
-    
-    $course = Course::find(1);
-    // dd($course);
-    $question_front = $course->front;
-    $answer_back = $course->back;
-    // dd($value);
-    
-    $word = "デバッグ用のワード";
-    $question = "デバッグ用のクエスチョン";  
-    return view('admin.course.quiz', ['question_front'=>$question_front, 'answer_back'=>$answer_back, 'word'=>$word, 'question'=>$question]); 
+    // $course = Course::find(1);
+    $courses = Course::inRandomOrder()->limit(3)->get();
+    $dummy_courses = Course::where('id' ,'<>', $courses[0]->id)
+      ->where('kind',$courses[0]->kind)->inRandomOrder()->limit(3)->get();
+    $dummy_answers = array();
+   for ($i = 0; $i < 3; $i++) {
+    array_push($dummy_answers,Course::where('id' ,'<>', $courses[$i]->id)
+      ->where('kind',$courses[$i]->kind)->inRandomOrder()->limit(3)->get());
+    }
+    $correct_and_dummy_answers = $dummy_answers;
+    $correct_and_dummy_answers[] = $courses;
+    shuffle($correct_and_dummy_answers);
+    return view('admin.course.quiz', ['correct_and_dummy_answers'=>$correct_and_dummy_answers,'dummy_answers'=>$dummy_answers, 'dummy_courses'=>$dummy_courses, 'courses'=>$courses]); 
   }
+  
+  public function PostQuizTime(Request $request)
+  {
+    $user = Auth::user(); // ログインユーザーのインスタンスの獲得
+    $users_quiz_result = new Users_quiz_result();
+    $quiz_data = $request->all();//ユーザーが入力した項目  名前、目標、画像選択のみが連想配列で渡されている
+    $users_quiz_result->running_time = $quiz_data["running_time"];
+    // dd($users_quiz_result->running_time);
+    $users_quiz_result->save();
+    return view('admin.course.quiz');
+  }
+  
   public function quiz2()
   {     
     return view('admin.course.quiz2');  

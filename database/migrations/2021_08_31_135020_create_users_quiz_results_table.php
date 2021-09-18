@@ -18,7 +18,8 @@ class CreateUsersQuizResultsTable extends Migration
             $table->integer('user_id'); 
             $table->integer('course_id'); 
             $table->integer('challenge_id'); 
-            $table->boolean('result'); 
+            $table->boolean('users_quiz_result');
+            $table->float('running_time')->nullable();
             $table->timestamps();
             $table->unique(['user_id','course_id','challenge_id']);
         });
