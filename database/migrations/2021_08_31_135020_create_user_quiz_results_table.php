@@ -16,9 +16,9 @@ class CreateUsersQuizResultsTable extends Migration
         Schema::create('users_quiz_results', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('user_id'); 
-            $table->integer('course_id'); 
             $table->integer('challenge_id'); 
-            $table->boolean('users_quiz_result');
+            $table->integer('course_id'); 
+            $table->integer('user_quiz_result')->nullable();
             $table->float('running_time')->nullable();
             $table->timestamps();
             $table->unique(['user_id','course_id','challenge_id']);
