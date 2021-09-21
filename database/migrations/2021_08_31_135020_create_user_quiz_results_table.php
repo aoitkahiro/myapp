@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateUsersQuizResultsTable extends Migration
+class CreateUserQuizResultsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,13 @@ class CreateUsersQuizResultsTable extends Migration
      */
     public function up()
     {
-        Schema::create('users_quiz_results', function (Blueprint $table) {
+        Schema::create('user_quiz_results', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('user_id'); 
             $table->integer('challenge_id'); 
             $table->integer('course_id'); 
-            $table->integer('user_quiz_result')->nullable();
-            $table->float('running_time')->nullable();
+            $table->integer('status')->nullable();
+            $table->integer('running_time')->nullable();
             $table->timestamps();
             $table->unique(['user_id','course_id','challenge_id']);
         });
@@ -32,6 +32,6 @@ class CreateUsersQuizResultsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users_quiz_results');
+        Schema::dropIfExists('user_quiz_results');
     }
 }

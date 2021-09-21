@@ -3,7 +3,7 @@
 @section('content')
 
 <div class="container">
-  <div id="QuizStart" onClick = "hoge()" class="btn btn-black">clickStart() ▶</div>
+  <div id="QuizStart" onClick = "startQuiz()" class="btn btn-black">clickStart() ▶</div>
   <div class="text-center">
     <div>
     <h2 id="display">00:00</h2>
@@ -14,23 +14,25 @@
     <div id="js-items" class="text">
         <p id="sound">　</p>
       <div class="m-2">
-        <div><button type="button" id="js-btn-1" class="btn btn--yellow">{{$courses[0]->back}}</button></div>
+        <div><button type="button" id="js-btn-1" class="btn btn--yellow selection">{{$courses[0]->back}}</button></div>
       </div>
       <div class="m-2">
-        <div><button type="button" id="js-btn-2" class="btn btn--yellow">dummy</button></div>
+        <div><button type="button" id="js-btn-2" class="btn btn--yellow selection">dummy</button></div>
       </div>
       <div class="m-2">
-        <button type="button" id="js-btn-3" class="btn btn--yellow">dummy</button>
+        <button type="button" id="js-btn-3" class="btn btn--yellow selection">dummy</button>
       </div>
       <div class="m-2">
-        <button type="button" id="js-btn-4" class="btn btn--yellow">dummy</button>
+        <button type="button" id="js-btn-4" class="btn btn--yellow selection">dummy</button>
       </div>
     </div>
   <form name="recordtime"  method="post">
   @csrf
     <input type="hidden" name="score" id="score">
+    <input type="hidden" name="user_quiz_result" id="user_quiz_result">
     <input type="hidden" name="running_time" id="running_time">
     <input type="hidden" name="course_id" id="course_id">
+    <input type="hidden" name="challenge_id" id="challenge_id">
     <button type="button" id="save_button">記録を送信する</button>
   </form>
   </div>
@@ -39,11 +41,13 @@
   
 @endsection
 @section('js')
+
   <script>
     const courses = {!!$courses!!}; {{-- '$courses'を渡す時、' がquotと表示されてしまうのを防ぐため --}} 
     const dummy_courses =  {!!$dummy_courses!!};
     const dummy_answers = @json($dummy_answers);{{--@json とは配列をJavaScriptで扱いやすくしたデータ構造（詳しくしる）--}}
     const correct_and_dummy_answers = @json($correct_and_dummy_answers);
+    const challenge_id =  {!!$challenge_id!!};
     let quiz = [];
     let counter = 0;
     courses.forEach(function(course){ 
@@ -58,15 +62,18 @@
     const $window = window;
     const $doc = document;
     const $question = $doc.getElementById('js-question');
-    const $button = $doc.getElementsByTagName('button');
-    const buttonLen = $button.length;
-    
+    let $button = $doc.getElementsByClassName('selection');
+    let buttonLen = $button.length;
     const quizLen = quiz.length;
     let quizCount = 0;
     let score = 0;
+    let running_time = "";{{--runnning timeミリ秒保存用 例"1000 2000 2200" --}} 
     
     const setupQuiz = () => {
+        console.log("start setquiz");
         $question.textContent = quiz[quizCount].question;
+        $button = $doc.getElementsByClassName('selection');
+        buttonLen = $button.length;
         document.getElementById('sound').textContent = "　";
         
         let new_value = [quiz[quizCount].answer];
@@ -82,12 +89,22 @@
         console.log(new_value);
         
         let btnIndex = 0;
-        
-        while(btnIndex < buttonLen){ 
-              $button[btnIndex].textContent = new_value[btnIndex];
-              btnIndex++;
+        console.log(btnIndex);
+        console.log("btnIndex:" + btnIndex + "  buttonLen:" + buttonLen)
+        console.log($button);
+        while(btnIndex < buttonLen){
+              if($button[btnIndex]){
+                    console.log("正常  btnindex:" + btnIndex);
+                    console.log($button[btnIndex]);
+                      $button[btnIndex].textContent = new_value[btnIndex];
+                      btnIndex++;
+              }else{
+                   console.log("異常  btnindex:" + btnIndex)
+                       btnIndex++;  
+              }
         }
-        for(let i = 1; i <= buttonLen; i++){
+
+        for(var i = 1; i <= buttonLen; i++){
         document.getElementById('js-btn-'+ i).className = "btn btn--yellow";
         }
     };
@@ -101,10 +118,12 @@
         } else {
           elm.className = "btn btn-black"
           document.getElementById('sound').textContent = "ブブー";
-          }
+        }
+        running_time = running_time + zeroAndMinutes + zeroAndSeconds + "/";{{-- ++と書ける？ --}}
+        console.log(running_time);
         goToNext();
-        
     };
+    
     const goToNext = () => {
         quizCount++;
         if(quizCount < quizLen){
@@ -126,7 +145,7 @@
     
     let handlerIndex = 0;
         {{-- let answersLen = quiz[quizCount].answers.length; --}} 
-    function hoge(){
+    function startQuiz(){
         document.getElementById('QuizStart').textContent = 'STARTED!!';
         setupQuiz();
     }
@@ -218,10 +237,21 @@
      --}} 
     
     document.getElementById('save_button').addEventListener('click', function(e){
-      document.getElementById('running_time').value = 1000; {{-- 実際にかかった時間　idがtimeのタグ（inputタグ）のvalue属性に「実際にかかった時間を」代入する --}} 
-      document.getElementById('score').value = 10; {{--正解数とか？ --}} 
+      document.getElementById('running_time').value = runnning_time;
+        {{-- 実際にかかった時間　idがtimeのタグ（inputタグ）のvalue属性に「実際にかかった時間を」代入する --}} 
+      document.getElementById('correct').value = 10;
+        {{--正解数とか？ --}} 
+      document.getElementById('user_quiz_result').value = 2;  
+      document.getElementById('challenge_id').value = challenge_id;  
       document.getElementById('course_id').value = courses[0].id;  
-      document.forms['recordtime'].submit();  {{--このフォームの送信ボタンを押した時と同じ挙動をする <input type="submit" value="送信ボタン">のsubmitと同じ意味 --}} 
+      document.forms['recordtime'].submit();
+        {{--このフォームの送信ボタンを押した時と同じ挙動をする <input type="submit" value="送信ボタン">のsubmitと同じ意味 --}} 
+    })
+    
+    $('#record_result_submit').onclick(function(){
+      $('#time').val() = //JSの変数上に存在する、かかった時間の値
+        {{--$('#score').val() = //JSの変数上に存在する、かかったスコアの値--}}
+      $('#record_result_form').submit()
     })
 
   </script>

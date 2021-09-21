@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Auth;//Laravel ではデフォルトでクラス�
 use App\Course;
 use App\User;
 use App\History;
-use App\UsersQuizResult;
+use App\UserQuizResult;
 
 class CourseController extends Controller
 {
@@ -244,7 +244,8 @@ class CourseController extends Controller
   public function quiz()
   {
     // $course = Course::find(1);
-    $courses = Course::inRandomOrder()->limit(3)->get();
+    $question_amount = 3;//３は、のちのち20などにする予定
+    $courses = Course::inRandomOrder()->limit($question_amount)->get();
     $dummy_courses = Course::where('id' ,'<>', $courses[0]->id)
       ->where('kind',$courses[0]->kind)->inRandomOrder()->limit(3)->get();
     $dummy_answers = array();
@@ -255,36 +256,39 @@ class CourseController extends Controller
     $correct_and_dummy_answers = $dummy_answers;
     $correct_and_dummy_answers[] = $courses;
     shuffle($correct_and_dummy_answers);
-    $latest_users_quiz_result = UsersQuizResult::where('user_id', Auth::id())->orderBy("challenge_id","desc")->first();
+    $latest_user_quiz_result = UserQuizResult::where('user_id', Auth::id())->orderBy("challenge_id","desc")->first();
     $challenge_id = 1;
-    if(isset($latest_users_quiz_result)){
-      $challenge_id = $latest_users_quiz_result->challenge_id + 1;
+    if(isset($latest_user_quiz_result)){
+      $challenge_id = $latest_user_quiz_result->challenge_id + 1;
     }
     foreach($courses as $course){
-      $result = new UsersQuizResult();
+      $result = new UserQuizResult();
       $result->user_id = Auth::id();
       $result->course_id = $course->id;
       $result->challenge_id = $challenge_id;
-      $result->users_quiz_result = false;
+      $result->user_quiz_result = 0;
       $result->save();
-      
     }
-    return view('admin.course.quiz', ['correct_and_dummy_answers'=>$correct_and_dummy_answers,'dummy_answers'=>$dummy_answers, 'dummy_courses'=>$dummy_courses, 'courses'=>$courses]); 
+    return view('admin.course.quiz', ['challenge_id'=>$challenge_id, 'correct_and_dummy_answers'=>$correct_and_dummy_answers,
+    'dummy_answers'=>$dummy_answers, 'dummy_courses'=>$dummy_courses, 'courses'=>$courses]); 
   }
   
   public function PostQuizTime(Request $request)
   {
+    // dd($request);
     $user = Auth::user(); // ログインユーザーのインスタンスの獲得
-    $users_quiz_result = new UsersQuizResult();
+    $user_quiz_results = UserQuizResult::where('user_id', Auth::id())->where('challenge_id', $request->challenge_id)->get();
     $quiz_data = $request->all(); //$quiz_data にはrunnning_time や score などHTMLからsubmitされた値が入っている。
     // dd($quiz_data);
-    $users_quiz_result->running_time = $quiz_data["running_time"];//updateかける
-    $users_quiz_result->user_id = $user->id;
-    $users_quiz_result->course_id = $quiz_data;
-    $users_quiz_result->challenge_id = 14;
-    $users_quiz_result->users_quiz_result = false;
-    // dd($users_quiz_result->running_time);
-    $users_quiz_result->save();
+    // $user_quiz_results[0]->update(['user_quiz_result'=>$request->user_quiz_result]);
+    // $user_quiz_results[0]->running_time = $quiz_data["running_time"];//updateかける
+    $result = [];
+    foreach($user_quiz_results as $result){
+      $result->update(['user_quiz_result' => $quiz_data['user_quiz_result']]);
+      $result->update(['running_time' => $quiz_data['running_time']]);//updateかける ※quiz_dataは連想配列なので$quiz_data->ではない
+      $result->save();
+    }
+    // dd($user_quiz_results);
     return redirect()->action('Admin\CourseController@quiz');
   }
   
