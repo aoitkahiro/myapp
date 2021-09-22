@@ -266,7 +266,7 @@ class CourseController extends Controller
       $result->user_id = Auth::id();
       $result->course_id = $course->id;
       $result->challenge_id = $challenge_id;
-      $result->user_quiz_result = 0;
+      $result->judgement = 0;
       $result->save();
     }
     return view('admin.course.quiz', ['challenge_id'=>$challenge_id, 'correct_and_dummy_answers'=>$correct_and_dummy_answers,
@@ -280,13 +280,22 @@ class CourseController extends Controller
     $user_quiz_results = UserQuizResult::where('user_id', Auth::id())->where('challenge_id', $request->challenge_id)->get();
     $quiz_data = $request->all(); //$quiz_data にはrunnning_time や score などHTMLからsubmitされた値が入っている。
     // dd($quiz_data);
+    $running_time_in_string = $quiz_data['running_time'];
+    $running_time_array = explode("/" , $running_time_in_string);
+    $result_in_string = $quiz_data['result'];
+    $result_array = explode(" " , $result_in_string);
+    // dd($result_array);
+    // dd($running_time_array);
     // $user_quiz_results[0]->update(['user_quiz_result'=>$request->user_quiz_result]);
     // $user_quiz_results[0]->running_time = $quiz_data["running_time"];//updateかける
-    $result = [];
-    foreach($user_quiz_results as $result){
-      $result->update(['user_quiz_result' => $quiz_data['user_quiz_result']]);
-      $result->update(['running_time' => $quiz_data['running_time']]);//updateかける ※quiz_dataは連想配列なので$quiz_data->ではない
-      $result->save();
+    $user_quiz_result = [];
+    $i = 0;
+    foreach($user_quiz_results as $user_quiz_result){
+      // $result->update(['user_quiz_result' => $quiz_data['user_quiz_result']]);
+      $user_quiz_result->update(['running_time' => $running_time_array[$i]]);//updateかける ※quiz_dataは連想配列なので$quiz_data->ではない
+      $user_quiz_result->update(['judgement' => $result_array[$i]]);//updateかける ※quiz_dataは連想配列なので$quiz_data->ではない
+      $user_quiz_result->save();
+      $i++;
     }
     // dd($user_quiz_results);
     return redirect()->action('Admin\CourseController@quiz');

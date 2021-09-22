@@ -31,6 +31,7 @@
     <input type="hidden" name="score" id="score">
     <input type="hidden" name="user_quiz_result" id="user_quiz_result">
     <input type="hidden" name="running_time" id="running_time">
+    <input type="hidden" name="result" id="result">
     <input type="hidden" name="course_id" id="course_id">
     <input type="hidden" name="challenge_id" id="challenge_id">
     <button type="button" id="save_button">記録を送信する</button>
@@ -62,18 +63,20 @@
     const $window = window;
     const $doc = document;
     const $question = $doc.getElementById('js-question');
-    let $button = $doc.getElementsByClassName('selection');
-    let buttonLen = $button.length;
+    let $buttons = $doc.getElementsByClassName('selection');
+    let buttonLen = $buttons.length;
     const quizLen = quiz.length;
     let quizCount = 0;
     let score = 0;
     let running_time = "";{{--runnning timeミリ秒保存用 例"1000 2000 2200" --}} 
+    let result = "";
     
     const setupQuiz = () => {
-        console.log("start setquiz");
+        console.log("setquiz関数が呼ばれました");
         $question.textContent = quiz[quizCount].question;
-        $button = $doc.getElementsByClassName('selection');
-        buttonLen = $button.length;
+        $buttons = $doc.getElementsByClassName('selection');
+        console.log($buttons);
+        buttonLen = $buttons.length;
         document.getElementById('sound').textContent = "　";
         
         let new_value = [quiz[quizCount].answer];
@@ -86,17 +89,16 @@
          const randomNumber = Math.floor(Math.random() * (i + 1));
          [new_value[i], new_value[randomNumber]] = [new_value[randomNumber], new_value[i]];
         }
-        console.log(new_value);
+        console.log("new_value = " + new_value);
         
         let btnIndex = 0;
-        console.log(btnIndex);
         console.log("btnIndex:" + btnIndex + "  buttonLen:" + buttonLen)
-        console.log($button);
+        console.log($buttons);
         while(btnIndex < buttonLen){
-              if($button[btnIndex]){
+              if($buttons[btnIndex]){
                     console.log("正常  btnindex:" + btnIndex);
-                    console.log($button[btnIndex]);
-                      $button[btnIndex].textContent = new_value[btnIndex];
+                    console.log($buttons[btnIndex]);
+                      $buttons[btnIndex].textContent = new_value[btnIndex];
                       btnIndex++;
               }else{
                    console.log("異常  btnindex:" + btnIndex)
@@ -105,22 +107,25 @@
         }
 
         for(var i = 1; i <= buttonLen; i++){
-        document.getElementById('js-btn-'+ i).className = "btn btn--yellow";
+          document.getElementById('js-btn-'+ i).className = "btn btn--yellow selection";
         }
     };
             {{-- ↓クリックされたボタンに基づいて、正誤文を出したり次の問題へ進める処理 --}} 
     const clickHandler = (elm) => { {{--elmとは、「eventの、targetである今clickされたbuttonを取得」--}}
         if(elm.textContent === quiz[quizCount].correct){
-          elm.className = "btn btn-orange"
+          elm.className = "btn btn-orange selection"
           document.getElementById('sound').textContent = "ピンポン♪";
           score++;
-        
+          result = result + "2" + " ";
         } else {
-          elm.className = "btn btn-black"
+          elm.className = "btn btn-black selection"
           document.getElementById('sound').textContent = "ブブー";
+          result = result + "1" + " ";
         }
         running_time = running_time + zeroAndMinutes + zeroAndSeconds + "/";{{-- ++と書ける？ --}}
         console.log(running_time);
+        console.log("結果："+ result);
+        console.log("今$buttonsのクラスは btn btn-orange selectionか btn btn-black selectionです");
         goToNext();
     };
     
@@ -152,7 +157,7 @@
         {{-- ↓のclickによるイベント実行関数は（第1引数 実行条件, 第2引数 実行内容をクロージャーで行う --}}
     while(handlerIndex < buttonLen){
         {{-- ↓handlerIndex番めの<button>が'click'されたときに第2引数の関数が実行されますよ、という処理（何行も書かずにwhile文でrefactoringしている）--}}
-        $button[handlerIndex].addEventListener('click', (e) => {  {{-- (e)は処理の中で使う --}} 
+        $buttons[handlerIndex].addEventListener('click', (e) => {  {{-- (e)は処理の中で使う --}} 
             {{-- 'click'した<target>の値を渡しながら処理clickHandler()を実行する（リレーをしている？） --}} 
         clickHandler(e.target);
             {{-- なぜe.targetという値を持っている？clickHandler(elm)なのに --}} 
@@ -237,18 +242,22 @@
      --}} 
     
     document.getElementById('save_button').addEventListener('click', function(e){
-      document.getElementById('running_time').value = runnning_time;
+      console.log(running_time);
+      document.getElementById('running_time').value = running_time;
+      document.getElementById('result').value = result;
+      console.log("コンソールログです");
         {{-- 実際にかかった時間　idがtimeのタグ（inputタグ）のvalue属性に「実際にかかった時間を」代入する --}} 
-      document.getElementById('correct').value = 10;
-        {{--正解数とか？ --}} 
-      document.getElementById('user_quiz_result').value = 2;  
+        {{--document.getElementById('correct').value = 10;--}}
+        {{--正解数とか？ --}}
+      document.getElementById('user_quiz_result').value = 2;
+      console.log(2 + "問正解とレコード登録します");
       document.getElementById('challenge_id').value = challenge_id;  
       document.getElementById('course_id').value = courses[0].id;  
       document.forms['recordtime'].submit();
         {{--このフォームの送信ボタンを押した時と同じ挙動をする <input type="submit" value="送信ボタン">のsubmitと同じ意味 --}} 
     })
     
-    $('#record_result_submit').onclick(function(){
+    $('#record_result_submit').click(function(){
       $('#time').val() = //JSの変数上に存在する、かかった時間の値
         {{--$('#score').val() = //JSの変数上に存在する、かかったスコアの値--}}
       $('#record_result_form').submit()
