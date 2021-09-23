@@ -15,6 +15,10 @@
   background-color: #aaa;
 }
 
+.margin_bottom_2 {
+  margin-bottom: 2em;
+}
+
 .btn-orange,
 a.btn-orange {
   color: #fff;

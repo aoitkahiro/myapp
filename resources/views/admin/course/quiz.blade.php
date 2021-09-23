@@ -38,19 +38,36 @@
   </form>
   </div>
 </div>
+  <p class="margin_bottom_2"></p>
+<div class="container">
+  <p id="">"{{$courses[0]->category}}"に挑戦した人たち</p>
+  {{--@foreach($hoge as $h)--}}
+    <li class="Ranking"> {{$result->user_id}} さん 記録：{{$latest_user_quiz_result->running_time}}秒challengeidごとの最大秒</li>
+  {{--@endforeach  --}}
+</div>
+<div class="container">
+  <p class="margin_bottom_2"></p>
+  <a href="{{action('Admin\CourseController@quiz')}}" type="button" id="restart" class="btn btn-black"><h2>↺</h2><br><h8>もう一度</h8></a>
+  <a href="{{action('Admin\CourseController@index')}}" type="button" id="goIndex" class="btn btn-black"><h2>↩</h2><br><h8>もどる</h8></a>
+
+    @foreach ($courses as $course)
+      <li class="list-group-item"><span id="judgement{{ $course->id }}"> </span> {{$course->front}}<br>  {{$course->back}}</li>
+    @endforeach
+</div>
 
   
 @endsection
 @section('js')
 
   <script>
-    const courses = {!!$courses!!}; {{-- '$courses'を渡す時、' がquotと表示されてしまうのを防ぐため --}} 
+    const courses = {!!$courses!!}; {{-- '$courses'を渡す時、' がquotと表示されてしまうのを防ぐため --}}
     const dummy_courses =  {!!$dummy_courses!!};
     const dummy_answers = @json($dummy_answers);{{--@json とは配列をJavaScriptで扱いやすくしたデータ構造（詳しくしる）--}}
     const correct_and_dummy_answers = @json($correct_and_dummy_answers);
     const challenge_id =  {!!$challenge_id!!};
     let quiz = [];
     let counter = 0;
+    console.log(courses);
     courses.forEach(function(course){ 
       quiz.push({
         question: course.front,
@@ -132,12 +149,24 @@
     const goToNext = () => {
         quizCount++;
         if(quizCount < quizLen){
-         setTimeout(function(){setupQuiz(quizCount)},2000);    
+          setTimeout(function(){setupQuiz(quizCount)},2000);    
         } else {
           stopTheWatch();
-          $window.alert('ピピ～！（笛の音を実装予定）');
+          judgeString = result.replace(/0|1/g, '✖');
+          judgeString = judgeString.replace(/2/g, '〇'); 
+          judgeString = (judgeString.trimEnd());
+          const someJudgements = judgeString.split(" ");
+          console.log(someJudgements);
+          let count = 0;
+          console.log(courses);
+          console.log(courses[count]);
+          console.log(courses[count].id);
+          someJudgements.forEach((judgement) => {
+          document.getElementById("judgement"+ courses[count].id).textContent = judgement;
+          count++;
+          });
           showEnd();
-        }
+        };
     };
     
     const showEnd = () => {
@@ -145,6 +174,8 @@
         
         const $items = $doc.getElementById('js-items');
         $items.style.visibility = 'hidden';
+        
+        
     };
     
     
@@ -246,13 +277,9 @@
       document.getElementById('running_time').value = running_time;
       document.getElementById('result').value = result;
       console.log("コンソールログです");
-        {{-- 実際にかかった時間　idがtimeのタグ（inputタグ）のvalue属性に「実際にかかった時間を」代入する --}} 
-        {{--document.getElementById('correct').value = 10;--}}
-        {{--正解数とか？ --}}
-      document.getElementById('user_quiz_result').value = 2;
       console.log(2 + "問正解とレコード登録します");
       document.getElementById('challenge_id').value = challenge_id;  
-      document.getElementById('course_id').value = courses[0].id;  
+      document.getElementById('course_id').value = courses[0].id;
       document.forms['recordtime'].submit();
         {{--このフォームの送信ボタンを押した時と同じ挙動をする <input type="submit" value="送信ボタン">のsubmitと同じ意味 --}} 
     })

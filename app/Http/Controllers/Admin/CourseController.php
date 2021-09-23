@@ -247,11 +247,11 @@ class CourseController extends Controller
     $question_amount = 3;//３は、のちのち20などにする予定
     $courses = Course::inRandomOrder()->limit($question_amount)->get();
     $dummy_courses = Course::where('id' ,'<>', $courses[0]->id)
-      ->where('kind',$courses[0]->kind)->inRandomOrder()->limit(3)->get();
+      ->where('kind',$courses[0]->kind)->inRandomOrder()->limit($question_amount)->get();
     $dummy_answers = array();
-    for ($i = 0; $i < 3; $i++) {
+    for ($i = 0; $i < $question_amount; $i++) {
       array_push($dummy_answers,Course::where('id' ,'<>', $courses[$i]->id)
-        ->where('kind',$courses[$i]->kind)->inRandomOrder()->limit(3)->get());
+        ->where('kind',$courses[$i]->kind)->inRandomOrder()->limit($question_amount)->get());
     }
     $correct_and_dummy_answers = $dummy_answers;
     $correct_and_dummy_answers[] = $courses;
@@ -269,8 +269,9 @@ class CourseController extends Controller
       $result->judgement = 0;
       $result->save();
     }
-    return view('admin.course.quiz', ['challenge_id'=>$challenge_id, 'correct_and_dummy_answers'=>$correct_and_dummy_answers,
-    'dummy_answers'=>$dummy_answers, 'dummy_courses'=>$dummy_courses, 'courses'=>$courses]); 
+    // dd($latest_user_quiz_result);
+    return view('admin.course.quiz', ['latest_user_quiz_result'=>$latest_user_quiz_result,'result'=> $result, 'challenge_id'=>$challenge_id, 
+    'correct_and_dummy_answers'=>$correct_and_dummy_answers,'dummy_answers'=>$dummy_answers, 'dummy_courses'=>$dummy_courses, 'courses'=>$courses]); 
   }
   
   public function PostQuizTime(Request $request)
@@ -301,6 +302,39 @@ class CourseController extends Controller
     return redirect()->action('Admin\CourseController@quiz');
   }
   
+  /*public function lowerLearningLevel(Request $request)
+  {
+    //databaseを検索してレコードがある場合、ない場合で実行コードを分けるよう実装する。
+    $histories = History::where('user_id',Auth::id())->where('course_id',$request->course_id)->get();
+    dd($histories);
+    //レコードを探すコード
+    //->get();だとインスタンスの「配列」が返ってきてしまうのでエラーになる
+    //historiesテーブルを検索して、user_id , couse_idのカラム２つで検索している（whereは複数件のインスタンスを返すが、この場合firstだけ返してくる）
+    if($histories != NULL){
+      foreach($histories as histries)
+      $histories->update(['learning_level'=>$request->learning_level]);
+      return redirect('admin/course/wordbook?tango_id=' . $request->tango_id);
+    }else{
+       //インスタンス作成
+       $histories = new History;
+       $form = $request->all();
+       //Inputタグのusers_id属性がusers_idの場合 $request->users_id で値を受け取る
+       //モデルインスタンスのusers_id属性に代入
+       $histories->user_id = Auth::id(); //use Auth; と書かないと使えない！
+       
+       unset($form['tango_id']);
+       unset($form['_token']);
+       
+       //Historyモデルのインスタンスである$historiesに、$formの中にあるデータを詰め込む
+       $histories->fill($form);
+       //saveメソッドが呼ばれると新しいレコードがデータベースに挿入される
+       $histories->save();
+       
+       //return view('admin.course.wordbook');
+       //return redirect()->action('Admin\CourseController@wordbook');
+       return redirect('admin/course/wordbook?tango_id=' . $request->tango_id);
+    }
+  }*/
   public function quiz2()
   {     
     return view('admin.course.quiz2');  
