@@ -298,8 +298,36 @@ class CourseController extends Controller
       $user_quiz_result->save();
       $i++;
     }
-    // dd($user_quiz_results);
+    // dd($rankings);
     return redirect()->action('Admin\CourseController@quiz');
+  }
+  
+  public function ranking()
+  {
+    
+    $question_amount = 3;//３は、のちのち20などにする予定
+    $courses = Course::inRandomOrder()->limit($question_amount)->get();
+    $result = new UserQuizResult();
+    
+    $latest_user_quiz_result = UserQuizResult::where('user_id', Auth::id())->orderBy("challenge_id","desc")->first();
+    $challenge_id = 1;
+    if(isset($latest_user_quiz_result)){
+      $challenge_id = $latest_user_quiz_result->challenge_id + 1;
+    }
+    $users = User::all();
+    $rankings = [];
+    foreach ($users as $user) {
+      $ary = []; // ここに正解回数が入る([0]が一回目の結果)
+      $maxCi = UserQuizResult::where('user_id', $user->id)->max('challenge_id'); // そのユーザのチャレンジID最大値を取得
+      for ($ci = 1; $ci <= $maxCi; $ci++) {
+        $success = UserQuizResult::where('user_id', $user->id)->where('challenge_id', $ci)->where('judgement', 2)->count();
+        $ary = ['name' => $user->name, '挑戦回数' => $ci, '正解回数' => $success];
+        $rankings[] = $ary;
+      }
+    }
+    dd($rankings);
+    return view('admin.course.ranking', ['latest_user_quiz_result'=>$latest_user_quiz_result,'result'=> $result, 'challenge_id'=>$challenge_id, 
+   'courses'=>$courses]); 
   }
   
   /*public function lowerLearningLevel(Request $request)

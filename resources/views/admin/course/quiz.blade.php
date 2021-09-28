@@ -42,7 +42,7 @@
 <div class="container">
   <p id="">"{{$courses[0]->category}}"に挑戦した人たち</p>
   {{--@foreach($hoge as $h)--}}
-    <li class="Ranking"> {{$result->user_id}} さん 記録：{{$latest_user_quiz_result->running_time}}秒challengeidごとの最大秒</li>
+    <li class="Ranking"> {{$result->user_id}} さん 記録：???秒challengeidごとの最大秒</li>
   {{--@endforeach  --}}
 </div>
 <div class="container">

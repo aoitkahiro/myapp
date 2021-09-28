@@ -40,6 +40,7 @@ Route::group(['prefix' => 'admin'], function() {
     Route::get('course/quiz', 'Admin\CourseController@quiz');
     Route::post('course/quiz', 'Admin\CourseController@PostQuizTime');
     Route::get('course/quiz2', 'Admin\CourseController@quiz2');
+    Route::get('course/ranking', 'Admin\CourseController@ranking');
     
 });
 Auth::routes();
