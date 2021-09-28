@@ -4,9 +4,9 @@
 
 <div class="container">
   <p id="">"{{$courses[0]->category}}"に挑戦した人たち</p>
-  {{--@foreach($hoge as $h)--}}
-    <li class="Ranking"> {{$result->user_id}} さん 記録：???秒challengeidごとの最大秒</li>
-  {{--@endforeach  --}}
+  @foreach($rankings as $rank)
+    <li class="Ranking"> {{$rank["name"]}} さん　正解数：{{$rank["正解回数"]}}　タイム：???秒</li>
+  @endforeach
 </div>
   <p class="margin_bottom_2"></p>
 <div class="container">

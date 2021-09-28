@@ -304,16 +304,7 @@ class CourseController extends Controller
   
   public function ranking()
   {
-    
-    $question_amount = 3;//３は、のちのち20などにする予定
-    $courses = Course::inRandomOrder()->limit($question_amount)->get();
-    $result = new UserQuizResult();
-    
-    $latest_user_quiz_result = UserQuizResult::where('user_id', Auth::id())->orderBy("challenge_id","desc")->first();
-    $challenge_id = 1;
-    if(isset($latest_user_quiz_result)){
-      $challenge_id = $latest_user_quiz_result->challenge_id + 1;
-    }
+    $courses = Course::all();
     $users = User::all();
     $rankings = [];
     foreach ($users as $user) {
@@ -325,9 +316,10 @@ class CourseController extends Controller
         $rankings[] = $ary;
       }
     }
-    dd($rankings);
-    return view('admin.course.ranking', ['latest_user_quiz_result'=>$latest_user_quiz_result,'result'=> $result, 'challenge_id'=>$challenge_id, 
-   'courses'=>$courses]); 
+    $numbers = array_column($rankings, '正解回数');
+    array_multisort($numbers, SORT_DESC, $rankings);
+    // dd($rankings);
+    return view('admin.course.ranking', ['rankings'=> $rankings, 'courses'=>$courses]); 
   }
   
   /*public function lowerLearningLevel(Request $request)
