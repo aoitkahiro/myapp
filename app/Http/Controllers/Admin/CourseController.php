@@ -304,6 +304,8 @@ class CourseController extends Controller
   
   public function ranking()
   {
+    $time = UserQuizResult::where('user_id', Auth::id())->where('challenge_id', 1)->first();
+    // dd($time->updated_at->format('Y/m/d'));
     $courses = Course::all();
     $users = User::all();
     $rankings = [];
@@ -318,7 +320,7 @@ class CourseController extends Controller
     }
     $numbers = array_column($rankings, '正解回数');
     array_multisort($numbers, SORT_DESC, $rankings);
-    // dd($rankings);
+    dd($rankings);
     return view('admin.course.ranking', ['rankings'=> $rankings, 'courses'=>$courses]); 
   }
   
