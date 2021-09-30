@@ -3,10 +3,12 @@
 @section('content')
 
 <div class="container">
-  <p id="">"{{$courses[0]->category}}"に挑戦した人たち</p>
+  <h2 id=""> "{{$courses[0]->category}}"にチャレンジした人たち</h2>
+  
+　<p>　　1日でいいキロク３コまで残せます</p>
   <ol>
   @foreach($rankings as $rank)
-    <li class="Ranking"><img class="gazou" style="max-width:20px;" src="{{ asset('storage/tango/' . $rank["画像"]) }}"> {{$rank["name"]}} さん　正解数：{{$rank["正解回数"]}}　タイム：{{$rank["タイム"]}}　挑戦日：{{$rank["挑戦日"]}}　今の目標：{{$rank["目標"]}}</li>
+    <li class="Ranking"><img class="gazou" style="max-height:30px;" src="{{ asset('storage/tango/' . $rank["画像"]) }}"> {{$rank["name"]}} さん　正解数：{{$rank["正解回数"]}}　タイム：{{$rank["タイム"]}}　挑戦日：{{$rank["挑戦日"]}}　今の目標：{{$rank["目標"]}}</li>
   @endforeach
   </ol>
 </div>

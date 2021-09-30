@@ -304,7 +304,6 @@ class CourseController extends Controller
   
   public function ranking()
   {
-    $time = UserQuizResult::where('user_id', Auth::id())->where('challenge_id', 1)->first();
     $courses = Course::all();
     $users = User::all();
     $rankings = [];
