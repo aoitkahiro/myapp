@@ -279,7 +279,7 @@ class CourseController extends Controller
     // dd($request);
     $user = Auth::user(); // ログインユーザーのインスタンスの獲得
     $user_quiz_results = UserQuizResult::where('user_id', Auth::id())->where('challenge_id', $request->challenge_id)->get();
-    $quiz_data = $request->all(); //$quiz_data にはrunnning_time や score などHTMLからsubmitされた値が入っている。
+    $quiz_data = $request->all(); //$quiz_data にはrunning_time や score などHTMLからsubmitされた値が入っている。
     // dd($quiz_data);
     $running_time_in_string = $quiz_data['running_time'];
     $running_time_array = explode("/" , $running_time_in_string);
@@ -305,7 +305,6 @@ class CourseController extends Controller
   public function ranking()
   {
     $time = UserQuizResult::where('user_id', Auth::id())->where('challenge_id', 1)->first();
-    // dd($time->updated_at->format('Y/m/d'));
     $courses = Course::all();
     $users = User::all();
     $rankings = [];
@@ -314,13 +313,19 @@ class CourseController extends Controller
       $maxCi = UserQuizResult::where('user_id', $user->id)->max('challenge_id'); // そのユーザのチャレンジID最大値を取得
       for ($ci = 1; $ci <= $maxCi; $ci++) {
         $success = UserQuizResult::where('user_id', $user->id)->where('challenge_id', $ci)->where('judgement', 2)->count();
-        $ary = ['name' => $user->name, '挑戦回数' => $ci, '正解回数' => $success];
+        $modelForTimeAndDate = UserQuizResult::where('user_id', $user->id)->where('challenge_id', $ci)->orderBy('running_time','DESC')->first();
+        // dd($user->id, $ci, $modelForDate);
+        $date = $modelForTimeAndDate->created_at->format('Y/m/d');
+        $running_time = $modelForTimeAndDate->running_time;
+        $mygoal = $user->mygoal;
+        // dd($user->image_path);
+        $ary = ['name' => $user->name, '挑戦回数' => $ci, '正解回数' => $success, '挑戦日'=> $date, 'タイム'=>$running_time, '目標'=>$mygoal, '画像'=>$user->image_path];
         $rankings[] = $ary;
       }
     }
     $numbers = array_column($rankings, '正解回数');
     array_multisort($numbers, SORT_DESC, $rankings);
-    dd($rankings);
+    // dd($rankings);
     return view('admin.course.ranking', ['rankings'=> $rankings, 'courses'=>$courses]); 
   }
   
