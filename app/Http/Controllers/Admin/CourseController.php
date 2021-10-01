@@ -297,7 +297,7 @@ class CourseController extends Controller
     }
     //もし"覚えたを解除するswitch"がonなら
     if($request->forgotten == 1);{
-      $course_id = array(1,2,3);
+      $course_id = array(3,4,5);
       $i = 0;
       foreach($course_id as $ci){
         if($result_array[$i] == 1){
