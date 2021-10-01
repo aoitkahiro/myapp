@@ -276,7 +276,8 @@ class CourseController extends Controller
   
   public function PostQuizTime(Request $request)
   {
-    // dd($request);
+    // var_dump($request->ArrayForHistoriesChange);
+    // dd($request->forgotten);
     $user = Auth::user(); // ログインユーザーのインスタンスの獲得
     $user_quiz_results = UserQuizResult::where('user_id', Auth::id())->where('challenge_id', $request->challenge_id)->get();
     $quiz_data = $request->all(); //$quiz_data にはrunning_time や score などHTMLからsubmitされた値が入っている。
@@ -285,10 +286,6 @@ class CourseController extends Controller
     $running_time_array = explode("/" , $running_time_in_string);
     $result_in_string = $quiz_data['result'];
     $result_array = explode(" " , $result_in_string);
-    // dd($result_array);
-    // dd($running_time_array);
-    // $user_quiz_results[0]->update(['user_quiz_result'=>$request->user_quiz_result]);
-    // $user_quiz_results[0]->running_time = $quiz_data["running_time"];//updateかける
     $user_quiz_result = [];
     $i = 0;
     foreach($user_quiz_results as $user_quiz_result){
@@ -297,6 +294,19 @@ class CourseController extends Controller
       $user_quiz_result->update(['judgement' => $result_array[$i]]);//updateかける ※quiz_dataは連想配列なので$quiz_data->ではない
       $user_quiz_result->save();
       $i++;
+    }
+    //もし"覚えたを解除するswitch"がonなら
+    if($request->forgotten == 1);{
+      $course_id = array(1,2,3);
+      $i = 0;
+      foreach($course_id as $ci){
+        if($result_array[$i] == 1){
+          $history = History::where('user_id',Auth::id())->where('course_id',$ci)->first();
+          if($history != NULL){
+            $history->update(['learning_level'=> 0]);
+          }
+        }
+      }
     }
     // dd($rankings);
     return redirect()->action('Admin\CourseController@quiz');
@@ -322,9 +332,42 @@ class CourseController extends Controller
         $rankings[] = $ary;
       }
     }
+    $days = array_column($rankings, '挑戦日');
     $numbers = array_column($rankings, '正解回数');
-    array_multisort($numbers, SORT_DESC, $rankings);
+    $times = array_column($rankings, 'タイム');
+    // $beforeSort = $rankings;
+    $result = array_multisort($days, SORT_DESC,$numbers, SORT_DESC, $times, SORT_ASC, $rankings); // 上位以外をはじくために、配列を整える
+    // dd($beforeSort,$rankings,$result);
+    
+    $existed_user_names = [];
+    $pre_date = "";
+    $count = 0;
     // dd($rankings);
+    
+    foreach($rankings as $ranking){
+      // dd($rankings);
+      $checking_date = $ranking["挑戦日"];
+      $checking_name = $ranking["name"];
+      
+      if($checking_date != $pre_date){ // 同日のデータをはじくために、"" あるいは 前のループの日付と比較
+        $existed_user_names = [];
+      }//もし日付が前ループと同じなら、$ $existed_user_names[] は初期化しない
+      
+      if(in_array($checking_name, $existed_user_names)){ // 既存の名前をはじくために、配列に存在するかcheck
+        // dd($count,$rankings[$count],$rankings);
+        unset($rankings[$count]);  //$rankngを$rankingsから削除する
+        // dd($count,$rankings);
+      }else{
+        // if($count == 6){
+        //   dd($existed_user_names,$checking_name,in_array($checking_name, $existed_user_names),$checking_date,$pre_date);
+        // }
+        array_push($existed_user_names, $checking_name);//unset()に該当しなかった名前は「既存の名前」に追加して、次のcheckで使用
+      }
+      $pre_date = $checking_date; //チェックした日付を次のループで使用する
+      $count++;
+    }
+    // dd($rankings);
+    
     return view('admin.course.ranking', ['rankings'=> $rankings, 'courses'=>$courses]); 
   }
   

@@ -5,7 +5,7 @@
 <div class="container">
   <h2 id=""> "{{$courses[0]->category}}"にチャレンジした人たち</h2>
   
-　<p>　　1日でいいキロク３コまで残せます</p>
+　<p>　　1日1個 自己ベストが残ります</p>
   <ol>
   @foreach($rankings as $rank)
     <li class="Ranking"><img class="gazou" style="max-height:30px;" src="{{ asset('storage/tango/' . $rank["画像"]) }}"> {{$rank["name"]}} さん　正解数：{{$rank["正解回数"]}}　タイム：{{$rank["タイム"]}}　挑戦日：{{$rank["挑戦日"]}}　今の目標：{{$rank["目標"]}}</li>
@@ -15,12 +15,10 @@
   <p class="margin_bottom_2"></p>
 <div class="container">
   <p class="margin_bottom_2"></p>
-  <a href="{{action('Admin\CourseController@quiz')}}" type="button" id="restart" class="btn btn-black"><h2>↺</h2><br><h8>もう一度</h8></a>
   <a href="{{action('Admin\CourseController@index')}}" type="button" id="goIndex" class="btn btn-black"><h2>↩</h2><br><h8>もどる</h8></a>
 
 </div>
 
-  
 @endsection
 @section('js')
 

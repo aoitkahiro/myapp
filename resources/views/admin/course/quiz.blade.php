@@ -32,8 +32,10 @@
     <input type="hidden" name="user_quiz_result" id="user_quiz_result">
     <input type="hidden" name="running_time" id="running_time">
     <input type="hidden" name="result" id="result">
-    <input type="hidden" name="course_id" id="course_id">
+    <input type="hidden" name="course_id" id="course_id">{{--要確認（何のためにRequestへinputしているのか--}}
     <input type="hidden" name="challenge_id" id="challenge_id">
+    <input type="hidden" name="ArrayForHistoriesChange" id="ArrayForHistoriesChange">
+    <p><input type="checkbox" name="forgotten" id="forgotten" value="1"> 間違えた語の[覚えた]を解除</p>
     <button type="button" id="save_button">記録を送信する</button>
   </form>
   </div>
@@ -87,6 +89,7 @@
     let score = 0;
     let running_time = "";{{--runnning timeミリ秒保存用 例"1000 2000 2200" --}} 
     let result = "";
+    let ArrayForHistoriesChange = [];
     
     const setupQuiz = () => {
         console.log("setquiz関数が呼ばれました");
@@ -134,15 +137,16 @@
           document.getElementById('sound').textContent = "ピンポン♪";
           score++;
           result = result + "2" + " ";
-        } else {
+          ArrayForHistoriesChange.push(2);
+          } else {
           elm.className = "btn btn-black selection"
           document.getElementById('sound').textContent = "ブブー";
           result = result + "1" + " ";
+          ArrayForHistoriesChange.push(1);
         }
         running_time = running_time + zeroAndMinutes + zeroAndSeconds + "/";{{-- ++と書ける？ --}}
         console.log(running_time);
         console.log("結果："+ result);
-        console.log("今$buttonsのクラスは btn btn-orange selectionか btn btn-black selectionです");
         goToNext();
     };
     
@@ -161,6 +165,7 @@
           console.log(courses);
           console.log(courses[count]);
           console.log(courses[count].id);
+          console.log(ArrayForHistoriesChange);
           someJudgements.forEach((judgement) => {
           document.getElementById("judgement"+ courses[count].id).textContent = judgement;
           count++;
@@ -280,6 +285,7 @@
       console.log(2 + "問正解とレコード登録します");
       document.getElementById('challenge_id').value = challenge_id;  
       document.getElementById('course_id').value = courses[0].id;
+      document.getElementById('ArrayForHistoriesChange').value = ArrayForHistoriesChange;
       document.forms['recordtime'].submit();
         {{--このフォームの送信ボタンを押した時と同じ挙動をする <input type="submit" value="送信ボタン">のsubmitと同じ意味 --}} 
     })

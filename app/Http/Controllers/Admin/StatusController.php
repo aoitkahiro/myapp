@@ -24,7 +24,7 @@ class StatusController extends Controller
       
       //dd($history,$request->course_id,Auth::id(),$request->all());
       if($history != NULL){
-         dd($history);
+         // dd($history);
          $history->update(['learning_level'=>$request->learning_level]);
          return redirect('admin/course/wordbook?tango_id=' . $request->tango_id);
       }else{
