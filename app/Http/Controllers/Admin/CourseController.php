@@ -281,11 +281,15 @@ class CourseController extends Controller
     $user = Auth::user(); // ログインユーザーのインスタンスの獲得
     $user_quiz_results = UserQuizResult::where('user_id', Auth::id())->where('challenge_id', $request->challenge_id)->get();
     $quiz_data = $request->all(); //$quiz_data にはrunning_time や score などHTMLからsubmitされた値が入っている。
-    // dd($quiz_data);
     $running_time_in_string = $quiz_data['running_time'];
     $running_time_array = explode("/" , $running_time_in_string);
     $result_in_string = $quiz_data['result'];
     $result_array = explode(" " , $result_in_string);
+    $course_id_array = json_decode($request->course_id_array,true);//true は連想配列に、falseはオブジェクトにデコードする
+    $result_items = json_decode($request->result_items,true);
+    $rslts = array_column($result_items,'rslt');
+    dd($rslts[0],$rslts);
+    // dd($course_id_array,$running_time_array,$request,$quiz_data);
     $user_quiz_result = [];
     $i = 0;
     foreach($user_quiz_results as $user_quiz_result){
@@ -296,12 +300,12 @@ class CourseController extends Controller
       $i++;
     }
     //もし"覚えたを解除するswitch"がonなら
-    if($request->forgotten == 1);{
-      $course_id = array(3,4,5);
+    if($request->forgotten == 1){
       $i = 0;
-      foreach($course_id as $ci){
+      foreach($course_id_array as $course_id){
         if($result_array[$i] == 1){
-          $history = History::where('user_id',Auth::id())->where('course_id',$ci)->first();
+        //   dd($course_id);    
+          $history = History::where('user_id',Auth::id())->where('course_id',$course_id)->first();
           if($history != NULL){
             $history->update(['learning_level'=> 0]);
           }
@@ -367,7 +371,12 @@ class CourseController extends Controller
       $count++;
     }
     // dd($rankings);
-    
+    $days = array_column($rankings, '挑戦日');
+    $numbers = array_column($rankings, '正解回数');
+    $times = array_column($rankings, 'タイム');
+    // dd($days,$numbers,$times,$rankings);
+    $boolean = array_multisort($numbers, SORT_DESC, $times, SORT_ASC, $days, SORT_DESC,$rankings); // ランキングを仕様通りに並べ替える
+    // dd($rankings);
     return view('admin.course.ranking', ['rankings'=> $rankings, 'courses'=>$courses]); 
   }
   
