@@ -276,34 +276,38 @@ class CourseController extends Controller
   
   public function PostQuizTime(Request $request)
   {
-    // var_dump($request->ArrayForHistoriesChange);
-    // dd($request->forgotten);
-    $user = Auth::user(); // ログインユーザーのインスタンスの獲得
-    $user_quiz_results = UserQuizResult::where('user_id', Auth::id())->where('challenge_id', $request->challenge_id)->get();
-    $quiz_data = $request->all(); //$quiz_data にはrunning_time や score などHTMLからsubmitされた値が入っている。
-    $running_time_in_string = $quiz_data['running_time'];
-    $running_time_array = explode("/" , $running_time_in_string);
-    $result_in_string = $quiz_data['result'];
-    $result_array = explode(" " , $result_in_string);
+    $user_quiz_results = UserQuizResult::where('user_id', Auth::id())->where('challenge_id', $request->challenge_id)->
+        orderBy("id")->get();
+    // $quiz_data = $request->all(); //$quiz_data にはrunning_time や score などHTMLからsubmitされた値が入っている。
+    // $running_time_in_string = $quiz_data['running_time'];
+    // $running_time_array = explode("/" , $running_time_in_string);
+    // $result_in_string = $quiz_data['result'];
+    // $result_array = explode(" " , $result_in_string);
     $course_id_array = json_decode($request->course_id_array,true);//true は連想配列に、falseはオブジェクトにデコードする
     $result_items = json_decode($request->result_items,true);
-    $rslts = array_column($result_items,'rslt');
-    dd($rslts[0],$rslts);
+    $results = array_column($result_items,'rslt');
+    $running_times = array_column($result_items,'rng_time');
+    // dd($results[0],$results);
     // dd($course_id_array,$running_time_array,$request,$quiz_data);
+    // dd($running_times);
     $user_quiz_result = [];
     $i = 0;
+    $pre_running_time = 0;//デバッグ用の変数（ランニングタイムでバグが起こっているため）
     foreach($user_quiz_results as $user_quiz_result){
-      // $result->update(['user_quiz_result' => $quiz_data['user_quiz_result']]);
-      $user_quiz_result->update(['running_time' => $running_time_array[$i]]);//updateかける ※quiz_dataは連想配列なので$quiz_data->ではない
-      $user_quiz_result->update(['judgement' => $result_array[$i]]);//updateかける ※quiz_dataは連想配列なので$quiz_data->ではない
+      $user_quiz_result->update(['running_time' => $running_times[$i]]);
+      $user_quiz_result->update(['judgement' => $results[$i]]);
+      if($running_times[$i] < $pre_running_time){
+          dd("running_time の保存がバグっているようです",$running_times,$user_quiz_results,$results);
+      }
       $user_quiz_result->save();
+      $pre_running_time = $running_times[$i];
       $i++;
     }
     //もし"覚えたを解除するswitch"がonなら
     if($request->forgotten == 1){
       $i = 0;
       foreach($course_id_array as $course_id){
-        if($result_array[$i] == 1){
+        if($results[$i] == 1){
         //   dd($course_id);    
           $history = History::where('user_id',Auth::id())->where('course_id',$course_id)->first();
           if($history != NULL){
@@ -375,7 +379,7 @@ class CourseController extends Controller
     $numbers = array_column($rankings, '正解回数');
     $times = array_column($rankings, 'タイム');
     // dd($days,$numbers,$times,$rankings);
-    $boolean = array_multisort($numbers, SORT_DESC, $times, SORT_ASC, $days, SORT_DESC,$rankings); // ランキングを仕様通りに並べ替える
+    array_multisort($numbers, SORT_DESC, $times, SORT_ASC, $days, SORT_DESC,$rankings); // ランキングを仕様通りに並べ替える
     // dd($rankings);
     return view('admin.course.ranking', ['rankings'=> $rankings, 'courses'=>$courses]); 
   }
