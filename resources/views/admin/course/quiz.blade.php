@@ -2,18 +2,18 @@
 @section('title', 'Q')
 @section('content')
 
-<p id="">"{{$courses[0]->category}}"に挑戦した人たち</p>
+<p id="">"{{$courses[0]->category}}クイズに挑戦</p>
 <div class="container">
   <div id="QuizStart" onClick = "startQuiz()" class="btn btn-black">clickStart() ▶</div>
   <div class="text-center">
     <div>
-    <h2 id="display">00:00</h2>
+    <h2 id="display" class="sample2">00:00:00</h2>
       <h3 id="js-question">
         - - - -
       </h3>
     </div>
     <div id="js-items" class="text">
-        <p id="sound">　</p>
+        <div id="sound">　</div>
       <div class="m-2">
         <div><button type="button" id="js-btn-1" class="btn btn--yellow selection">{{$courses[0]->back}}</button></div>
       </div>
@@ -37,7 +37,7 @@
     <input type="hidden" name="result_items" id="result_items">
     <input type="hidden" name="challenge_id" id="challenge_id">
     <input type="hidden" name="ArrayForHistoriesChange[]" id="ArrayForHistoriesChange">
-    <p><input type="checkbox" checked="checked" name="forgotten" id="forgotten" value="1"> 間違えた語の[覚えた]を解除</p>
+    <p><input type="checkbox" checked="checked" class="sample2" name="forgotten" id="forgotten" value="1"> 間違えた語の[覚えた]を解除</p>
     <button type="button" id="save_button">記録を送信する</button>
   </form>
   </div>
@@ -147,7 +147,7 @@
       
       result_items.push({
           rslt: rslt,
-          rng_time: zeroAndMinutes + zeroAndSeconds,
+          rng_time: zeroAndMinutes + zeroAndSeconds + "." + zeroAndoneHandredthOfSeconds,
       })
       console.log(result_items);
       running_time = running_time + zeroAndMinutes + zeroAndSeconds + "/";{{-- ++と書ける？ --}}
@@ -181,7 +181,7 @@
   };
   
   const showEnd = () => {
-      $question.textContent = '【成　績】　　' + score + '問 / ' + quizLen + '問中';
+      $question.textContent = score + '問 / ' + quizLen + '問中';
       
       const $items = $doc.getElementById('js-items');
       $items.style.visibility = 'hidden';
@@ -208,7 +208,7 @@
   }
   function stopTheWatch(){
         clearInterval(interval);
-        startStop.innerHTML = "今回の記録";
+        startStop.innerHTML = "成 績";
         status = "stop";
   }
    {{-- 以下ストップウォッチのコード ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━--}} 
@@ -220,25 +220,36 @@
   let hours = 0;
   let minutes = 0;
   let seconds = 0;
+  let oneHandredthOfSeconds = 0;
   
   let zeroAndHours = 0;
   let zeroAndMinutes = 0;
   let zeroAndSeconds = 0;
+  let zeroAndoneHandredthOfSeconds = 0;
   
   let status = "stop";
   let interval;
   
   function stopWatch(){
-    seconds++;
-    if(seconds / 60 == 1){
-        minutes++;
-        seconds = 0;
-        if(minutes / 60 == 1){
-            hours++;
-            minutes = 0;
+    oneHandredthOfSeconds++;
+    if(oneHandredthOfSeconds / 100 == 1){
+        seconds++;
+        oneHandredthOfSeconds = 0;
+        if(seconds / 60 == 1){
+            minutes++;
+            seconds = 0;
+            if(minutes / 60 == 1){
+                hours++;
+                minutes = 0;
+            }
         }
     }
     
+    if(oneHandredthOfSeconds < 10){
+        zeroAndoneHandredthOfSeconds = "0" + oneHandredthOfSeconds;
+    }else{
+        zeroAndoneHandredthOfSeconds = oneHandredthOfSeconds;
+    }
     if(seconds < 10){
         zeroAndSeconds = "0" + seconds;
     }else{
@@ -254,12 +265,12 @@
     }else{
         zeroAndHours = hours;
     }
-    display.innerHTML = zeroAndMinutes + ":" + zeroAndSeconds;
+    display.innerHTML = zeroAndMinutes + ":" + zeroAndSeconds + ":" + zeroAndoneHandredthOfSeconds;
   };
   
   startStop.addEventListener("click", function(){
     if(status == "stop"){
-        interval = setInterval(stopWatch, 1000); {{-- 0.01秒ごとに、stopWatch()を実行する--}}
+        interval = setInterval(stopWatch, 10); {{-- 0.01秒ごとに、stopWatch()を実行する--}}
         startStop.innerHTML = "Challenge!!";
         status = "start";
         
@@ -269,19 +280,6 @@
         status = "stop";
     }
   })
-   {{-- 
-  reset.addEventListener("click", function(){
-    clearInterval(interval);
-    startStop.innerHTML = "START";
-    status = "stop";
-    display.innerHTML = "00:00:00";
-    hours = 0;
-    minutes = 0;
-    seconds = 0;
-    
-    
-  })
-   --}} 
   
   document.getElementById('save_button').addEventListener('click', function(e){
     console.log(running_time);

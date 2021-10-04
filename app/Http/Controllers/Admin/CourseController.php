@@ -287,7 +287,7 @@ class CourseController extends Controller
     $result_items = json_decode($request->result_items,true);
     $results = array_column($result_items,'rslt');
     $running_times = array_column($result_items,'rng_time');
-    // dd($results[0],$results);
+    // dd($result_items,$running_times,$results[0],$results);
     // dd($course_id_array,$running_time_array,$request,$quiz_data);
     // dd($running_times);
     $user_quiz_result = [];
@@ -296,9 +296,6 @@ class CourseController extends Controller
     foreach($user_quiz_results as $user_quiz_result){
       $user_quiz_result->update(['running_time' => $running_times[$i]]);
       $user_quiz_result->update(['judgement' => $results[$i]]);
-      if($running_times[$i] < $pre_running_time){
-          dd("running_time の保存がバグっているようです",$running_times,$user_quiz_results,$results);
-      }
       $user_quiz_result->save();
       $pre_running_time = $running_times[$i];
       $i++;

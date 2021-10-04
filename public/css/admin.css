@@ -1,3 +1,5 @@
+@charset "UTF-8";
+
 .container {
   border: 1px solid #1b0303;
 }
@@ -13,6 +15,13 @@
   width: 400px;
   height: 100px;
   background-color: #aaa;
+}
+
+/* CSSに記述します */
+
+.sample2 {
+  font-size: 20px;
+  font-family: "monospace", "Yu Gothic", "Meiryo", "\30D2\30E9\30AE\30CE\89D2\30B4", "sans-serif";
 }
 
 .margin_bottom_2 {
