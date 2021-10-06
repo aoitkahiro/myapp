@@ -15,16 +15,16 @@
     <div id="js-items" class="text">
         <div id="sound">　</div>
       <div class="m-2">
-        <div><button type="button" id="js-btn-1" class="btn btn--yellow selection">{{$courses[0]->back}}</button></div>
+        <div><button type="button" id="js-btn-1" class="btn btn--yellow selection">――</button></div>
       </div>
       <div class="m-2">
-        <div><button type="button" id="js-btn-2" class="btn btn--yellow selection">dummy</button></div>
+        <div><button type="button" id="js-btn-2" class="btn btn--yellow selection">――</button></div>
       </div>
       <div class="m-2">
-        <button type="button" id="js-btn-3" class="btn btn--yellow selection">dummy</button>
+        <button type="button" id="js-btn-3" class="btn btn--yellow selection">――</button>
       </div>
       <div class="m-2">
-        <button type="button" id="js-btn-4" class="btn btn--yellow selection">dummy</button>
+        <button type="button" id="js-btn-4" class="btn btn--yellow selection">――</button>
       </div>
     </div>
   <form name="recordtime"  method="post">
@@ -56,6 +56,8 @@
 @section('js')
 
 <script>
+
+
   const courses = {!!$courses!!}; {{-- '$courses'を渡す時、' がquotと表示されてしまうのを防ぐため --}}
   const dummy_courses =  {!!$dummy_courses!!};
   const dummy_answers = @json($dummy_answers);{{--@json とは配列をJavaScriptで扱いやすくしたデータ構造（詳しくしる）--}}
@@ -184,7 +186,7 @@
       $question.textContent = score + '問 / ' + quizLen + '問中';
       
       const $items = $doc.getElementById('js-items');
-      $items.style.visibility = 'hidden';
+      $items.innerHTML = '<img class="d-block mx-auto" style="max-width:150px;" src="{{ asset('storage/tango/' . Auth::user()->image_path) }}">';
       
       
   };

@@ -17,21 +17,22 @@ Route::get('/', function () {
 
 Route::group(['prefix' => 'admin'], function() {
     Route::get('course/start', 'Admin\CourseController@start');
-    Route::get('course/profile', 'Admin\CourseController@profile');
+    Route::get('course/profile', 'Admin\CourseController@profile')->middleware('auth');
+    Route::get('course/upImage', 'Admin\CourseController@upImage')->middleware('auth');
     Route::post('course/profile', 'Admin\CourseController@profileUpdate');
     //Route::get('course/index', 'Admin\CourseController@index');
     Route::get('course/index', 'Admin\CourseController@index')->middleware('auth'); //->middleware('auth')はログイン用のコード
-    Route::get('course/select', 'Admin\CourseController@select');
-    Route::get('course/wordbook', 'Admin\CourseController@wordbook');
+    Route::get('course/select', 'Admin\CourseController@select')->middleware('auth');
+    Route::get('course/wordbook', 'Admin\CourseController@wordbook')->middleware('auth');
     Route::post('course/wordbook', 'Admin\StatusController@store')->middleware('auth');
-    Route::get('course/write', 'Admin\CourseController@write');
+    Route::get('course/write', 'Admin\CourseController@write')->middleware('auth');
     Route::post('course/write', 'Admin\CourseController@update');
     
     //以下、新たに単語帳を作るRouting（createアクション）
-    Route::get('course/create', 'Admin\CourseController@create');
+    Route::get('course/create', 'Admin\CourseController@create')->middleware('auth');
     /*Route::get('course/csv', 'Admin\CourseController@csv'); //csv表示
     Route::post('course/csv', 'Admin\CourseController@upload_regist'); //csv取込み-登録*/
-    Route::get('course/csv2', 'Admin\CourseController@csv2'); //csv表示
+    Route::get('course/csv2', 'Admin\CourseController@csv2')->middleware('auth'); //csv表示
     Route::post('course/csv2', 'Admin\CourseController@inportCsv'); //csv取込み-登録
     
     //CSS練習用のページ（削除予定）

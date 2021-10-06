@@ -15,11 +15,11 @@ class CreateUserQuizResultsTable extends Migration
     {
         Schema::create('user_quiz_results', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('user_id'); 
-            $table->integer('challenge_id'); 
-            $table->integer('course_id'); 
+            $table->integer('user_id');
+            $table->integer('challenge_id');
+            $table->integer('course_id');
             $table->integer('judgement')->nullable();
-            $table->float('running_time')->nullable();
+            $table->integer('running_time')->nullable();
             $table->timestamps();
             $table->unique(['user_id','course_id','challenge_id']);
         });

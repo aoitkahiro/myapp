@@ -81,7 +81,7 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    英単語頑張るアプリ
+                    Word&Quiz
                 </div>
 
                 <div class="links">
