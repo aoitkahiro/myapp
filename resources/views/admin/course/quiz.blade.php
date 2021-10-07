@@ -184,7 +184,22 @@
   
   const showEnd = () => {
       $question.textContent = score + '問 / ' + quizLen + '問中';
-      
+      let correctRatio = score / quizLen;
+          alert(correctRatio);
+
+      switch (score / quizLen) {
+        case 1:
+          console.log('カナダです');
+          break;
+        case 0.9:
+          console.log('ロシアです');
+          break;
+        case 0.5:
+          console.log('ドイツです');
+          break;
+        default:
+          console.log('どれも日本ではありません');
+      } 
       const $items = $doc.getElementById('js-items');
       $items.innerHTML = '<img class="d-block mx-auto" style="max-width:150px;" src="{{ asset('storage/tango/' . Auth::user()->image_path) }}">';
       
