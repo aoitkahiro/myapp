@@ -36,7 +36,7 @@
     <input type="hidden" name="course_id_array" id="course_id_array">
     <input type="hidden" name="result_items" id="result_items">
     <input type="hidden" name="challenge_id" id="challenge_id">
-    <input type="hidden" name="ArrayForHistoriesChange[]" id="ArrayForHistoriesChange">
+    <input type="hidden" name="resultArray[]" id="resultArray">
     <p><input type="checkbox" checked="checked" class="sample2" name="forgotten" id="forgotten" value="1"> 間違えた語の[覚えた]を解除</p>
     <button type="button" id="save_button">記録を送信する</button>
   </form>
@@ -47,7 +47,8 @@
   <a href="{{action('Admin\CourseController@index')}}" type="button" id="goIndex" class="btn btn-black"><h2>↩</h2><br><h8>もどる</h8></a>
   <p class="margin_bottom_2"></p>
     @foreach ($courses as $course)
-      <li class="list-group-item"><span id="judgement{{ $course->id }}"> </span> {{$course->front}}<br>  {{$course->back}}</li>
+      {{--@if (currenctCourseIds[i]== '✖')@endif--}}
+        <li class="list-group-item"><span id="judgement{{ $course->id }}"> </span> {{$course->front}}<br>  {{$course->back}}</li>
     @endforeach
 </div>
 
@@ -89,7 +90,7 @@
   let score = 0;
   let running_time = "";{{--runnning timeミリ秒保存用 例"1000 2000 2200" --}} 
   let result = "";
-  let ArrayForHistoriesChange = [];
+  let resultArray = [];
   
   const setupQuiz = () => {
       console.log("setquiz関数が呼ばれました");
@@ -138,13 +139,13 @@
         score++;
         result = result + "2" + " ";
         rslt = 2;
-        ArrayForHistoriesChange.push(2);
+        resultArray.push(2);
         } else {
         elm.className = "btn btn-black selection"
         document.getElementById('sound').textContent = "ブブー";
         result = result + "1" + " ";
         rslt = 1;
-        ArrayForHistoriesChange.push(1);
+        resultArray.push(1);
       }
       
       result_items.push({
@@ -167,17 +168,55 @@
         judgeString = result.replace(/0|1/g, '✖');
         judgeString = judgeString.replace(/2/g, '〇'); 
         judgeString = (judgeString.trimEnd());
-        const someJudgements = judgeString.split(" ");
+        let someJudgements = judgeString.split(" ");
+        
         console.log(someJudgements);
         let count = 0;
         console.log(courses);
         console.log(courses[count]);
         console.log(courses[count].id);
-        console.log(ArrayForHistoriesChange);
+        console.log(resultArray);
         someJudgements.forEach((judgement) => {
-        document.getElementById("judgement"+ courses[count].id).textContent = judgement;
-        count++;
+          document.getElementById("judgement"+ courses[count].id).textContent = judgement;
+          count++;
         });
+        let i = 0;
+        let currenctCourseIds = [];
+        courses.forEach((course) =>{
+          currenctCourseIds.push(courses[i].id);
+          i++
+        });
+        console.log("-----------------------------");
+        console.log(currenctCourseIds);
+        function createObject(keys, values) {
+	        let outputObject = {}; 
+  	 
+        	{{--配列の長さが一致しているか確認--}} 
+        	if (keys.length != values.length) { 
+            	console.error("配列の長さが一致しないので、空を返します"); 
+            	return outputObject; 
+          } 
+        	 
+        	{{--両方の配列をループしてオブジェクトに追加--}} 
+        	for (let i = 0; i < keys.length; ++i) { 
+            	let key = keys[i]; 
+            	let value = values[i]; 
+            	 
+          	outputObject[key] = value; 
+          } 
+        	 
+        	{{--関数の最後でオブジェクトをアウトプット--}} 
+        	return outputObject;
+        };
+        {{--使い方--}} 
+        let keys = currenctCourseIds; 
+        let values = someJudgements; 
+        let myObject = createObject(keys, values); 
+        let key = Object.keys(myObject);
+         
+        console.log(myObject); 
+        console.log(key[1]);
+                
         showEnd();
       };
   };
@@ -185,23 +224,26 @@
   const showEnd = () => {
       $question.textContent = score + '問 / ' + quizLen + '問中';
       let correctRatio = score / quizLen;
+      const $items = $doc.getElementById('js-items');
           alert(correctRatio);
 
-      switch (score / quizLen) {
-        case 1:
-          console.log('カナダです');
+      switch (true) {
+        case correctRatio == 1:
+          console.log('満点です');
+          $items.innerHTML = '<img class="d-block mx-auto" style="max-width:150px;" src="{{ asset('storage/image/' . 'excellent.png') }}">';
           break;
-        case 0.9:
-          console.log('ロシアです');
+        case correctRatio >= 0.5:
+          console.log('高得点です');
+          $items.innerHTML = '<img class="d-block mx-auto" style="max-width:150px;" src="{{ asset('storage/image/' . 'great.png') }}">';
           break;
-        case 0.5:
-          console.log('ドイツです');
+        case correctRatio >= 0.3:
+          console.log('平均的です');
+          $items.innerHTML = '<img class="d-block mx-auto" style="max-width:150px;" src="{{ asset('storage/image/' . 'hand_good.png') }}">';
           break;
         default:
-          console.log('どれも日本ではありません');
+          console.log('平均以下です');
+          $items.innerHTML = '<img class="d-block mx-auto" style="max-width:150px;" src="{{ asset('storage/image/' . 'dog.jpg') }}">';
       } 
-      const $items = $doc.getElementById('js-items');
-      $items.innerHTML = '<img class="d-block mx-auto" style="max-width:150px;" src="{{ asset('storage/tango/' . Auth::user()->image_path) }}">';
       
       
   };
@@ -307,7 +349,7 @@
     document.getElementById('challenge_id').value = challenge_id;  
     document.getElementById('course_id_array').value = JSON.stringify(course_id_array);
     document.getElementById('result_items').value = JSON.stringify(result_items);
-    document.getElementById('ArrayForHistoriesChange').value = ArrayForHistoriesChange;
+    document.getElementById('resultArray').value = resultArray;
     document.forms['recordtime'].submit();
       {{--このフォームの送信ボタンを押した時と同じ挙動をする <input type="submit" value="送信ボタン">のsubmitと同じ意味 --}} 
   })

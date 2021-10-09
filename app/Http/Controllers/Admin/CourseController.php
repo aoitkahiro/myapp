@@ -81,7 +81,19 @@ class CourseController extends Controller
   // 7.3 コース画面を作るために追加
   public function index()   
   {     
-      return view('admin.course.index');  
+      $courses = Course::all();
+      $i = 0;
+      $arr = [];
+      foreach($courses as $course){
+        // dd($course);
+        array_push($arr,$course->category);
+        $i++;
+      }
+      $unique_categories = array_unique($arr);
+      // dd($unique_categories);
+      
+      
+      return view('admin.course.index',['unique_categories'=>$unique_categories, 'courses'=>$courses]);
   }
   // 7.10 単語帳orテストを作るために追加
   public function select()

@@ -7,16 +7,16 @@
         {{--この行に、ここ以下のコードを実行しない命令を記述するべきと考えられるものの、思いつかないため保留2021.8.13--}}
     @endif
     <a href="{{action('Admin\CourseController@write',['tango_id'=>$post[$tango_id]->id])}}">編集</a> {{--  URL：?tango_id=1が生成される（URLにおいて?で送られる数値をgetパラメータという--}} 
-    <br>*ここからデバッグ用の記述です<br><br>
-    <h2>今のページの<br>user_idは{{$user->id}}<br>course_idは{{$post[$tango_id]->id}}<br>
+    <div>*ここからデバッグ用の記述です</div>
+    <h6>(今のページの)<br>user_idは {{$user->id}}<br>course_idは {{$post[$tango_id]->id}}<br>
     関連する<br>histories_tableのidは 
     @if($value != NULL)
-        {{$value->id}}<br>learning_levelは{{$value->learning_level}}
+        {{$value->id}}<br>learning_levelは {{$value->learning_level}}
     @else
         ありません（まだレコードなし）
     @endif
-    </h2>
-    <br>ここまでデバッグ用の記述です*<br>
+    </h6>
+    ここまでデバッグ用の記述です*<br>
     <div class="col">
         @if($value == NULL or $value->learning_level == 0 ) {{-- もしhistoriesテーブルのtango_id番めのレコードの learning_level が0かNULLなら --}}
             <form action="{{ action('Admin\StatusController@store') }}" method="post" enctype="multipart/form-data">  {{--  ActionタグにURLを書く--}} 
@@ -40,31 +40,9 @@
             </form>
         @endif
     </div>
-
-    <form action="{{ action('Admin\StatusController@store') }}" method="post" enctype="multipart/form-data"> 
-        @csrf
-        <input type="hidden" name="course_id" value={{$post[$tango_id]->id}}> 
-        <input type="hidden" name="tango_id" value= {{$tango_id}}>
-        <input type="radio" <?php if(empty($history) or $history->learning_level == 0){ echo "checked";} ?>> 未記憶
-        
-        <input type="hidden" name="course_id" value={{$post[$tango_id]->id}}>
-        <input type="hidden" name="tango_id" value= {{$tango_id}}>
-        <input type="radio" name="learning_level" value="1"<?php if(isset($history) and $history->learning_level == 1){ echo "checked";} ?>> 覚えた
-        
-        <input type="hidden" name="course_id" value={{$post[$tango_id]->id}}>
-        <input type="hidden" name="tango_id" value= {{$tango_id}}>
-        <input type="radio"  name="learning_level" value="2"<?php if(isset($history) and $history->learning_level == 2){ echo "checked";} ?>> 最初から知ってる
-        
-        <input type="hidden" name="course_id" value={{$post[$tango_id]->id}}> 
-        <input type="hidden" name="tango_id" value= {{$tango_id}}>
-        <input type="radio" name="learning_level" value="0"> 未記憶に戻す
-        
-        <input type="submit" value="更新">
-    </form>
-    
     <div class="row">
         <div class="text-center">
-            <button type="button" class="btn btn-warning"><font size="8">{{ $post[$tango_id]->front }} ...course_id:{{$post[$tango_id]->id}}</font></button>
+            <button type="button" class="btn btn-warning"><font size="6">{{ $post[$tango_id]->front }}</font></button> ...course_id:{{$post[$tango_id]->id}}
         </div>
     </div>
     <div>
