@@ -334,13 +334,14 @@ class CourseController extends Controller
         }
       }
     }
+    
     if(isset($request->forgotten)){
       $forgotten = $request->forgotten;
     }else{
       $forgotten = 0;
     }
     // dd($forgotten,$request->all());
-    return redirect()->action('Admin\CourseController@quiz',['forgotten' => $forgotten]);
+    return redirect()->action('Admin\CourseController@quiz',['forgotten' => $forgotten,'hoge' => $hoge]);
   }
   
   public function ranking()
