@@ -117,13 +117,12 @@ class CourseController extends Controller
     
     $course_id_in_histories_1 = [];
     $course_id_in_histories_2 = [];
-    foreach($some_history as $a_history) // 当ユーザーのhistoryを一つずつ入れていって…
-    {
-    if($a_history->learning_level == 2){ // もし一つのhistoryのlearning_levelが2なら
-      $course_id_in_histories_2[]= $a_history->course_id; //この配列に、learning_levelが2（覚えた）のhistoryのcourse_idを入れる
-    }elseif($a_history->learning_level == 1){ // もし一つのhistoryのlearning_levelが1なら
-      $course_id_in_histories_1[]= $a_history->course_id; //この配列に、learning_levelが1（最初から知ってる）のhistoryのcourse_idを入れる
-      }
+    foreach($some_history as $a_history){ // 当ユーザーのhistoryを一つずつ入れていって…
+      if($a_history->learning_level == 2){ // もし一つのhistoryのlearning_levelが2なら
+        $course_id_in_histories_2[]= $a_history->course_id; //この配列に、learning_levelが2（覚えた）のhistoryのcourse_idを入れる
+      }elseif($a_history->learning_level == 1){ // もし一つのhistoryのlearning_levelが1なら
+        $course_id_in_histories_1[]= $a_history->course_id; //この配列に、learning_levelが1（最初から知ってる）のhistoryのcourse_idを入れる
+        }
     }
     \Log::info("tango_id");
     \Log::info($tango_id);
@@ -161,7 +160,7 @@ class CourseController extends Controller
     $value = History::where('user_id',$user->id)->where('course_id', $courses[$tango_id]->id)->first();
     \Log::info("courses[$tango_id]->id");
     \Log::info($courses[$tango_id]->id);
-    //dd($value);
+    // dd($courses,$tango_id);
     return view('admin.course.wordbook', ['value'=>$value, 'history'=>$history, 'tango_id'=> $tango_id, 'post' => $courses,  'user' => $user, 'users' =>$users, 'message' => $massage]); 
     //return view('admin.course.wordbook', ['post' => $course, "all_courses_count" => $courses->count(),'page_num' => $count, 'user' => $user, 'users' =>$users , 'hoge' =>'hello']);
   }                                         //$course にはid,front,back,kind,category,degree の値等が入っている。 
@@ -257,8 +256,9 @@ class CourseController extends Controller
   {     
     return view('admin.course.practice');  
   }
-  public function quiz()
+  public function quiz(Request $request)
   {
+    
     // $course = Course::find(1);
     $question_amount = 3;//３は、のちのち20などにする予定
     $courses = Course::inRandomOrder()->limit($question_amount)->get();
@@ -285,13 +285,15 @@ class CourseController extends Controller
       $result->judgement = 0;
       $result->save();
     }
+    // dd($request->forgotten);
     // dd($latest_user_quiz_result);
     return view('admin.course.quiz', ['latest_user_quiz_result'=>$latest_user_quiz_result,'result'=> $result, 'challenge_id'=>$challenge_id, 
-    'correct_and_dummy_answers'=>$correct_and_dummy_answers,'dummy_answers'=>$dummy_answers, 'dummy_courses'=>$dummy_courses, 'courses'=>$courses]); 
+    'correct_and_dummy_answers'=>$correct_and_dummy_answers,'dummy_answers'=>$dummy_answers, 'dummy_courses'=>$dummy_courses, 'courses'=>$courses,'forgotten'=>$request->forgotten]); 
   }
   
   public function PostQuizTime(Request $request)
   {
+    // dd($request->all());
     $user_quiz_results = UserQuizResult::where('user_id', Auth::id())->where('challenge_id', $request->challenge_id)->
         orderBy("id")->get();
     // $quiz_data = $request->all(); //$quiz_data にはrunning_time や score などHTMLからsubmitされた値が入っている。
@@ -320,7 +322,7 @@ class CourseController extends Controller
       $i++;
     }
     //もし"覚えたを解除するswitch"がonなら
-    if($request->forgotten == 1){
+    if($request->forgotten == "on"){
       $i = 0;
       foreach($course_id_array as $course_id){
         if($results[$i] == 1){
@@ -332,8 +334,13 @@ class CourseController extends Controller
         }
       }
     }
-    // dd($rankings);
-    return redirect()->action('Admin\CourseController@quiz');
+    if(isset($request->forgotten)){
+      $forgotten = $request->forgotten;
+    }else{
+      $forgotten = 0;
+    }
+    // dd($forgotten,$request->all());
+    return redirect()->action('Admin\CourseController@quiz',['forgotten' => $forgotten]);
   }
   
   public function ranking()

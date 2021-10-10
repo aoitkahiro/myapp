@@ -37,7 +37,7 @@
     <input type="hidden" name="result_items" id="result_items">
     <input type="hidden" name="challenge_id" id="challenge_id">
     <input type="hidden" name="resultArray[]" id="resultArray">
-    <p><input type="checkbox" checked="checked" class="sample2" name="forgotten" id="forgotten" value="1"> 間違えた語の[覚えた]を解除</p>
+    <p><input type="checkbox" {{ $forgotten == "0" ? ""  : "checked" }} class="sample2" name="forgotten" id="forgotten"> 間違えた語の[覚えた]を解除</p>
     <button type="button" id="save_button">記録を送信する</button>
   </form>
   </div>
@@ -46,12 +46,9 @@
   <a href="{{action('Admin\CourseController@quiz')}}" type="button" id="restart" class="btn btn-black"><h2>↺</h2><br><h8>もう一度</h8></a>
   <a href="{{action('Admin\CourseController@index')}}" type="button" id="goIndex" class="btn btn-black"><h2>↩</h2><br><h8>もどる</h8></a>
   <p class="margin_bottom_2"></p>
-    @foreach ($courses as $course)
-      {{--@if (currenctCourseIds[i]== '✖')@endif--}}
-        <li class="list-group-item"><span id="judgement{{ $course->id }}"> </span> {{$course->front}}<br>  {{$course->back}}</li>
-    @endforeach
+  <div id="wrongList"></div>
 </div>
-
+{{$forgotten}}
   
 @endsection
 @section('js')
@@ -140,7 +137,7 @@
         result = result + "2" + " ";
         rslt = 2;
         resultArray.push(2);
-        } else {
+      } else {
         elm.className = "btn btn-black selection"
         document.getElementById('sound').textContent = "ブブー";
         result = result + "1" + " ";
@@ -149,6 +146,7 @@
       }
       
       result_items.push({
+          quiz: quiz[quizCount],
           rslt: rslt,
           rng_time: zeroAndMinutes + zeroAndSeconds + "." + zeroAndoneHandredthOfSeconds,
       })
@@ -176,10 +174,10 @@
         console.log(courses[count]);
         console.log(courses[count].id);
         console.log(resultArray);
-        someJudgements.forEach((judgement) => {
-          document.getElementById("judgement"+ courses[count].id).textContent = judgement;
-          count++;
-        });
+        result_items.filter(result => result.rslt == 1).forEach((missed)=>{
+          let wrongList = document.getElementById("wrongList");
+          wrongList.innerHTML += `<li class="list-group-item"> × ${missed.quiz.question}<br>  ${missed.quiz.answer}</li>`
+        })
         let i = 0;
         let currenctCourseIds = [];
         courses.forEach((course) =>{

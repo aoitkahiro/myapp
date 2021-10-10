@@ -7,15 +7,15 @@
 
 {{-- admin.blade.phpの@yield('content')に以下のタグを埋め込む --}}
 @section('content')
-        <div class="container">
-            <div class="col-6 offset-3">
-                <br><br>
-                @foreach($unique_categories as $unique_category)
-                    <p><button type="button" class="btn btn-warning">{{$unique_category}}</button></p>
-                @endforeach
-                <br>
-                {{--<a href="https://f6003bf85196481c9df5c1f7e84f45ff.vfs.cloud9.us-east-2.amazonaws.com/admin/course/wordbook?abc=1">wordbook.blade.phpへ（idを持っていく）</a>--}}
-                <a href="{{ action('Admin\CourseController@wordbook', ['tango_id' => 0]) }}">wordbook.blade.phpへ（idを持っていく）</a>  
-            </div>
+    <div class="container">
+        <div class="col-6 offset-3">
+            <br><br>
+            @foreach($unique_categories as $unique_category)
+                <p><button type="button" class="btn btn-warning">{{$unique_category}}</button></p>
+            @endforeach
+            <br>
+            {{--<a href="https://f6003bf85196481c9df5c1f7e84f45ff.vfs.cloud9.us-east-2.amazonaws.com/admin/course/wordbook?abc=1">wordbook.blade.phpへ（idを持っていく）</a>--}}
+            <a href="{{ action('Admin\CourseController@wordbook', ['tango_id' => 0]) }}">wordbook.blade.phpへ（idを持っていく）</a>  
         </div>
+    </div>
 @endsection
