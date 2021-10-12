@@ -103,6 +103,7 @@ class CourseController extends Controller
   // 7.10 単語帳画面を作るために追加
   public function wordbook(Request $request)  
   {
+    // dd($request->category,$request);
     $users = User::where('id', Auth::id())->get(); //戻り値を配列にして、Viewに渡す場合のコード。これに対して、インスタンスでViewに渡すのが↓の行
     //$user = User::where('id', Auth::id())->first(); //->first() は、1件だけ取り出すメソッド。もし複数見つかったら1件目取得。対して->get()は一致するすべてのデータを取り出す。
                                                     //->first() はUserクラスのインスタンスを取得 ->get()はUserクラスのコレクション（配列の型）で取得する
@@ -122,24 +123,17 @@ class CourseController extends Controller
         $course_id_in_histories_2[]= $a_history->course_id; //この配列に、learning_levelが2（覚えた）のhistoryのcourse_idを入れる
       }elseif($a_history->learning_level == 1){ // もし一つのhistoryのlearning_levelが1なら
         $course_id_in_histories_1[]= $a_history->course_id; //この配列に、learning_levelが1（最初から知ってる）のhistoryのcourse_idを入れる
-        }
+      }
     }
-    \Log::info("tango_id");
-    \Log::info($tango_id);
-    \Log::info("some_history");
-    \Log::info($some_history);
-    \Log::info("course_id_in_histories_1");
-    \Log::info($course_id_in_histories_1);
-    \Log::info("history");
-    \Log::info($history);
-    
+    $unique_category = $request->category;
+    // dd($unique_category);
     if($some_history != NULL){
       if($looking_level == 2){ // もし、looking_levelが 2 なら
         $courses = Course::whereNotIn('id', $course_id_in_histories_2)->orWhereNotIn('id', $course_id_in_histories_1)->get(); //learning_levelが2or1のcourse_id以外を表示させる
       }elseif($looking_level == 1){ // もし、looking_levelが 1なら
         $courses = Course::whereNotIn('id', $course_id_in_histories_1)->get(); //learning_levelが1のcourse_id以外を表示させる
       }elseif($looking_level == 0){ // もし、looking_levelが初期値の 0 なら
-        $courses = Course::all();
+        $courses = Course::where('category',$unique_category)->get();
       }
     }
     if($courses->count() == 0){ //もし、courseテーブルの全てのデータを取得してデータ件数が0だったら（大前提として0ではない。開発中のエラーを回避するためのif文）
@@ -154,14 +148,10 @@ class CourseController extends Controller
               break; // ここを通ると強制的にループが終わる。あまりいい実装ではない（特殊なケースが増える）
             }                     
         }*///以上、ページングのコード
-    }//if文の終わり
-    \Log::info("courses[$tango_id]->id");
-    \Log::info($courses[$tango_id]->id);
+    }
     $value = History::where('user_id',$user->id)->where('course_id', $courses[$tango_id]->id)->first();
-    \Log::info("courses[$tango_id]->id");
-    \Log::info($courses[$tango_id]->id);
-    // dd($courses,$tango_id);
-    return view('admin.course.wordbook', ['value'=>$value, 'history'=>$history, 'tango_id'=> $tango_id, 'post' => $courses,  'user' => $user, 'users' =>$users, 'message' => $massage]); 
+    return view('admin.course.wordbook', ['unique_category'=>$unique_category, 'value'=>$value, 'history'=>$history, 'tango_id'=> $tango_id, 
+    'post' => $courses,  'user' => $user, 'users' =>$users, 'message' => $massage]); 
     //return view('admin.course.wordbook', ['post' => $course, "all_courses_count" => $courses->count(),'page_num' => $count, 'user' => $user, 'users' =>$users , 'hoge' =>'hello']);
   }                                         //$course にはid,front,back,kind,category,degree の値等が入っている。 
   // 7.10 書き込み画面を作るために追加
@@ -261,7 +251,7 @@ class CourseController extends Controller
     
     // $course = Course::find(1);
     $question_amount = 3;//３は、のちのち20などにする予定
-    $courses = Course::inRandomOrder()->limit($question_amount)->get();
+    $courses = Course::inRandomOrder()->where('category','どうぶつの種類')->limit($question_amount)->get();
     $dummy_courses = Course::where('id' ,'<>', $courses[0]->id)
       ->where('kind',$courses[0]->kind)->inRandomOrder()->limit($question_amount)->get();
     $dummy_answers = array();
@@ -341,11 +331,19 @@ class CourseController extends Controller
       $forgotten = 0;
     }
     // dd($forgotten,$request->all());
-    return redirect()->action('Admin\CourseController@quiz',['forgotten' => $forgotten,'hoge' => $hoge]);
+    return redirect()->action('Admin\CourseController@quiz',['forgotten' => $forgotten]);
   }
   
   public function ranking()
   {
+    //【まずは】ランキングの関数に入れるカテゴリー絞りの配列を作る
+    //１．先頭で絞り込む
+     // coursesテーブルをcourse_idで調べる。
+      // もしcourse_idのcategory== $request->categoryならその$course_idには$ranking_categoryと名付ける
+      // $ranking_categoryの
+    //１．と同じuser_id, challenge_id のresultsがあれば、それを配列に入れる
+    
+    
     $courses = Course::all();
     $users = User::all();
     $rankings = [];
@@ -386,13 +384,8 @@ class CourseController extends Controller
       }//もし日付が前ループと同じなら、$ $existed_user_names[] は初期化しない
       
       if(in_array($checking_name, $existed_user_names)){ // 既存の名前をはじくために、配列に存在するかcheck
-        // dd($count,$rankings[$count],$rankings);
         unset($rankings[$count]);  //$rankngを$rankingsから削除する
-        // dd($count,$rankings);
       }else{
-        // if($count == 6){
-        //   dd($existed_user_names,$checking_name,in_array($checking_name, $existed_user_names),$checking_date,$pre_date);
-        // }
         array_push($existed_user_names, $checking_name);//unset()に該当しなかった名前は「既存の名前」に追加して、次のcheckで使用
       }
       $pre_date = $checking_date; //チェックした日付を次のループで使用する

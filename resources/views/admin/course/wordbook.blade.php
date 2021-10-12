@@ -93,7 +93,7 @@
         @if($tango_id == 0)
         @else
             <button type="button" class="btn btn-warning"><font size="1">◀</font></button><br>
-            <a href="{{ action('Admin\CourseController@wordbook', ['tango_id' =>$tango_id -1]) }}">前へ</a>
+            <a href="{{ action('Admin\CourseController@wordbook', ['tango_id' =>$tango_id -1, 'category' => $unique_category]) }}">前へ</a>
         @endif
         </div>
         <div class="col-auto">
@@ -105,8 +105,8 @@
             <a href="{{ action('Admin\CourseController@wordbook', ['tango_id' =>$tango_id + 1]) }}">最後の単語です</a><br>
         @else
             <button type="button" class="btn btn-warning"><font size="1">▶</font></button><br>
-            <a href="{{ action('Admin\CourseController@wordbook', ['tango_id' =>$tango_id + 1]) }}">次へ</a><br>
-            <a href="{{ action('Admin\CourseController@wordbook', ['tango_id' =>$tango_id + 2]) }}">２個次へ</a>
+            <a href="{{ action('Admin\CourseController@wordbook', ['tango_id' =>$tango_id + 1, 'category' => $unique_category]) }}">次へ</a><br>
+            <a href="{{ action('Admin\CourseController@wordbook', ['tango_id' =>$tango_id + 2, 'category' => $unique_category]) }}">２個次へ</a>
         @endif
         </div>
     </div>
