@@ -13,6 +13,7 @@ use App\Course;
 use App\User;
 use App\History;
 use App\UserQuizResult;
+use Log;
 
 class CourseController extends Controller
 {
@@ -149,7 +150,10 @@ class CourseController extends Controller
             }                     
         }*///以上、ページングのコード
     }
+    Log::info('####');
+    Log::info($courses);//画面遷移のときは空にならないが、「最初から知ってる」を押したときは空になる。なぜ？
     $value = History::where('user_id',$user->id)->where('course_id', $courses[$tango_id]->id)->first();
+    // dd($value);
     return view('admin.course.wordbook', ['unique_category'=>$unique_category, 'value'=>$value, 'history'=>$history, 'tango_id'=> $tango_id, 
     'post' => $courses,  'user' => $user, 'users' =>$users, 'message' => $massage]); 
     //return view('admin.course.wordbook', ['post' => $course, "all_courses_count" => $courses->count(),'page_num' => $count, 'user' => $user, 'users' =>$users , 'hoge' =>'hello']);
@@ -339,8 +343,9 @@ class CourseController extends Controller
     //【まずは】ランキングの関数に入れるカテゴリー絞りの配列を作る
     //１．先頭で絞り込む
      // coursesテーブルをcourse_idで調べる。
-      // もしcourse_idのcategory== $request->categoryならその$course_idには$ranking_categoryと名付ける
-      // $ranking_categoryの
+      // もしcourse_idのcategory== $request->categoryならその$course_idには$cat_course_idと名付ける
+      // $cat_course_id を含むレコードと同じuser_id, challenge_id を持っているレコードは、配列に入れる
+      
     //１．と同じuser_id, challenge_id のresultsがあれば、それを配列に入れる
     
     

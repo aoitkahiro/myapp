@@ -21,7 +21,6 @@ class StatusController extends Controller
       //レコードを探すコード
       //->get();だとインスタンスの「配列」が返ってきてしまうのでエラーになる
       //historiesテーブルを検索して、user_id , couse_idのカラム２つで検索している（whereは複数件のインスタンスを返すが、この場合firstだけ返してくる）
-      
       //dd($history,$request->course_id,Auth::id(),$request->all());
       if($history != NULL){
          // dd($history);
@@ -31,6 +30,7 @@ class StatusController extends Controller
          //インスタンス作成
          $history = new History;
          
+         // dd($history);
          $form = $request->all();
          //Inputタグのusers_id属性がusers_idの場合 $request->users_id で値を受け取る
          //モデルインスタンスのusers_id属性に代入
