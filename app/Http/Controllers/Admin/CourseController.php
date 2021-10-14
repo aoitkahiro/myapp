@@ -187,7 +187,7 @@ class CourseController extends Controller
   //━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━　↑ 単語帳機能　━━　↓ 単語帳新規作成機能　━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   
   // 7.10 作成開始画面を作るために追加
-  public function create()   
+  public function create()
   {     
     return view('admin.course.create');  
   }
@@ -341,14 +341,22 @@ class CourseController extends Controller
   public function ranking()
   {
     //【まずは】ランキングの関数に入れるカテゴリー絞りの配列を作る
+    $category = "どうぶつの種類";
     //１．先頭で絞り込む
+    $ranking_array = UserQuizResult::oldest("id")->get();
+    $i = 0;
+    $course_ids_in_ranking =[];
+    foreach($ranking_array as $rank){
+      $course_ids_in_ranking[] = $ranking_array[$i]->course_id;
+      $i++;
+    }
+    // dd($course_ids_in_ranking,$ranking_array[0],$ranking_array[0]->course_id);
      // coursesテーブルをcourse_idで調べる。
+    $courses_in_this_ranking = Course::where("category",$category)->whereIn("id",$course_ids_in_ranking)->get();
+    dd($courses_in_this_ranking);
       // もしcourse_idのcategory== $request->categoryならその$course_idには$cat_course_idと名付ける
       // $cat_course_id を含むレコードと同じuser_id, challenge_id を持っているレコードは、配列に入れる
-      
     //１．と同じuser_id, challenge_id のresultsがあれば、それを配列に入れる
-    
-    
     $courses = Course::all();
     $users = User::all();
     $rankings = [];
