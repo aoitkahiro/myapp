@@ -126,14 +126,15 @@ class CourseController extends Controller
         $course_id_in_histories_1[]= $a_history->course_id; //この配列に、learning_levelが1（最初から知ってる）のhistoryのcourse_idを入れる
       }
     }
-    $unique_category = $request->category;
-    // dd($unique_category);
+    $unique_category = Course::find($tango_id + 1)->category;
+    // dd($request,$unique_category);
     if($some_history != NULL){
       if($looking_level == 2){ // もし、looking_levelが 2 なら
         $courses = Course::whereNotIn('id', $course_id_in_histories_2)->orWhereNotIn('id', $course_id_in_histories_1)->get(); //learning_levelが2or1のcourse_id以外を表示させる
       }elseif($looking_level == 1){ // もし、looking_levelが 1なら
         $courses = Course::whereNotIn('id', $course_id_in_histories_1)->get(); //learning_levelが1のcourse_id以外を表示させる
       }elseif($looking_level == 0){ // もし、looking_levelが初期値の 0 なら
+      // dd($looking_level,$unique_category);
         $courses = Course::where('category',$unique_category)->get();
       }
     }
@@ -152,6 +153,7 @@ class CourseController extends Controller
     }
     Log::info('####');
     Log::info($courses);//画面遷移のときは空にならないが、「最初から知ってる」を押したときは空になる。なぜ？
+    // dd($courses,$tango_id);
     $value = History::where('user_id',$user->id)->where('course_id', $courses[$tango_id]->id)->first();
     // dd($value);
     return view('admin.course.wordbook', ['unique_category'=>$unique_category, 'value'=>$value, 'history'=>$history, 'tango_id'=> $tango_id, 

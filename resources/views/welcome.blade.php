@@ -81,7 +81,7 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    Word&Quiz
+                    単語&クイズ
                 </div>
 
                 <div class="links">

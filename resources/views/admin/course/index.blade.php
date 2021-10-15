@@ -11,7 +11,7 @@
         <div class="col-6 offset-3">
             <br><br>
             @foreach($unique_categories as $unique_category)
-                <a href="{{ action('Admin\CourseController@wordbook', ['tango_id' => 0, 'category' => $unique_category, 'hoge'=> 'testtest']) }}">
+                <a href="{{ action('Admin\CourseController@wordbook', ['tango_id' => 0, 'category' => $unique_category, 'page'=> '1']) }}">
                     <p><button type="button" class="btn btn-warning">{{$unique_category}}</button></p>
                 </a> 
             @endforeach

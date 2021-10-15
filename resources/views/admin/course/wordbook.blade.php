@@ -35,6 +35,7 @@
                     <input type="hidden" name="course_id" value={{$post[$tango_id]->id}}>
                     <input type="hidden" name="learning_level" value="0"> {{--最初から知っている を解除」をsubmitしたとき、0へ切り替える--}}
                     <input type="hidden" name="tango_id" value= {{$tango_id}}>
+                    <input type="hidden" name="category" value= "どうぶつの種類">
                     <input type="submit" class="btn btn-secondary" value="最初から知ってる を解除">
                 </p>
             </form>

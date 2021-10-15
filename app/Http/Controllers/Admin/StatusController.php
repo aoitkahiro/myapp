@@ -25,7 +25,7 @@ class StatusController extends Controller
       if($history != NULL){
          // dd($history);
          $history->update(['learning_level'=>$request->learning_level]);
-         return redirect('admin/course/wordbook?tango_id=' . $request->tango_id);
+         return redirect('admin/course/wordbook')->with(["tango_id"=>$request->tango_id]);
       }else{
          //インスタンス作成
          $history = new History;
@@ -46,7 +46,7 @@ class StatusController extends Controller
          
          //return view('admin.course.wordbook');
          //return redirect()->action('Admin\CourseController@wordbook');
-         return redirect('admin/course/wordbook?tango_id=' . $request->tango_id);
+         return redirect('admin/course/wordbook')->with(["tango_id"=>$request->tango_id]);
       }
    }
 }
