@@ -93,6 +93,10 @@
       console.log("setquiz関数が呼ばれました");
       $question.textContent = quiz[quizCount].question;
       $buttons = $doc.getElementsByClassName('selection');
+      
+		  {{--  document.getElementById("js-btn-2").removeAttribute("disabled");
+        document.getElementById("js-btn-2").style.color = "red"; --}}
+    	
       console.log($buttons);
       buttonLen = $buttons.length;
       document.getElementById('sound').textContent = "　";
@@ -128,6 +132,13 @@
         document.getElementById('js-btn-'+ i).className = "btn btn--yellow selection";
       }
   };
+  {{--  // ビジーwaitを使う方法
+  function sleep(waitMsec) {
+    let startMsec = new Date();
+  
+    // 指定ミリ秒間だけループさせる（CPUは常にビジー状態）
+    while (new Date() - startMsec < waitMsec);
+  } --}}
           {{-- ↓クリックされたボタンに基づいて、正誤文を出したり次の問題へ進める処理 --}} 
   const clickHandler = (elm) => { {{--elmとは、「eventの、targetである今clickされたbuttonを取得」--}}
       if(elm.textContent === quiz[quizCount].correct){
@@ -144,7 +155,16 @@
         rslt = 1;
         resultArray.push(1);
       }
-      
+      if (document.getElementById("js-btn-2").disabled === true){
+        alert("disabled true");
+      }else{
+        {{-- document.getElementById("js-btn-2").setAttribute("disabled", true);
+        document.getElementById("js-btn-2").style.color = "blue";
+        alert("blue");
+        sleep(5000);
+        document.getElementById("js-btn-2").removeAttribute("disabled");
+        document.getElementById("js-btn-2").style.color = "white"; --}}
+      };
       result_items.push({
           quiz: quiz[quizCount],
           rslt: rslt,
@@ -160,7 +180,7 @@
   const goToNext = () => {
       quizCount++;
       if(quizCount < quizLen){
-        setTimeout(function(){setupQuiz(quizCount)},500);    
+        setTimeout(function(){setupQuiz(quizCount)},1000);    
       } else {
         stopTheWatch();
         judgeString = result.replace(/0|1/g, '✖');
@@ -223,7 +243,7 @@
       $question.textContent = score + '問 / ' + quizLen + '問中';
       let correctRatio = score / quizLen;
       const $items = $doc.getElementById('js-items');
-          alert(correctRatio);
+          {{--alert(correctRatio);--}}
 
       switch (true) {
         case correctRatio == 1:

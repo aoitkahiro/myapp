@@ -102,9 +102,9 @@ class CourseController extends Controller
       return view('admin.course.select');  
   }
   // 7.10 単語帳画面を作るために追加
-  public function wordbook(Request $request)  
+  public function wordbook(Request $request)
   {
-    // dd($request->category,$request);
+    // dd($request->page,$request->category,$request);
     $users = User::where('id', Auth::id())->get(); //戻り値を配列にして、Viewに渡す場合のコード。これに対して、インスタンスでViewに渡すのが↓の行
     //$user = User::where('id', Auth::id())->first(); //->first() は、1件だけ取り出すメソッド。もし複数見つかったら1件目取得。対して->get()は一致するすべてのデータを取り出す。
                                                     //->first() はUserクラスのインスタンスを取得 ->get()はUserクラスのコレクション（配列の型）で取得する
@@ -126,17 +126,19 @@ class CourseController extends Controller
         $course_id_in_histories_1[]= $a_history->course_id; //この配列に、learning_levelが1（最初から知ってる）のhistoryのcourse_idを入れる
       }
     }
-    $unique_category = Course::find($tango_id + 1)->category;
+    // $unique_category = Course::find($tango_id + 1)->category;
+    $unique_category = $request->category;
     // dd($request,$unique_category);
     if($some_history != NULL){
       if($looking_level == 2){ // もし、looking_levelが 2 なら
-        $courses = Course::whereNotIn('id', $course_id_in_histories_2)->orWhereNotIn('id', $course_id_in_histories_1)->get(); //learning_levelが2or1のcourse_id以外を表示させる
+        $courses = Course::where('category',$unique_category)->whereNotIn('id', $course_id_in_histories_2)->orWhereNotIn('id', $course_id_in_histories_1)->get(); //learning_levelが2or1のcourse_id以外を表示させる
       }elseif($looking_level == 1){ // もし、looking_levelが 1なら
-        $courses = Course::whereNotIn('id', $course_id_in_histories_1)->get(); //learning_levelが1のcourse_id以外を表示させる
+        $courses = Course::where('category',$unique_category)->whereNotIn('id', $course_id_in_histories_1)->get(); //learning_levelが1のcourse_id以外を表示させる
       }elseif($looking_level == 0){ // もし、looking_levelが初期値の 0 なら
-      // dd($looking_level,$unique_category);
         $courses = Course::where('category',$unique_category)->get();
+        // dd($courses,$unique_category);
       }
+    // dd($courses);
     }
     if($courses->count() == 0){ //もし、courseテーブルの全てのデータを取得してデータ件数が0だったら（大前提として0ではない。開発中のエラーを回避するためのif文）
         $massage ="この科目にはデータがありません";
@@ -154,8 +156,10 @@ class CourseController extends Controller
     Log::info('####');
     Log::info($courses);//画面遷移のときは空にならないが、「最初から知ってる」を押したときは空になる。なぜ？
     // dd($courses,$tango_id);
+    //↓の$valueはView側で[最初から知ってる][覚えた]ボタンを裏表切り替えるために、準備するための変数
+    // dd($courses);
     $value = History::where('user_id',$user->id)->where('course_id', $courses[$tango_id]->id)->first();
-    // dd($value);
+    // dd($value,$courses[$tango_id],$tango_id);
     return view('admin.course.wordbook', ['unique_category'=>$unique_category, 'value'=>$value, 'history'=>$history, 'tango_id'=> $tango_id, 
     'post' => $courses,  'user' => $user, 'users' =>$users, 'message' => $massage]); 
     //return view('admin.course.wordbook', ['post' => $course, "all_courses_count" => $courses->count(),'page_num' => $count, 'user' => $user, 'users' =>$users , 'hoge' =>'hello']);
