@@ -261,7 +261,7 @@ class CourseController extends Controller
     
     // $course = Course::find(1);
     $question_amount = 3;//３は、のちのち20などにする予定
-    $courses = Course::inRandomOrder()->where('category','どうぶつの種類')->limit($question_amount)->get();
+    $courses = Course::inRandomOrder()->where('category','TOEIC500')->limit($question_amount)->get();
     $dummy_courses = Course::where('id' ,'<>', $courses[0]->id)
       ->where('kind',$courses[0]->kind)->inRandomOrder()->limit($question_amount)->get();
     $dummy_answers = array();
