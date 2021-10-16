@@ -16,6 +16,7 @@
 
                     You are logged in!
                 </div>
+                <a href="{{ action('Admin\CourseController@index')}}">Click here</a>
             </div>
         </div>
     </div>

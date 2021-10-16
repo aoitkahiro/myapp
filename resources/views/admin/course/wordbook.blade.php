@@ -98,7 +98,7 @@
         @endif
         </div>
         <div class="col-auto">
-            {{--＠今何ページ目か表示--}}{{$tango_id +1}} / {{--＠全何ページか表示--}}{{$post->count()}} {{-- Courses::で取得した総数をcount()する --}} 
+            {{--＠今何ページ目か表示--}}{{$tango_id +1}} / {{--＠全何ページか表示--}}{{$post->count()}}
         </div>
         <div class="col col-lg-2">
         @if($tango_id +1 == $post->count())
@@ -111,5 +111,9 @@
         @endif
         </div>
     </div>
+</div>
+<div class="text-center">
+    {{$user->name}}さん
+    e-mail: {{$users[0]->email}}
 </div>
 @endsection
