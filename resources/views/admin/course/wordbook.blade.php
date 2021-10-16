@@ -41,7 +41,8 @@
             </form>
         @endif
     </div>
-    <div class="row">
+    <div class="col"><p><input type="submit" class="btn btn-primary" value="覚えた"></p></div>
+    <div class="row col">
         <div class="text-center">
             <button type="button" class="btn btn-warning"><font size="6">{{ $post[$tango_id]->front }}</font></button> ...course_id:{{$post[$tango_id]->id}}
         </div>
