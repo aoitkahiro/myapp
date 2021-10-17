@@ -6,8 +6,11 @@
         <p>{{$message}}</p>
         {{--この行に、ここ以下のコードを実行しない命令を記述するべきと考えられるものの、思いつかないため保留2021.8.13--}}
     @endif
-    <a href="{{action('Admin\CourseController@write',['tango_id'=>$post[$tango_id]->id])}}">編集</a> {{--  URL：?tango_id=1が生成される（URLにおいて?で送られる数値をgetパラメータという--}} 
-    <div>*ここからデバッグ用の記述です</div>
+    <p class="col">
+    <a  class="btn btn-warning" href="{{action('Admin\CourseController@write',['category'=>$unique_category,'tango_id'=>$post[$tango_id]->id,'page'=>$tango_id])}}">編集</a> {{--  URL：?tango_id=1が生成される（URLにおいて?で送られる数値をgetパラメータという--}} 
+    <a  class="btn btn-warning" href="{{action('Admin\CourseController@quiz',['category'=>$unique_category])}}">この科目のクイズへ</a>
+    </p>
+    {{--<div>*ここからデバッグ用の記述です</div>
     <h6>(今のページの)<br>user_idは {{$user->id}}<br>course_idは {{$post[$tango_id]->id}}<br>
     関連する<br>histories_tableのidは 
     @if($value != NULL)
@@ -16,7 +19,7 @@
         ありません（まだレコードなし）
     @endif
     </h6>
-    ここまでデバッグ用の記述です*<br>
+    ここまでデバッグ用の記述です*<br>--}}
     <div class="col">
         @if($value == NULL or $value->learning_level == 0 ) {{-- もしhistoriesテーブルのtango_id番めのレコードの learning_level が0かNULLなら --}}
             <form action="{{ action('Admin\StatusController@store') }}" method="post" enctype="multipart/form-data">  {{--  ActionタグにURLを書く--}} 
@@ -25,6 +28,7 @@
                     <input type="hidden" name="course_id" value={{$post[$tango_id]->id}}> {{--1ページごとなので、foreachではなく具体的な数値を$tango_idで渡している--}} 
                     <input type="hidden" name="learning_level" value="1"> {{--すでに知っている」をsubmitしたとき、0→1へ切り替える--}}
                     <input type="hidden" name="tango_id" value= {{$tango_id}}>{{--再度同じページにredirectするために、$tango_idを渡す--}}
+                    <input type="hidden" name="category" value= {{$unique_category}}>
                     <input type="submit" class="btn btn-primary" value="最初から知ってる">
                 </p>
             </form>
@@ -35,16 +39,40 @@
                     <input type="hidden" name="course_id" value={{$post[$tango_id]->id}}>
                     <input type="hidden" name="learning_level" value="0"> {{--最初から知っている を解除」をsubmitしたとき、0へ切り替える--}}
                     <input type="hidden" name="tango_id" value= {{$tango_id}}>
-                    <input type="hidden" name="category" value= "どうぶつの種類">
+                    <input type="hidden" name="category" value= {{$unique_category}}>
                     <input type="submit" class="btn btn-secondary" value="最初から知ってる を解除">
                 </p>
             </form>
         @endif
     </div>
-    <div class="col"><p><input type="submit" class="btn btn-primary" value="覚えた"></p></div>
+    <div class="col">
+        @if($value == NULL or $value->learning_level == 0 or $value->learning_level == 1 ) {{-- もしhistoriesテーブルのtango_id番めのレコードの learning_level が1,0かNULLなら --}}
+            <form action="{{ action('Admin\StatusController@store') }}" method="post" enctype="multipart/form-data">  {{--  ActionタグにURLを書く--}} 
+            @csrf
+                <p>
+                    <input type="hidden" name="course_id" value={{$post[$tango_id]->id}}> {{--1ページごとなので、foreachではなく具体的な数値を$tango_idで渡している--}} 
+                    <input type="hidden" name="learning_level" value="2"> {{--覚えたをsubmitしたとき、0→2へ切り替える--}}
+                    <input type="hidden" name="tango_id" value= {{$tango_id}}>{{--再度同じページにredirectするために、$tango_idを渡す--}}
+                    <input type="hidden" name="category" value= {{$unique_category}}>
+                    <input type="submit" class="btn btn-primary" value="覚えた">
+                </p>
+            </form>
+        @else
+            <form action="{{ action('Admin\StatusController@store') }}" method="post" enctype="multipart/form-data">  {{--  ActionタグにURLを書く--}}
+            @csrf
+                <p>
+                    <input type="hidden" name="course_id" value={{$post[$tango_id]->id}}>
+                    <input type="hidden" name="learning_level" value="0"> {{--最初から知っている を解除」をsubmitしたとき、0へ切り替える--}}
+                    <input type="hidden" name="tango_id" value= {{$tango_id}}>
+                    <input type="hidden" name="category" value= {{$unique_category}}>
+                    <input type="submit" class="btn btn-secondary" value="覚えた を解除">
+                </p>
+            </form>
+        @endif
+    </div>
     <div class="row col">
         <div class="text-center">
-            <button type="button" class="btn btn-warning"><font size="6">{{ $post[$tango_id]->front }}</font></button> ...course_id:{{$post[$tango_id]->id}}
+            <button type="button" class="btn btn-warning"><font size="6">{{ $post[$tango_id]->front }}</font></button> {{--...course_id:{{$post[$tango_id]->id}}--}}
         </div>
     </div>
     <div>
@@ -94,8 +122,8 @@
         <div>
         @if($tango_id == 0)
         @else
-            <button type="button" class="btn btn-warning"><font size="1">◀</font></button><br>
-            <a href="{{ action('Admin\CourseController@wordbook', ['tango_id' =>$tango_id -1, 'category' => $unique_category]) }}">前へ</a>
+            <a href="{{ action('Admin\CourseController@wordbook', ['tango_id' =>$tango_id -1, 'category' => $unique_category]) }}">
+            <button type="button" class="btn btn-warning"><font size="1">◀</font></button><br>前へ</a>
         @endif
         </div>
         <div class="col-auto">
@@ -103,18 +131,17 @@
         </div>
         <div class="col col-lg-2">
         @if($tango_id +1 == $post->count())
-            <button type="button" class="btn btn-warning"><font size="1">　</font></button><br>
-            <a href="{{ action('Admin\CourseController@wordbook', ['tango_id' =>$tango_id + 1]) }}">最後の単語です</a><br>
+            <a href="{{action('Admin\CourseController@quiz',['category'=>$unique_category])}}">
+            <button type="button" class="btn btn-warning"><font size="1">Q</font></button><br>最後の単語です</a><br>
         @else
-            <button type="button" class="btn btn-warning"><font size="1">▶</font></button><br>
-            <a href="{{ action('Admin\CourseController@wordbook', ['tango_id' =>$tango_id + 1, 'category' => $unique_category]) }}">次へ</a><br>
-            <a href="{{ action('Admin\CourseController@wordbook', ['tango_id' =>$tango_id + 2, 'category' => $unique_category]) }}">２個次へ</a>
+            <a href="{{ action('Admin\CourseController@wordbook', ['tango_id' =>$tango_id + 1, 'category' => $unique_category]) }}">
+            <button type="button" class="btn btn-warning"><font size="1">▶</font></button><br>次へ</a><br>
+            <a href="{{ action('Admin\CourseController@wordbook', ['tango_id' =>$tango_id + 5, 'category' => $unique_category]) }}">5個次へ</a>
         @endif
         </div>
     </div>
 </div>
 <div class="text-center">
-    {{$user->name}}さん
-    e-mail: {{$users[0]->email}}
+    {{$user->name}}さん専用単語帳
 </div>
 @endsection

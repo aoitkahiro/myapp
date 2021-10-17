@@ -2,7 +2,7 @@
 @section('title', 'Q')
 @section('content')
 
-<p id="">"{{$courses[0]->category}}クイズに挑戦</p>
+<p id="">［{{$courses[0]->category}}］クイズに挑戦</p>
 <div class="container">
   <div id="QuizStart" onClick = "startQuiz()" class="btn btn-black">clickStart() ▶</div>
   <div class="text-center">
@@ -37,25 +37,29 @@
     <input type="hidden" name="result_items" id="result_items">
     <input type="hidden" name="challenge_id" id="challenge_id">
     <input type="hidden" name="resultArray[]" id="resultArray">
+    <input type="hidden" name="category" value={{$category}}>
     <p><input type="checkbox" {{ $forgotten == "0" ? ""  : "checked" }} class="sample2" name="forgotten" id="forgotten"> 間違えた語の[覚えた]を解除</p>
     <button type="button" id="save_button">記録を送信する</button>
   </form>
   </div>
 </div>
+  <p class="margin_bottom_2 text-center"></p>
+  <a href="{{action('Admin\CourseController@quiz',['category'=>$category])}}" type="button" id="restart" class="btn btn-black"><h2>↺</h2><br><h8>もう一度</h8></a>
+  <a href="{{action('Admin\CourseController@index')}}" type="button" id="goIndex" class="btn btn-black"><h2>↩</h2><br><h8>もどる</h8></a>
+  <a href="{{action('Admin\CourseController@ranking')}}" type="button" id="goRanking" class="btn btn-black"><h2>👑</h2><br><h8>ランキング</h8></a>
   <p class="margin_bottom_2"></p>
-  <a href="{{action('Admin\CourseController@quiz')}}" type="button" id="restart" class="btn btn-black"><h2>↺</h2><br><h8>もう一度</h8></a>
-  <a href="{{action('Admin\CourseController@ranking')}}" type="button" id="goIndex" class="btn btn-black"><h2>👑↩</h2><br><h8>もどる</h8></a>
-  <p class="margin_bottom_2"></p>
+  <h3>
+        今回 × だった単語
+  </h3>
   <div id="wrongList"></div>
 </div>
-{{$forgotten}}
-  
+
 @endsection
 @section('js')
 
 <script>
 
-
+  
   const courses = {!!$courses!!}; {{-- '$courses'を渡す時、' がquotと表示されてしまうのを防ぐため --}}
   const dummy_courses =  {!!$dummy_courses!!};
   const dummy_answers = @json($dummy_answers);{{--@json とは配列をJavaScriptで扱いやすくしたデータ構造（詳しくしる）--}}
@@ -88,6 +92,13 @@
   let running_time = "";{{--runnning timeミリ秒保存用 例"1000 2000 2200" --}} 
   let result = "";
   let resultArray = [];
+  const selection1 = document.getElementById('js-btn-1');
+  const selection2 = document.getElementById('js-btn-2');
+  const selection3 = document.getElementById('js-btn-3');
+  const selection4 = document.getElementById('js-btn-4');
+    
+  const selections = [selection1, selection2, selection3, selection4];
+  const soundPinpon = new Audio("{{secure_asset('music/sound_pinpon.mp3')}}");
   
   const setupQuiz = () => {
       console.log("setquiz関数が呼ばれました");
@@ -128,19 +139,33 @@
         document.getElementById('js-btn-'+ i).className = "btn btn--yellow selection";
       }
   };
-    // ビジーwaitを使う方法
+    {{--ビジーwaitを使う方法--}}
   function sleep(waitMsec) {
     var startMsec = new Date();
   
-    // 指定ミリ秒間だけループさせる（CPUは常にビジー状態）
+    {{--指定ミリ秒間だけループさせる（CPUは常にビジー状態）--}}
     while (new Date() - startMsec < waitMsec);
   };
+  function wait(ms) {
+    return new Promise( resolve => { setTimeout( resolve, ms ) } ); {{--Promiseとawaitはセット  --}} 
+  };
+  function activeAllSelections(){
+    selections.forEach((s)=>{
+      s.disabled = false;
+    })
+  }
   
+  function disabledAllSelections(){
+    selections.forEach((s)=>{
+      s.disabled = true;
+    })
+  }
           {{-- ↓クリックされたボタンに基づいて、正誤文を出したり次の問題へ進める処理 --}} 
-  const clickHandler = (elm) => { {{--elmとは、「eventの、targetである今clickされたbuttonを取得」--}}
+  async function clickHandler (elm) { {{--elmとは、「eventの、targetである今clickされたbuttonを取得」--}}
       if(elm.textContent === quiz[quizCount].correct){
         elm.className = "btn btn-orange selection"
         document.getElementById('sound').textContent = "ピンポン♪";
+        soundPinpon.play();
         score++;
         result = result + "2" + " ";
         rslt = 2;
@@ -162,13 +187,13 @@
       running_time = running_time + zeroAndMinutes + zeroAndSeconds + "/";{{-- ++と書ける？ --}}
       console.log(running_time);
       console.log("結果："+ result);
-      sleep(1000,function(){
-        console.log("5秒経過しました");
-      });
+      disabledAllSelections();
+      await wait(1000);{{--await：ここ（wait()）が終わるまでは進まないことを保証。関数にasyncも、約束--}}
       goToNext();
   };
   
   const goToNext = () => {
+      activeAllSelections();
       quizCount++;
       if(quizCount < quizLen){
         setTimeout(function(){setupQuiz(quizCount)},500);    
@@ -234,24 +259,24 @@
       $question.textContent = score + '問 / ' + quizLen + '問中';
       let correctRatio = score / quizLen;
       const $items = $doc.getElementById('js-items');
-          alert(correctRatio);
+          {{--alert(correctRatio);--}}
 
       switch (true) {
         case correctRatio == 1:
-          console.log('満点です');
+          alert('すごい！満点です');
           $items.innerHTML = '<img class="d-block mx-auto" style="max-width:150px;" src="{{ asset('storage/image/' . 'excellent.png') }}">';
           break;
-        case correctRatio >= 0.5:
-          console.log('高得点です');
-          $items.innerHTML = '<img class="d-block mx-auto" style="max-width:150px;" src="{{ asset('storage/image/' . 'great.png') }}">';
+        case correctRatio >= 0.8:
+          console.log('すごい、8割以上です');
+          $items.innerHTML = '<img class="d-block mx-auto" style="max-width:150px;" src="{{ asset('storage/image/' . 'mugi80.jpg') }}">';
           break;
-        case correctRatio >= 0.3:
+        case correctRatio >= 0.5:
           console.log('平均的です');
           $items.innerHTML = '<img class="d-block mx-auto" style="max-width:150px;" src="{{ asset('storage/image/' . 'hand_good.png') }}">';
           break;
         default:
           console.log('平均以下です');
-          $items.innerHTML = '<img class="d-block mx-auto" style="max-width:150px;" src="{{ asset('storage/image/' . 'dog.jpg') }}">';
+          $items.innerHTML = '<img class="d-block mx-auto" style="max-width:150px;" src="{{ asset('storage/image/' . 'mugi.jpg') }}">';
       } 
       
       

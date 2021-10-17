@@ -157,7 +157,7 @@ class CourseController extends Controller
     Log::info($courses);//画面遷移のときは空にならないが、「最初から知ってる」を押したときは空になる。なぜ？
     // dd($courses,$tango_id);
     //↓の$valueはView側で[最初から知ってる][覚えた]ボタンを裏表切り替えるために、準備するための変数
-    // dd($courses);
+    // dd($courses,$courses[$tango_id],$courses[$tango_id]->id);
     $value = History::where('user_id',$user->id)->where('course_id', $courses[$tango_id]->id)->first();
     // dd($value,$courses[$tango_id],$tango_id);
     return view('admin.course.wordbook', ['unique_category'=>$unique_category, 'value'=>$value, 'history'=>$history, 'tango_id'=> $tango_id, 
@@ -165,16 +165,20 @@ class CourseController extends Controller
     //return view('admin.course.wordbook', ['post' => $course, "all_courses_count" => $courses->count(),'page_num' => $count, 'user' => $user, 'users' =>$users , 'hoge' =>'hello']);
   }                                         //$course にはid,front,back,kind,category,degree の値等が入っている。 
   // 7.10 書き込み画面を作るために追加
-  public function write(Request $request)  // writeからGETできたらこちら
+  public function write(Request $request)  // wordbookからGETできたらこちら
   {
     $a_course = Course::where('id',$request->tango_id)->first();
   //dd(session('extention')); // ->with で渡された場合は settion('xxxxx')で受ける
-    return view('admin.course.write',['tango_id_for_write'=>$request->tango_id, 'a_course'=>$a_course, 'ext'=> session('extention')]); // $request->tango_id の中身は整数値。URLの?tango_id=1 ならば、1）
+  // dd($request);
+    return view('admin.course.write',['tango_id_for_write'=>$request->tango_id, 'a_course'=>$a_course, 'ext'=> session('extention'),
+    'unique_category'=>$request->category,'page'=>$request->page]); // $request->tango_id の中身は整数値。URLの?tango_id=1 ならば、1）
   }                                 //　　↑次のViewで使う値に↑getパラメータのtango_idを取得している
   
   public function update(Request $request)  // writeからPOSTでRoutingされたらこちら
   {
+    // dd($request->category);
     $tango_data = $request->all();//ユーザーが入力した項目が連想配列で渡されている
+    // dd($tango_data);
     if ($request->file('image')) { //=file()ファイル選択ダイアログで、画像(bladeでnameに設定した"image"）を選択したか true or false で返す
       $ext = $request->file('image')->extension();
       $path = $request->file('image')->storeAs('public/tango', $request->course_id . "." . $ext);
@@ -186,8 +190,8 @@ class CourseController extends Controller
     if($request->back != NULL){
       $a_course->update(['back'=> $request->back]);
     }
-    $correct_id = $request->course_id - 1; // この文がないと、値を渡せない？
-    return redirect('admin/course/wordbook?tango_id=' . $correct_id );//->with(['extention'=>$ext]); // "with"実装してみたかったが、エラーになりそうだったので一旦コメントアウト2021.8.7
+    $page = $request->page; // この文がないと、値を渡せない？
+    return redirect('admin/course/wordbook?tango_id=' . $page .'&category=' . $request->category);//->with(['extention'=>$ext]); // "with"実装してみたかったが、エラーになりそうだったので一旦コメントアウト2021.8.7
   }
   
   //━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━　↑ 単語帳機能　━━　↓ 単語帳新規作成機能　━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -258,12 +262,12 @@ class CourseController extends Controller
   }
   public function quiz(Request $request)
   {
-    
+    // dd($request);
     // $course = Course::find(1);
     $question_amount = 3;//３は、のちのち20などにする予定
-    $courses = Course::inRandomOrder()->where('category','TOEIC500')->limit($question_amount)->get();
-    $dummy_courses = Course::where('id' ,'<>', $courses[0]->id)
-      ->where('kind',$courses[0]->kind)->inRandomOrder()->limit($question_amount)->get();
+    $courses = Course::inRandomOrder()->where('category',$request->category)->limit($question_amount)->get();
+    $dummy_courses = Course::where('id' ,'<>', $courses[0]->id)->
+      where('kind',$courses[0]->kind)->inRandomOrder()->limit($question_amount)->get();
     $dummy_answers = array();
     for ($i = 0; $i < $question_amount; $i++) {
       array_push($dummy_answers,Course::where('id' ,'<>', $courses[$i]->id)
@@ -287,7 +291,7 @@ class CourseController extends Controller
     }
     // dd($request->forgotten);
     // dd($latest_user_quiz_result);
-    return view('admin.course.quiz', ['latest_user_quiz_result'=>$latest_user_quiz_result,'result'=> $result, 'challenge_id'=>$challenge_id, 
+    return view('admin.course.quiz', ['latest_user_quiz_result'=>$latest_user_quiz_result,'result'=> $result, 'challenge_id'=>$challenge_id, 'category'=>$request->category, 
     'correct_and_dummy_answers'=>$correct_and_dummy_answers,'dummy_answers'=>$dummy_answers, 'dummy_courses'=>$dummy_courses, 'courses'=>$courses,'forgotten'=>$request->forgotten]); 
   }
   
@@ -341,7 +345,7 @@ class CourseController extends Controller
       $forgotten = 0;
     }
     // dd($forgotten,$request->all());
-    return redirect()->action('Admin\CourseController@quiz',['forgotten' => $forgotten]);
+    return redirect()->action('Admin\CourseController@quiz',['forgotten' => $forgotten, 'category'=>$request->category]);
   }
   public function ranking()
   {

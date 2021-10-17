@@ -11,13 +11,16 @@
         <div class="col-6 offset-3">
             <br><br>
             @foreach($unique_categories as $unique_category)
-                <a href="{{ action('Admin\CourseController@wordbook', ['tango_id' => 0, 'category' => $unique_category, 'page'=> 1 ]) }}">
-                    <p><button type="button" class="btn btn-warning">{{$unique_category}}</button></p>
-                </a> 
+                <p>
+                    <a href="{{ action('Admin\CourseController@wordbook', ['tango_id' => 0, 'category' => $unique_category, 'page'=> 1 ]) }}">
+                        <button type="button" class="btn btn-warning">{{$unique_category}}</button>
+                    </a> 
+                    <a href="{{action('Admin\CourseController@quiz',['category'=>$unique_category])}}">
+                        <button type="button" class="btn btn-warning">クイズ</button>
+                    </a>
+                </p>
             @endforeach
             <br>
-            <p><button type="button" class="btn btn-warning"><a href="{{ action('Admin\CourseController@quiz')}}">クイズ</a></button></p>
-            {{--<a href="https://f6003bf85196481c9df5c1f7e84f45ff.vfs.cloud9.us-east-2.amazonaws.com/admin/course/wordbook?abc=1">wordbook.blade.phpへ（idを持っていく）</a>--}}
-        </div>
+            </div>
     </div>
 @endsection

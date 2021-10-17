@@ -15,7 +15,7 @@
   <p class="margin_bottom_2"></p>
 <div class="container">
   <p class="margin_bottom_2"></p>
-  <a href="{{action('Admin\CourseController@index')}}" type="button" id="goIndex" class="btn btn-black"><h2>↩</h2><br><h8>もどる</h8></a>
+  <a href="{{action('Admin\CourseController@quiz')}}" type="button" id="goIndex" class="btn btn-black"><h2>↩</h2><br><h8>もどる</h8></a>
 
 </div>
 

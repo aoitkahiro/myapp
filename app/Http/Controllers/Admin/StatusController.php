@@ -21,11 +21,11 @@ class StatusController extends Controller
       //レコードを探すコード
       //->get();だとインスタンスの「配列」が返ってきてしまうのでエラーになる
       //historiesテーブルを検索して、user_id , couse_idのカラム２つで検索している（whereは複数件のインスタンスを返すが、この場合firstだけ返してくる）
-      //dd($history,$request->course_id,Auth::id(),$request->all());
+      // dd($history,$request->course_id,Auth::id(),$request->all());
       if($history != NULL){
-         // dd($history);
          $history->update(['learning_level'=>$request->learning_level]);
-         return redirect('admin/course/wordbook')->with(["tango_id"=>$request->tango_id]);
+         $url = 'admin/course/wordbook?tango_id=' . $request->tango_id . '&category=' . $request->category;
+         return redirect($url);
       }else{
          //インスタンス作成
          $history = new History;
@@ -36,17 +36,15 @@ class StatusController extends Controller
          //モデルインスタンスのusers_id属性に代入
          $history->user_id = Auth::id(); //use Auth; と書かないと使えない！
          
-         unset($form['tango_id']);
          unset($form['_token']);
-         
+         unset($form['tango_id']);
+         unset($form['category']);
          //Historyモデルのインスタンスである$historyに、$formの中にあるデータを詰め込む
          $history->fill($form);
          //saveメソッドが呼ばれると新しいレコードがデータベースに挿入される
          $history->save();
-         
-         //return view('admin.course.wordbook');
-         //return redirect()->action('Admin\CourseController@wordbook');
-         return redirect('admin/course/wordbook')->with(["tango_id"=>$request->tango_id]);
+         $url = 'admin/course/wordbook?tango_id=' . $request->tango_id . '&category=' . $request->category;
+         return redirect($url);
       }
    }
 }

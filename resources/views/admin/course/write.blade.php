@@ -13,12 +13,12 @@
         <a href="">次のカード</a>
       </div>
       <div class="col-4">
-        <a href="{{action('Admin\CourseController@wordbook', ['tango_id' => $tango_id_for_write - 1])}}">戻る</a>
+        <a href="{{action('Admin\CourseController@wordbook', ['category'=>$unique_category,'tango_id' => $page])}}">戻る</a>
          <br></br>
       </div>
     </div>
     <div class="row">
-      <form action="{{ action('Admin\CourseController@update') }}" method="post" enctype="multipart/form-data">
+      <form action="{{ action('Admin\CourseController@update',['category'=>$unique_category,'page' => $page] )}}" method="post" enctype="multipart/form-data">
         <div class="col-6 offset-3">
           @csrf
           <label class="col-md-8">表 面</label>
