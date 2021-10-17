@@ -3,7 +3,7 @@
 @section('content')
 
 <div class="container">
-  <h2 id=""> "{{$courses[0]->category}}"にチャレンジした人たち</h2>
+  <h2 id=""> "{{$category}}"にチャレンジした人たち</h2>
   
 　<p>　　1日1個 自己ベストが残ります</p>
   <ol>
@@ -15,7 +15,7 @@
   <p class="margin_bottom_2"></p>
 <div class="container">
   <p class="margin_bottom_2"></p>
-  <a href="{{action('Admin\CourseController@quiz')}}" type="button" id="goIndex" class="btn btn-black"><h2>↩</h2><br><h8>もどる</h8></a>
+  <a href="{{action('Admin\CourseController@quiz',['category'=>$category])}}" type="button" id="goIndex" class="btn btn-black"><h2>↩</h2><br><h8>もどる</h8></a>
 
 </div>
 

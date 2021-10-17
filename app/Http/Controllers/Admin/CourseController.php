@@ -347,13 +347,13 @@ class CourseController extends Controller
     // dd($forgotten,$request->all());
     return redirect()->action('Admin\CourseController@quiz',['forgotten' => $forgotten, 'category'=>$request->category]);
   }
-  public function ranking()
+  public function ranking(Request $request)
   {
-
+    
     $courses = Course::all();
     $users = User::all();
     $rankings = [];
-    $category = "TOEIC500";
+    $category = $request->category;
     foreach ($users as $user) {
       $ary = []; // ここに正解回数が入る([0]が一回目の結果)
       $maxCi = UserQuizResult::where('user_id', $user->id)->max('challenge_id'); // そのユーザのチャレンジID最大値を取得
@@ -413,7 +413,8 @@ class CourseController extends Controller
     // dd($days,$numbers,$times,$rankings);
     array_multisort($numbers, SORT_DESC, $times, SORT_ASC, $days, SORT_DESC,$rankings); // ランキングを仕様通りに並べ替える
     // dd($rankings);
-    return view('admin.course.ranking', ['rankings'=> $rankings, 'courses'=>$courses]); 
+    
+    return view('admin.course.ranking', ['rankings'=> $rankings, 'courses'=>$courses, 'category'=>$category]); 
   }
   
   /*public function lowerLearningLevel(Request $request)

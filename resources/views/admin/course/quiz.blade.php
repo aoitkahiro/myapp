@@ -46,7 +46,7 @@
   <p class="margin_bottom_2 text-center"></p>
   <a href="{{action('Admin\CourseController@quiz',['category'=>$category])}}" type="button" id="restart" class="btn btn-black"><h2>↺</h2><br><h8>もう一度</h8></a>
   <a href="{{action('Admin\CourseController@index')}}" type="button" id="goIndex" class="btn btn-black"><h2>↩</h2><br><h8>もどる</h8></a>
-  <a href="{{action('Admin\CourseController@ranking')}}" type="button" id="goRanking" class="btn btn-black"><h2>👑</h2><br><h8>ランキング</h8></a>
+  <a href="{{action('Admin\CourseController@ranking',['category'=>$category])}}" type="button" id="goRanking" class="btn btn-black"><h2>👑</h2><br><h8>ランキング</h8></a>
   <p class="margin_bottom_2"></p>
   <h3>
         今回 × だった単語
