@@ -264,7 +264,7 @@ class CourseController extends Controller
   {
     // dd($request);
     // $course = Course::find(1);
-    $question_amount = 10;//３は、のちのち20などにする予定
+    $question_amount = 3;//３は、のちのち20などにする予定
     $courses = Course::inRandomOrder()->where('category',$request->category)->limit($question_amount)->get();
     $dummy_courses = Course::where('id' ,'<>', $courses[0]->id)->
       where('kind',$courses[0]->kind)->inRandomOrder()->limit($question_amount)->get();

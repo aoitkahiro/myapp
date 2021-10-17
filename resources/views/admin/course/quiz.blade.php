@@ -39,7 +39,7 @@
     <input type="hidden" name="resultArray[]" id="resultArray">
     <input type="hidden" name="category" value={{$category}}>
     <p><input type="checkbox" {{ $forgotten == "0" ? ""  : "checked" }} class="sample2" name="forgotten" id="forgotten"> 間違えた語の[覚えた]を解除</p>
-    <button type="button" id="save_button">記録を送信する</button>
+    <button><a href="{{action('Admin\CourseController@quiz',['category'=>$category])}}" type="button" id="save_button">記録を送信する</a></button>
   </form>
   </div>
 </div>
