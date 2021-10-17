@@ -264,19 +264,19 @@
       switch (true) {
         case correctRatio == 1:
           alert('すごい！満点です');
-          $items.innerHTML = '<img class="d-block mx-auto" style="max-width:150px;" src="{{ asset('storage/image/' . 'excellent.png') }}">';
+          $items.innerHTML = '<img class="d-block mx-auto" style="max-width:150px;" src="{{ secure_asset('image/' . 'excellent.png') }}">';
           break;
         case correctRatio >= 0.8:
           console.log('すごい、8割以上です');
-          $items.innerHTML = '<img class="d-block mx-auto" style="max-width:150px;" src="{{ asset('storage/image/' . 'mugi80.jpg') }}">';
+          $items.innerHTML = '<img class="d-block mx-auto" style="max-width:150px;" src="{{ secure_asset('image/' . 'mugi80.jpg') }}">';
           break;
         case correctRatio >= 0.5:
           console.log('平均的です');
-          $items.innerHTML = '<img class="d-block mx-auto" style="max-width:150px;" src="{{ asset('storage/image/' . 'hand_good.png') }}">';
+          $items.innerHTML = '<img class="d-block mx-auto" style="max-width:150px;" src="{{ secure_asset('image/' . 'hand_good.png') }}">';
           break;
         default:
           console.log('平均以下です');
-          $items.innerHTML = '<img class="d-block mx-auto" style="max-width:150px;" src="{{ asset('storage/image/' . 'mugi.jpg') }}">';
+          $items.innerHTML = '<img class="d-block mx-auto" style="max-width:150px;" src="{{ secure_asset('image/' . 'mugi.jpg') }}">';
       } 
       
       
