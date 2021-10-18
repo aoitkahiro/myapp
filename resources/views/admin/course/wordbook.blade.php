@@ -1,6 +1,7 @@
 @extends('layouts.admin')
 @section('title', '単語帳')
 @section('content')
+　　　　　　　{{$user->name}}さんの単語帳 "{{$unique_category}}"
 <div class="container">
     @if($message != "")
         <p>{{$message}}</p>
@@ -19,7 +20,7 @@
         ありません（まだレコードなし）
     @endif
     </h6>
-    ここまでデバッグ用の記述です*<br>--}}{{$unique_category}}
+    ここまでデバッグ用の記述です*<br>--}}
     <div class="col">
         @if($value == NULL or $value->learning_level == 0 ) {{-- もしhistoriesテーブルのtango_id番めのレコードの learning_level が0かNULLなら --}}
             <form action="{{ action('Admin\StatusController@store') }}" method="post" enctype="multipart/form-data">  {{--  ActionタグにURLを書く--}} 
@@ -142,6 +143,5 @@
     </div>
 </div>
 <div class="text-center">
-    {{$user->name}}さん専用単語帳
 </div>
 @endsection
