@@ -157,9 +157,9 @@ class CourseController extends Controller
     Log::info($courses);//画面遷移のときは空にならないが、「最初から知ってる」を押したときは空になる。なぜ？
     // dd($courses,$tango_id);
     //↓の$valueはView側で[最初から知ってる][覚えた]ボタンを裏表切り替えるために、準備するための変数
-    // dd($courses,$courses[$tango_id],$courses[$tango_id]->id);
+    // dd($courses);
     $value = History::where('user_id',$user->id)->where('course_id', $courses[$tango_id]->id)->first();
-    // dd($value,$courses[$tango_id],$tango_id);
+    // dd($value,$courses[$tango_id],$tango_id, $unique_category);
     return view('admin.course.wordbook', ['unique_category'=>$unique_category, 'value'=>$value, 'history'=>$history, 'tango_id'=> $tango_id, 
     'post' => $courses,  'user' => $user, 'users' =>$users, 'message' => $massage]); 
     //return view('admin.course.wordbook', ['post' => $course, "all_courses_count" => $courses->count(),'page_num' => $count, 'user' => $user, 'users' =>$users , 'hoge' =>'hello']);
@@ -262,10 +262,13 @@ class CourseController extends Controller
   }
   public function quiz(Request $request)
   {
+    $category = urldecode($request->category);
     // dd($request);
     // $course = Course::find(1);
     $question_amount = 3;//３は、のちのち20などにする予定
-    $courses = Course::inRandomOrder()->where('category',$request->category)->limit($question_amount)->get();
+    // dd($request,urldecode($request->category));
+    $courses = Course::inRandomOrder()->where('category',$category)->limit($question_amount)->get();
+    // dd($courses);
     $dummy_courses = Course::where('id' ,'<>', $courses[0]->id)->
       where('kind',$courses[0]->kind)->inRandomOrder()->limit($question_amount)->get();
     $dummy_answers = array();
@@ -297,7 +300,8 @@ class CourseController extends Controller
   
   public function PostQuizTime(Request $request)
   {
-    // dd($request->all());
+    $category = urldecode($request->category);
+    // dd($request->all(),$category);
     $user_quiz_results = UserQuizResult::where('user_id', Auth::id())->where('challenge_id', $request->challenge_id)->
         orderBy("id")->get();
     // $quiz_data = $request->all(); //$quiz_data にはrunning_time や score などHTMLからsubmitされた値が入っている。
@@ -345,11 +349,10 @@ class CourseController extends Controller
       $forgotten = 0;
     }
     // dd($forgotten,$request->all());
-    return redirect()->action('Admin\CourseController@quiz',['forgotten' => $forgotten, 'category'=>$request->category]);
+    return redirect()->action('Admin\CourseController@quiz',['forgotten' => $forgotten, 'category'=>$category]);
   }
   public function ranking(Request $request)
   {
-    
     $courses = Course::all();
     $users = User::all();
     $rankings = [];
@@ -357,9 +360,11 @@ class CourseController extends Controller
     foreach ($users as $user) {
       $ary = []; // ここに正解回数が入る([0]が一回目の結果)
       $maxCi = UserQuizResult::where('user_id', $user->id)->max('challenge_id'); // そのユーザのチャレンジID最大値を取得
+        // dd($maxCi);
       for ($ci = 1; $ci <= $maxCi; $ci++) {
         $user_quiz_results = UserQuizResult::where('user_id', $user->id)->where('challenge_id', $ci)->where('judgement', 2)->get();
-        if(count($user_quiz_results) > 0 && Course::find($user_quiz_results[0]->course_id)->category == $category){
+        // dd($user_quiz_results);
+        if(count($user_quiz_results) > 0 && Course::find($user_quiz_results->first()->course_id)->category == $category){
             $modelForTimeAndDate = UserQuizResult::where('user_id', $user->id)->where('challenge_id', $ci)->orderBy('running_time','DESC')->first();
             // dd($user->id, $ci, $modelForDate);
             $date = $modelForTimeAndDate->created_at->format('Y/m/d');

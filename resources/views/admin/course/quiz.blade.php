@@ -37,9 +37,9 @@
     <input type="hidden" name="result_items" id="result_items">
     <input type="hidden" name="challenge_id" id="challenge_id">
     <input type="hidden" name="resultArray[]" id="resultArray">
-    <input type="hidden" name="category" value={{$category}}>
+    <input type="hidden" name="category" value={{urlencode($category)}}>
     <p><input type="checkbox" {{ $forgotten == "0" ? ""  : "checked" }} class="sample2" name="forgotten" id="forgotten"> 間違えた語の[覚えた]を解除</p>
-    <button><a href="{{action('Admin\CourseController@quiz',['category'=>$category])}}" type="button" id="save_button">記録を送信する</a></button>
+    <button type="button" id="save_button">記録を送信する</button>
   </form>
   </div>
 </div>
@@ -278,7 +278,7 @@
           console.log('平均以下です');
           $items.innerHTML = '<img class="d-block mx-auto" style="max-width:150px;" src="{{ secure_asset('image/' . 'mugi.jpg') }}">';
       } 
-      
+      {{--document.forms['recordtime'].submit();--}}
       
   };
   

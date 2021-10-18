@@ -16,12 +16,14 @@ class StatusController extends Controller
    
    public function store(Request $request)
    {
+      $category = urldecode($request->category);
+      // dd($category);
       //databaseを検索してレコードがある場合、ない場合で実行コードを分けるよう実装する。
       $history = History::where('user_id',Auth::id())->where('course_id',$request->course_id)->first();
       //レコードを探すコード
       //->get();だとインスタンスの「配列」が返ってきてしまうのでエラーになる
       //historiesテーブルを検索して、user_id , couse_idのカラム２つで検索している（whereは複数件のインスタンスを返すが、この場合firstだけ返してくる）
-      // dd($history,$request->course_id,Auth::id(),$request->all());
+      // dd($history,$request->all());
       if($history != NULL){
          $history->update(['learning_level'=>$request->learning_level]);
          $url = 'admin/course/wordbook?tango_id=' . $request->tango_id . '&category=' . $request->category;
