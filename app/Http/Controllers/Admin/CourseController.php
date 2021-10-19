@@ -265,7 +265,7 @@ class CourseController extends Controller
     $category = urldecode($request->category);
     // dd($request);
     // $course = Course::find(1);
-    $question_amount = 3;//３は、のちのち20などにする予定
+    $question_amount = 10;//３は、のちのち20などにする予定
     // dd($request,urldecode($request->category));
     $courses = Course::inRandomOrder()->where('category',$category)->limit($question_amount)->get();
     // dd($courses);
@@ -274,7 +274,7 @@ class CourseController extends Controller
     $dummy_answers = array();
     for ($i = 0; $i < $question_amount; $i++) {
       array_push($dummy_answers,Course::where('id' ,'<>', $courses[$i]->id)
-        ->where('kind',$courses[$i]->kind)->inRandomOrder()->limit($question_amount)->get());
+        ->where('kind',$courses[$i]->kind)->inRandomOrder()->limit(3)->get());
     }
     $correct_and_dummy_answers = $dummy_answers;
     $correct_and_dummy_answers[] = $courses;

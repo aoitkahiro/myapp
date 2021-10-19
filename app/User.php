@@ -16,7 +16,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password', 'looking_level'//連想配列で更新できない、ということを定義している（Laravelの仕様）
     ];
 
     /**

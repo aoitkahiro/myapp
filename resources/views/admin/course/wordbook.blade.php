@@ -142,6 +142,34 @@
         </div>
     </div>
 </div>
+<label class="col-md-12">　　カードはどのレベルまで表示しますか？</label>
+<div>
+   　　　<input type="radio" name="looking_level" value="0" <?php if($user->looking_level == 0){ echo "checked";} ?>>全部表示
+</div>
+<div>
+   　　　 <input type="radio" name="looking_level" value="1" <?php if($user->looking_level == 1){ echo "checked";} ?>>[最初から知ってる] のカードを隠す
+</div>
+<div>
+   　　　 <input type="radio" name="looking_level" value="1" <?php if($user->looking_level == 2){ echo "checked";} ?>>[最初から知ってる]と [覚えた]のカードを隠す
+</div>
+    <form action="{{ action('Admin\StatusController@levelChange') }}" method="post" enctype="multipart/form-data">  {{--  ActionタグにURLを書く--}} 
+    @csrf
+            <button type="submit" class="btn btn-primary" name="looking_level" value= 0> looking_level = 0</button> /全部表示
+            <input type="hidden" name="tango_id" value= {{$tango_id}}>
+            <input type="hidden" name="category" value= {{mb_convert_encoding($unique_category, 'UTF-8')}}>
+    </form>
+    <form action="{{ action('Admin\StatusController@levelChange') }}" method="post" enctype="multipart/form-data">  {{--  ActionタグにURLを書く--}} 
+    @csrf
+            <button type="submit" class="btn btn-primary" name="looking_level" value= 1> looking_level = 1</button> /[最初から知ってる] のカードを隠す
+            <input type="hidden" name="tango_id" value= {{$tango_id}}>
+            <input type="hidden" name="category" value= {{mb_convert_encoding($unique_category, 'UTF-8')}}>
+    </form>
+    <form action="{{ action('Admin\StatusController@levelChange') }}" method="post" enctype="multipart/form-data">  {{--  ActionタグにURLを書く--}} 
+    @csrf
+            <button type="submit" class="btn btn-primary" name="looking_level" value= 2> looking_level = 2</button> /[最初から知ってる]と [覚えた]のカードを隠す
+            <input type="hidden" name="tango_id" value= {{$tango_id}}>
+            <input type="hidden" name="category" value= {{mb_convert_encoding($unique_category, 'UTF-8')}}>
+    </form>
 <div class="text-center">
 </div>
 @endsection

@@ -25,6 +25,7 @@ Route::group(['prefix' => 'admin'], function() {
     Route::get('course/select', 'Admin\CourseController@select')->middleware('auth');
     Route::get('course/wordbook', 'Admin\CourseController@wordbook')->middleware('auth');
     Route::post('course/wordbook', 'Admin\StatusController@store')->middleware('auth');
+    Route::post('course/wordbook/levelChange', 'Admin\StatusController@levelChange')->middleware('auth');
     Route::get('course/write', 'Admin\CourseController@write')->middleware('auth');
     Route::post('course/write', 'Admin\CourseController@update');
     

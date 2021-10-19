@@ -16,6 +16,7 @@ class StatusController extends Controller
    
    public function store(Request $request)
    {
+      // dd($request->all());
       $category = urldecode($request->category);
       // dd($category);
       //databaseを検索してレコードがある場合、ない場合で実行コードを分けるよう実装する。
@@ -25,6 +26,7 @@ class StatusController extends Controller
       //historiesテーブルを検索して、user_id , couse_idのカラム２つで検索している（whereは複数件のインスタンスを返すが、この場合firstだけ返してくる）
       // dd($history,$request->all());
       if($history != NULL){
+      // dd($request->learning_level,$history->learning_level);
          $history->update(['learning_level'=>$request->learning_level]);
          $url = 'admin/course/wordbook?tango_id=' . $request->tango_id . '&category=' . $request->category;
          return redirect($url);
@@ -48,5 +50,14 @@ class StatusController extends Controller
          $url = 'admin/course/wordbook?tango_id=' . $request->tango_id . '&category=' . $request->category;
          return redirect($url);
       }
+   }
+   
+   public function levelChange(Request $request)
+   {
+      $user = Auth::user();
+      $user->update(['looking_level'=>$request->looking_level]);
+      // dd($request->looking_level,$user->looking_level);
+      $url = 'admin/course/wordbook?tango_id=' . $request->tango_id . '&category=' . $request->category;
+      return redirect($url);
    }
 }

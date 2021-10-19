@@ -118,6 +118,7 @@
        const randomNumber = Math.floor(Math.random() * (i + 1));
        [new_value[i], new_value[randomNumber]] = [new_value[randomNumber], new_value[i]];
       }
+      {{--　ここに配列を４つに絞るコードを書く？  --}}
       console.log("new_value = " + new_value);
       
       let btnIndex = 0;
