@@ -8,15 +8,23 @@
 {{-- admin.blade.phpの@yield('content')に以下のタグを埋め込む --}}
 @section('content')
     <div class="container">
-        <div class="col-6 offset-3">
+        <div class="col-10 offset-1">
             <br><br>
             @foreach($unique_categories as $unique_category)
                 <p>
                     <a href="{{ action('Admin\CourseController@wordbook', ['tango_id' => 0, 'category' => $unique_category, 'page'=> 1 ]) }}">
                         <button type="button" class="btn btn-warning">{{$unique_category}}</button>
                     </a> 
-                    <a href="{{action('Admin\CourseController@quiz',['category'=>$unique_category])}}">
-                        <button type="button" class="btn btn-warning">クイズ</button>
+                    <a href="{{action('Admin\CourseController@quiz',['category'=>$unique_category, 'question_quantity'=> 5])}}">
+                        <button type="button" class="btn btn-orange">5 問Q</button>
+                    </a>
+                    </a> 
+                    <a href="{{action('Admin\CourseController@quiz',['category'=>$unique_category, 'question_quantity'=> 10])}}">
+                        <button type="button" class="btn btn-orange">10 問Q</button>
+                    </a>
+                    </a> 
+                    <a href="{{action('Admin\CourseController@quiz',['category'=>$unique_category, 'question_quantity'=> 2])}}">
+                        <button type="button" class="btn btn-orange">2 問Q</button>
                     </a>
                 </p>
             @endforeach

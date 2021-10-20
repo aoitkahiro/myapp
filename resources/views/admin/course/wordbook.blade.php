@@ -22,12 +22,12 @@
     </h6>
     ここまでデバッグ用の記述です*<br>--}}
     <div class="col">
-        @if($value == NULL or $value->learning_level == 0 ) {{-- もしhistoriesテーブルのtango_id番めのレコードの learning_level が0かNULLなら --}}
+        @if($value == NULL or $value->learning_level == 0 or $value->learning_level == 1 ) {{-- もしhistoriesテーブルのtango_id番めのレコードの learning_level が0かNULLなら --}}
             <form action="{{ action('Admin\StatusController@store') }}" method="post" enctype="multipart/form-data">  {{--  ActionタグにURLを書く--}} 
             @csrf
                 <p>
                     <input type="hidden" name="course_id" value={{$post[$tango_id]->id}}> {{--1ページごとなので、foreachではなく具体的な数値を$tango_idで渡している--}} 
-                    <input type="hidden" name="learning_level" value="1"> {{--すでに知っている」をsubmitしたとき、0→1へ切り替える--}}
+                    <input type="hidden" name="learning_level" value="2"> {{--すでに知っている」をsubmitしたとき、0→1へ切り替える--}}
                     <input type="hidden" name="tango_id" value= {{$tango_id}}>{{--再度同じページにredirectするために、$tango_idを渡す--}}
                     <input type="hidden" name="category" value= {{urlencode($unique_category)}}>
                     <input type="submit" class="btn btn-primary" value="最初から知ってる">
@@ -38,7 +38,7 @@
             @csrf
                 <p>
                     <input type="hidden" name="course_id" value={{$post[$tango_id]->id}}>
-                    <input type="hidden" name="learning_level" value="0"> {{--最初から知っている を解除」をsubmitしたとき、0へ切り替える--}}
+                    <input type="hidden" name="learning_level" value="1"> {{--最初から知っている を解除」をsubmitしたとき、0へ切り替える--}}
                     <input type="hidden" name="tango_id" value= {{$tango_id}}>
                     <input type="hidden" name="category" value= {{urlencode($unique_category)}}>
                     <input type="submit" class="btn btn-secondary" value="最初から知ってる を解除">
@@ -47,12 +47,12 @@
         @endif
     </div>
     <div class="col">
-        @if($value == NULL or $value->learning_level == 0 or $value->learning_level == 1 ) {{-- もしhistoriesテーブルのtango_id番めのレコードの learning_level が1,0かNULLなら --}}
+        @if($value == NULL or $value->learning_level == 0 ) {{-- もしhistoriesテーブルのtango_id番めのレコードの learning_level が1,0かNULLなら --}}
             <form action="{{ action('Admin\StatusController@store') }}" method="post" enctype="multipart/form-data">  {{--  ActionタグにURLを書く--}} 
             @csrf
                 <p>
                     <input type="hidden" name="course_id" value={{$post[$tango_id]->id}}> {{--1ページごとなので、foreachではなく具体的な数値を$tango_idで渡している--}} 
-                    <input type="hidden" name="learning_level" value="2"> {{--覚えたをsubmitしたとき、0→2へ切り替える--}}
+                    <input type="hidden" name="learning_level" value="1"> {{--覚えたをsubmitしたとき、0→2へ切り替える--}}
                     <input type="hidden" name="tango_id" value= {{$tango_id}}>{{--再度同じページにredirectするために、$tango_idを渡す--}}
                     <input type="hidden" name="category" value= {{urlencode($unique_category)}}>
                     <input type="submit" class="btn btn-primary" value="覚えた">

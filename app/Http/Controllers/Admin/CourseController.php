@@ -110,8 +110,8 @@ class CourseController extends Controller
                                                     //->first() はUserクラスのインスタンスを取得 ->get()はUserクラスのコレクション（配列の型）で取得する
     $user = Auth::user(); //2行上のuserの取り方と同じ
     $count = 0; // 最終的にページ数になる変数
-    //$course = Course::find($request->tango_id); // URLの"?tango_id=整数値"で送った値を($request ->tango_id)で取得している。 例えばURLが、?tango_id=10であれば、find(10)になる 
-        // ちなみにfindは DB内のレコードを「id」で検索・取得するための、Laravelのメソッド。今回はCourseというDBを tango_idで検索・取得している
+    //$course = Course::find($request->tango_id); // URLの"?tango_id=整数値"で送った値を($request ->tango_id)で取得している。 例えばURLが、?tango_id=10であれば、find(10)になる
+    // ちなみにfindは DB内のレコードを「id」で検索・取得するための、Laravelのメソッド。今回はCourseというDBを tango_idで検索・取得している
     $tango_id = $request->tango_id;
     $looking_level = $user->looking_level; // 特定のuserレコードの、looking_level"0~2"を$looking_level に取得
     $some_history = History::where('user_id', $user->id)->get();//historiesテーブル内を$user->id で検索して特定userのhistoriesレコードを取得している
@@ -131,12 +131,12 @@ class CourseController extends Controller
     // dd($request,$unique_category);
     if($some_history != NULL){
       if($looking_level == 2){ // もし、looking_levelが 2 なら
-        $courses = Course::where('category',$unique_category)->whereNotIn('id', $course_id_in_histories_2)->orWhereNotIn('id', $course_id_in_histories_1)->get(); //learning_levelが2or1のcourse_id以外を表示させる
+      $courses = Course::where('category',$unique_category)->whereNotIn('id', $course_id_in_histories_2)->WhereNotIn('id', $course_id_in_histories_1)->get();//get();
       }elseif($looking_level == 1){ // もし、looking_levelが 1なら
-        $courses = Course::where('category',$unique_category)->whereNotIn('id', $course_id_in_histories_1)->get(); //learning_levelが1のcourse_id以外を表示させる
+        $courses = Course::where('category',$unique_category)->whereNotIn('id', $course_id_in_histories_2)->get(); //learning_levelが1のcourse_id以外を表示させる
       }elseif($looking_level == 0){ // もし、looking_levelが初期値の 0 なら
         $courses = Course::where('category',$unique_category)->get();
-        // dd($courses,$unique_category);
+      // dd($courses,$unique_category);
       }
     // dd($courses);
     }
@@ -263,16 +263,15 @@ class CourseController extends Controller
   public function quiz(Request $request)
   {
     $category = urldecode($request->category);
-    // dd($request);
     // $course = Course::find(1);
-    $question_amount = 10;//３は、のちのち20などにする予定
+    $question_quantity = $request->question_quantity;//３は、のちのち20などにする予定
     // dd($request,urldecode($request->category));
-    $courses = Course::inRandomOrder()->where('category',$category)->limit($question_amount)->get();
+    $courses = Course::inRandomOrder()->where('category',$category)->limit($question_quantity)->get();
     // dd($courses);
     $dummy_courses = Course::where('id' ,'<>', $courses[0]->id)->
-      where('kind',$courses[0]->kind)->inRandomOrder()->limit($question_amount)->get();
+      where('kind',$courses[0]->kind)->inRandomOrder()->limit($question_quantity)->get();
     $dummy_answers = array();
-    for ($i = 0; $i < $question_amount; $i++) {
+    for ($i = 0; $i < $question_quantity; $i++) {
       array_push($dummy_answers,Course::where('id' ,'<>', $courses[$i]->id)
         ->where('kind',$courses[$i]->kind)->inRandomOrder()->limit(3)->get());
     }
@@ -294,13 +293,14 @@ class CourseController extends Controller
     }
     // dd($request->forgotten);
     // dd($latest_user_quiz_result);
-    return view('admin.course.quiz', ['latest_user_quiz_result'=>$latest_user_quiz_result,'result'=> $result, 'challenge_id'=>$challenge_id, 'category'=>$request->category, 
+    return view('admin.course.quiz', ['latest_user_quiz_result'=>$latest_user_quiz_result,'result'=> $result, 'challenge_id'=>$challenge_id, 'category'=>$request->category, 'question_quantity'=>$question_quantity,
     'correct_and_dummy_answers'=>$correct_and_dummy_answers,'dummy_answers'=>$dummy_answers, 'dummy_courses'=>$dummy_courses, 'courses'=>$courses,'forgotten'=>$request->forgotten]); 
   }
   
   public function PostQuizTime(Request $request)
   {
     $category = urldecode($request->category);
+    $question_quantity = $request->question_quantity;
     // dd($request->all(),$category);
     $user_quiz_results = UserQuizResult::where('user_id', Auth::id())->where('challenge_id', $request->challenge_id)->
         orderBy("id")->get();
@@ -349,7 +349,7 @@ class CourseController extends Controller
       $forgotten = 0;
     }
     // dd($forgotten,$request->all());
-    return redirect()->action('Admin\CourseController@quiz',['forgotten' => $forgotten, 'category'=>$category]);
+    return redirect()->action('Admin\CourseController@quiz',['forgotten' => $forgotten, 'category'=>$category, 'question_quantity'=>$question_quantity]);
   }
   public function ranking(Request $request)
   {
@@ -357,30 +357,37 @@ class CourseController extends Controller
     $users = User::all();
     $rankings = [];
     $category = $request->category;
+    $question_quantity = $request->question_quantity;
     foreach ($users as $user) {
       $ary = []; // ここに正解回数が入る([0]が一回目の結果)
       $maxCi = UserQuizResult::where('user_id', $user->id)->max('challenge_id'); // そのユーザのチャレンジID最大値を取得
         // dd($maxCi);
       for ($ci = 1; $ci <= $maxCi; $ci++) {
-        $user_quiz_results = UserQuizResult::where('user_id', $user->id)->where('challenge_id', $ci)->where('judgement', 2)->get();
-        // dd($user_quiz_results);
-        if(count($user_quiz_results) > 0 && Course::find($user_quiz_results->first()->course_id)->category == $category){
-            $modelForTimeAndDate = UserQuizResult::where('user_id', $user->id)->where('challenge_id', $ci)->orderBy('running_time','DESC')->first();
-            // dd($user->id, $ci, $modelForDate);
-            $date = $modelForTimeAndDate->created_at->format('Y/m/d');
-            $running_time = $modelForTimeAndDate->running_time;
-            $mygoal = $user->mygoal;
-            // $date, $success, $running_time　の帳尻が合わないと、ランキングのソートが正常に動かなさそう
-            // success = あるチャレンジの正答数
-            // running_time = あるチャレンジの３問解くのにかかった時間
-            // $date = あるチャレンジの終了日
-            $success = count($user_quiz_results);
-            $ary = ['name' => $user->name, '挑戦回数' => $ci, '正解回数' => $success, '挑戦日'=> $date, 
-            'タイム'=>$running_time, '目標'=>$mygoal, '画像'=>$user->image_path, 'uqz'=> $user_quiz_results];
-            $rankings[] = $ary;
-        }
+        $num_of_challenge = UserQuizResult::where('user_id', $user->id)->where('challenge_id', $ci)->get();
+        $n = count($num_of_challenge);
+        // dd($n,$question_quantity);
+        //if($n == $question_quantity){
+          $user_quiz_results = UserQuizResult::where('user_id', $user->id)->where('challenge_id', $ci)->where('judgement', 2)->get();
+          // dd($user_quiz_results);
+          if(count($user_quiz_results) > 0 && Course::find($user_quiz_results->first()->course_id)->category == $category){
+              $modelForTimeAndDate = UserQuizResult::where('user_id', $user->id)->where('challenge_id', $ci)->orderBy('running_time','DESC')->first();
+              // dd($user->id, $ci, $modelForDate);
+              $date = $modelForTimeAndDate->created_at->format('Y/m/d');
+              $running_time = $modelForTimeAndDate->running_time;
+              $mygoal = $user->mygoal;
+              // $date, $success, $running_time　の帳尻が合わないと、ランキングのソートが正常に動かなさそう
+              // success = あるチャレンジの正答数
+              // running_time = あるチャレンジの３問解くのにかかった時間
+              // $date = あるチャレンジの終了日
+              $success = count($user_quiz_results);
+              $ary = ['name' => $user->name, '挑戦回数' => $ci, '正解回数' => $success, '挑戦日'=> $date, 
+              'タイム'=>$running_time, '目標'=>$mygoal, '画像'=>$user->image_path, 'uqz'=> $user_quiz_results];
+              $rankings[] = $ary;
+          }
+        //}
       }
     }
+    // ランキングを日付、正解回数、タイムの降順に並べ替える
     $days = array_column($rankings, '挑戦日');
     $numbers = array_column($rankings, '正解回数');
     $times = array_column($rankings, 'タイム');
@@ -388,7 +395,6 @@ class CourseController extends Controller
     // $beforeSort = $rankings;
     $result = array_multisort($days, SORT_DESC,$numbers, SORT_DESC, $times, SORT_ASC, $rankings); // 上位以外をはじくために、配列を整える
     // dd($beforeSort,$rankings,$result);
-    
     $existed_user_names = [];
     $pre_date = "";
     $count = 0;
@@ -419,7 +425,7 @@ class CourseController extends Controller
     array_multisort($numbers, SORT_DESC, $times, SORT_ASC, $days, SORT_DESC,$rankings); // ランキングを仕様通りに並べ替える
     // dd($rankings);
     
-    return view('admin.course.ranking', ['rankings'=> $rankings, 'courses'=>$courses, 'category'=>$category]); 
+    return view('admin.course.ranking', ['rankings'=> $rankings, 'courses'=>$courses, 'category'=>$category, 'question_quantity'=>$question_quantity]); 
   }
   
   /*public function lowerLearningLevel(Request $request)

@@ -38,15 +38,16 @@
     <input type="hidden" name="challenge_id" id="challenge_id">
     <input type="hidden" name="resultArray[]" id="resultArray">
     <input type="hidden" name="category" value={{urlencode($category)}}>
+    <input type="hidden" name="question_quantity" value={{$question_quantity}}>
     <p><input type="checkbox" {{ $forgotten == "0" ? ""  : "checked" }} class="sample2" name="forgotten" id="forgotten"> 間違えた語の[覚えた]を解除</p>
     <button type="button" id="save_button">記録を送信する</button>
   </form>
   </div>
 </div>
   <p class="margin_bottom_2 text-center"></p>
-  <a href="{{action('Admin\CourseController@quiz',['category'=>$category])}}" type="button" id="restart" class="btn btn-black"><h2>↺</h2><br><h8>もう一度</h8></a>
+  <a href="{{action('Admin\CourseController@quiz',['category'=>$category, 'question_quantity'=>$question_quantity])}}" type="button" id="restart" class="btn btn-black"><h2>↺</h2><br><h8>もう一度</h8></a>
   <a href="{{action('Admin\CourseController@index')}}" type="button" id="goIndex" class="btn btn-black"><h2>↩</h2><br><h8>もどる</h8></a>
-  <a href="{{action('Admin\CourseController@ranking',['category'=>$category])}}" type="button" id="goRanking" class="btn btn-black"><h2>👑</h2><br><h8>ランキング</h8></a>
+  <a href="{{action('Admin\CourseController@ranking',['category'=>$category, 'question_quantity'=>$question_quantity])}}" type="button" id="goRanking" class="btn btn-black"><h2>👑</h2><br><h8>ランキング</h8></a>
   <p class="margin_bottom_2"></p>
   <h3>
         今回 × だった単語
@@ -173,7 +174,7 @@
         resultArray.push(2);
       } else {
         elm.className = "btn btn-black selection"
-        document.getElementById('sound').textContent = "ブブー";
+        document.getElementById('sound').textContent = quiz[quizCount].correct + " が正解です";
         result = result + "1" + " ";
         rslt = 1;
         resultArray.push(1);
@@ -189,7 +190,7 @@
       console.log(running_time);
       console.log("結果："+ result);
       disabledAllSelections();
-      await wait(1000);{{--await：ここ（wait()）が終わるまでは進まないことを保証。関数にasyncも、約束--}}
+      await wait(1000);{{--await：ここ（wait()）が終わるまでは進まないことを保証。関数にasyncも記述するのがお約束--}}
       goToNext();
   };
   
@@ -197,7 +198,8 @@
       activeAllSelections();
       quizCount++;
       if(quizCount < quizLen){
-        setTimeout(function(){setupQuiz(quizCount)},500);    
+        {{--setTimeout(function(){setupQuiz(quizCount)},500);--}} 
+        setupQuiz(quizCount);
       } else {
         stopTheWatch();
         judgeString = result.replace(/0|1/g, '✖');
@@ -264,7 +266,6 @@
 
       switch (true) {
         case correctRatio == 1:
-          alert('すごい！満点です');
           $items.innerHTML = '<img class="d-block mx-auto" style="max-width:150px;" src="{{ secure_asset('image/' . 'excellent.png') }}">';
           break;
         case correctRatio >= 0.8:
