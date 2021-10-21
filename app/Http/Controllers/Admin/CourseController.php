@@ -311,6 +311,7 @@ class CourseController extends Controller
     // $result_array = explode(" " , $result_in_string);
     $course_id_array = json_decode($request->course_id_array,true);//true は連想配列に、falseはオブジェクトにデコードする
     $result_items = json_decode($request->result_items,true);
+    // dd($request);
     $results = array_column($result_items,'rslt');
     $running_times = array_column($result_items,'rng_time');
     // dd($results[0],$results);
@@ -357,6 +358,7 @@ class CourseController extends Controller
     $users = User::all();
     $rankings = [];
     $category = $request->category;
+    // dd($category);
     $question_quantity = $request->question_quantity;
     foreach ($users as $user) {
       $ary = []; // ここに正解回数が入る([0]が一回目の結果)
@@ -366,7 +368,7 @@ class CourseController extends Controller
         $num_of_challenge = UserQuizResult::where('user_id', $user->id)->where('challenge_id', $ci)->get();
         $n = count($num_of_challenge);
         // dd($n,$question_quantity);
-        //if($n == $question_quantity){
+        if($n == $question_quantity){
           $user_quiz_results = UserQuizResult::where('user_id', $user->id)->where('challenge_id', $ci)->where('judgement', 2)->get();
           // dd($user_quiz_results);
           if(count($user_quiz_results) > 0 && Course::find($user_quiz_results->first()->course_id)->category == $category){
@@ -380,11 +382,11 @@ class CourseController extends Controller
               // running_time = あるチャレンジの３問解くのにかかった時間
               // $date = あるチャレンジの終了日
               $success = count($user_quiz_results);
-              $ary = ['name' => $user->name, '挑戦回数' => $ci, '正解回数' => $success, '挑戦日'=> $date, 
+              $ary = ['name' => $user->name, '挑戦回数' => $ci, /*'c_id'=> $c_id,*/ '正解回数' => $success, '挑戦日'=> $date, 
               'タイム'=>$running_time, '目標'=>$mygoal, '画像'=>$user->image_path, 'uqz'=> $user_quiz_results];
               $rankings[] = $ary;
           }
-        //}
+        }
       }
     }
     // ランキングを日付、正解回数、タイムの降順に並べ替える
@@ -417,14 +419,20 @@ class CourseController extends Controller
       $pre_date = $checking_date; //チェックした日付を次のループで使用する
       $count++;
     }
-    // dd($rankings);
-    $days = array_column($rankings, '挑戦日');
-    $numbers = array_column($rankings, '正解回数');
-    $times = array_column($rankings, 'タイム');
-    // dd($days,$numbers,$times,$rankings);
-    array_multisort($numbers, SORT_DESC, $times, SORT_ASC, $days, SORT_DESC,$rankings); // ランキングを仕様通りに並べ替える
-    // dd($rankings);
-    
+    // dd($rankings);//unset()済
+    $i = 0;
+    $your_rank = 1;
+    foreach($rankings as $rank){
+      if($rank["uqz"][$i]->user_id == Auth::id()){
+        break;
+      }else{
+        $i++;
+        $your_rank++;
+      }
+      //dd($rank["uqz"][0]->course_id);
+    }
+    $text ="あなたは {$your_rank}位 です";
+    dd($text);
     return view('admin.course.ranking', ['rankings'=> $rankings, 'courses'=>$courses, 'category'=>$category, 'question_quantity'=>$question_quantity]); 
   }
   
