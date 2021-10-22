@@ -8,7 +8,7 @@ class UserQuizResult extends Model
 {
     protected $guarded = array('id'); //'id'は通常、$guarded にする？
     
-    public static function getRankingInCategoryAndQuestionNum($user_id, $challenge_id, $category, $questionNum){
+    public static function getRankingInCategoryAndQuestionQuantity($user_id, $challenge_id, $category, $question_quantity){
         
     //なんやかんや処理を書く
     // まずUserQuizResultモデルにおいて
@@ -68,9 +68,20 @@ class UserQuizResult extends Model
       $count++;
     }
     
+    $i = 0;
+    $your_rank = 1;
+    foreach($rankings as $rank){
+      if($rank["uqz"][$i]->user_id == Auth::id()){
+        break;
+      }else{
+        $i++;
+        $your_rank++;
+      }
+      //dd($rank["uqz"][0]->course_id);
+    }
+    $text ="あなたは {$category} の{$question_quantity}で{$your_rank}位 です";
+    dd($text);
     
-    
-    
-    return $runking_number;
+    return $text;
   }
 }

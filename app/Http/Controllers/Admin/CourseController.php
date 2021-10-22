@@ -420,19 +420,10 @@ class CourseController extends Controller
       $count++;
     }
     // dd($rankings);//unset()済
-    $i = 0;
-    $your_rank = 1;
-    foreach($rankings as $rank){
-      if($rank["uqz"][$i]->user_id == Auth::id()){
-        break;
-      }else{
-        $i++;
-        $your_rank++;
-      }
-      //dd($rank["uqz"][0]->course_id);
-    }
-    $text ="あなたは {$your_rank}位 です";
-    dd($text);
+    
+    // getRankingInCategoryAndQuestionQuantity($user_id, $challenge_id, $category, $question_quantity);
+    UserQuizResult::getRankingInCategoryAndQuestionQuantity(1, 62, 'TOEIC出る順1-210_easy', 5);
+    
     return view('admin.course.ranking', ['rankings'=> $rankings, 'courses'=>$courses, 'category'=>$category, 'question_quantity'=>$question_quantity]); 
   }
   
