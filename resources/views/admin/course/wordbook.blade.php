@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 @section('title', '単語帳')
 @section('content')
-　　　　　　　{{$user->name}}さんの単語帳 "{{$unique_category}}"
+　　　　{{$user->name}}さんの単語帳 <font size="5">「{{$unique_category}}」</font>  記憶率<font size="5">「{{$bunshi_num}} / {{$bunbo_num}}」</font>
 <div class="container">
     @if($message != "")
         <p>{{$message}}</p>

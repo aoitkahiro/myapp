@@ -9,7 +9,7 @@ class UserQuizResult extends Model
 {
     protected $guarded = array('id'); //'id'は通常、$guarded にする？
     
-    public static function getRankingInCategoryAndQuestionQuantity($user_id, $challenge_id, $category, $question_quantity){
+    public static function getRankingInCategoryAndQuestionQuantity($category, $question_quantity){
         
     //なんやかんや処理を書く
     // まずUserQuizResultモデルにおいて
@@ -75,18 +75,25 @@ class UserQuizResult extends Model
     $times = array_column($rankings, 'タイム');
     $result = array_multisort($numbers, SORT_DESC, $times, SORT_ASC, $days, SORT_DESC,$rankings); // 今度は正解回数、タイム、挑戦日の優先順に並べ替える
     // dd($rankings);
-    $i = 0;
-    foreach($rankings as $rank){
-    // dd($user_id, $rank["uqz"][$i]->user_id, $rankings);
-      if($rank["uqz"][$i]->user_id == $user_id){
-        break;
-      }else{
-        $i++;
+    if($rankings== NULL){
+      $your_highscore_rank = NULL;
+      $your_highscore_rank_text ="{$your_name}さんは「{$category}」の{$question_quantity}問クイズに まだランクインしていません";
+    }else{
+      $your_id = Auth::id();
+      $your_name = Auth::user()->name;
+      $i = 0;
+      foreach($rankings as $rank){
+      // dd($user_id, $your_id, Auth::user()->name, $rank["uqz"][$i]->user_id, $rankings);
+        if($rank["uqz"][$i]->user_id == $your_id){
+          break;
+        }else{
+          $i++;
+        }
+      //   dd($rank["uqz"][0]->course_id,$user->name);
       }
-    //   dd($rank["uqz"][0]->course_id,$user->name);
+      $your_highscore_rank = $i + 1;
+      $your_highscore_rank_text ="{$your_name}さんは「{$category}」の{$question_quantity}問クイズで現在{$your_highscore_rank}位 です！";
     }
-    $your_highscore_rank = $i + 1;
-    $your_highscore_rank_text ="{$user->name}さんは「{$category}」の{$question_quantity}問クイズで現在{$your_highscore_rank}位 です";
     // dd($your_highscore_rank);
     
     return [$your_highscore_rank, $your_highscore_rank_text];

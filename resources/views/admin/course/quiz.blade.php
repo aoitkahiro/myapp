@@ -2,7 +2,7 @@
 @section('title', 'Q')
 @section('content')
 
-<p id="">［{{$courses[0]->category}}］クイズに挑戦</p>
+<p class ="text-center">{{$ranking_title}}</p>
 <div class="container">
   <div id="QuizStart" onClick = "startQuiz()" class="btn btn-black">clickStart() ▶</div>
   <div class="text-center">
@@ -39,7 +39,8 @@
     <input type="hidden" name="resultArray[]" id="resultArray">
     <input type="hidden" name="category" value={{urlencode($category)}}>
     <input type="hidden" name="question_quantity" value={{$question_quantity}}>
-    <p><input type="checkbox" {{ $forgotten == "0" ? ""  : "checked" }} class="sample2" name="forgotten" id="forgotten"> 間違えた語の[覚えた]を解除</p>
+    <input type="hidden" name="forgotten" value="0" >
+    <p><input type="checkbox" {{ $forgotten == "0" ? ""  : "checked" }} class="sample2" name="forgotten"> 間違えた語の[覚えた]を解除</p>
     <button type="button" id="save_button">記録を送信する</button>
   </form>
   </div>
@@ -90,6 +91,7 @@
   let buttonLen = $buttons.length;
   const quizLen = quiz.length;
   let quizCount = 0;
+  let whereQuizNum = 1;
   let score = 0;
   let running_time = "";{{--runnning timeミリ秒保存用 例"1000 2000 2200" --}} 
   let result = "";
@@ -108,7 +110,7 @@
       $buttons = $doc.getElementsByClassName('selection');
       console.log($buttons);
       buttonLen = $buttons.length;
-      document.getElementById('sound').textContent = "　";
+      document.getElementById('sound').textContent = whereQuizNum + "問目 / " + quizLen + "問";
       
       let new_value = [quiz[quizCount].answer];
       quiz[quizCount].selections.forEach(selection =>
@@ -173,12 +175,16 @@
         result = result + "2" + " ";
         rslt = 2;
         resultArray.push(2);
+      disabledAllSelections();
+      await wait(700);{{--await：ここ（wait()）が終わるまでは進まないことを保証。関数にasyncも記述するのがお約束--}}
       } else {
         elm.className = "btn btn-black selection"
         document.getElementById('sound').textContent = quiz[quizCount].correct + " が正解です";
         result = result + "1" + " ";
         rslt = 1;
         resultArray.push(1);
+      disabledAllSelections();
+      await wait(1100);{{--await：ここ（wait()）が終わるまでは進まないことを保証。関数にasyncも記述するのがお約束--}}
       }
       
       result_items.push({
@@ -190,16 +196,15 @@
       running_time = running_time + zeroAndMinutes + zeroAndSeconds + "/";{{-- ++と書ける？ --}}
       console.log(running_time);
       console.log("結果："+ result);
-      disabledAllSelections();
-      await wait(1000);{{--await：ここ（wait()）が終わるまでは進まないことを保証。関数にasyncも記述するのがお約束--}}
       goToNext();
   };
   
   const goToNext = () => {
-      activeAllSelections();
       quizCount++;
       if(quizCount < quizLen){
+      activeAllSelections();
         {{--setTimeout(function(){setupQuiz(quizCount)},500);--}} 
+        whereQuizNum++;
         setupQuiz(quizCount);
       } else {
         stopTheWatch();

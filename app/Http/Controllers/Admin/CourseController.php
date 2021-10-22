@@ -155,12 +155,41 @@ class CourseController extends Controller
     }
     Log::info('####');
     Log::info($courses);//画面遷移のときは空にならないが、「最初から知ってる」を押したときは空になる。なぜ？
-    // dd($courses,$tango_id);
+    
+    //正解率を出すメソッドを作成
+    //categoryで絞り込んだcourse_idの数が分母。分子はcategoryで絞り込んだcourse_idのうち、count(History::where('id',$the_ids)->get)
+    $bunbo_courses = Course::where('category',$unique_category)->get();
+    // dd($bunbo_courses,count($bunbo_courses));
+    $bunbo_num = count($bunbo_courses);
+    $bunbo_ids = [];
+    foreach($bunbo_courses as $bunbo_course){
+      array_push($bunbo_ids,$bunbo_course->id);
+    };
+    // dd($bunbo_ids);
+    // 'lerning_level 1 or 2'で絞り込む書き方が7行ほどあってやや複雑
+    $id_count = 0;
+    $vol1 = 1;
+    $vol2 = 2;
+    foreach($bunbo_ids as $bunbo_id){
+      $bunshi = History::where(function($bunshi) use($vol1,$vol2)
+      {
+         $bunshi->where('learning_level', $vol1)
+                ->orWhere('learning_level', $vol2);
+      })->where('user_id', $user->id)->where('course_id', $bunbo_id)->first();
+      
+      // Log::info('####');
+      // Log::info($bunshi);
+      if($bunshi != []){
+        $id_count++;
+      }
+    }
+    // dd($id_count);
+    $bunshi_num = $id_count;
     //↓の$valueはView側で[最初から知ってる][覚えた]ボタンを裏表切り替えるために、準備するための変数
     // dd($courses);
     $value = History::where('user_id',$user->id)->where('course_id', $courses[$tango_id]->id)->first();
     // dd($value,$courses[$tango_id],$tango_id, $unique_category);
-    return view('admin.course.wordbook', ['unique_category'=>$unique_category, 'value'=>$value, 'history'=>$history, 'tango_id'=> $tango_id, 
+    return view('admin.course.wordbook', ['bunshi_num'=>$bunshi_num,'bunbo_num'=>$bunbo_num,'unique_category'=>$unique_category, 'value'=>$value, 'history'=>$history, 'tango_id'=> $tango_id, 
     'post' => $courses,  'user' => $user, 'users' =>$users, 'message' => $massage]); 
     //return view('admin.course.wordbook', ['post' => $course, "all_courses_count" => $courses->count(),'page_num' => $count, 'user' => $user, 'users' =>$users , 'hoge' =>'hello']);
   }                                         //$course にはid,front,back,kind,category,degree の値等が入っている。 
@@ -291,9 +320,11 @@ class CourseController extends Controller
       $result->judgement = 0;
       $result->save();
     }
+      $your_highscore_rank = UserQuizResult::getRankingInCategoryAndQuestionQuantity($category, $question_quantity);
+      $ranking_title = $your_highscore_rank[1];
     // dd($request->forgotten);
     // dd($latest_user_quiz_result);
-    return view('admin.course.quiz', ['latest_user_quiz_result'=>$latest_user_quiz_result,'result'=> $result, 'challenge_id'=>$challenge_id, 'category'=>$request->category, 'question_quantity'=>$question_quantity,
+    return view('admin.course.quiz', ['ranking_title'=> $ranking_title, 'latest_user_quiz_result'=>$latest_user_quiz_result,'result'=> $result, 'challenge_id'=>$challenge_id, 'category'=>$request->category, 'question_quantity'=>$question_quantity,
     'correct_and_dummy_answers'=>$correct_and_dummy_answers,'dummy_answers'=>$dummy_answers, 'dummy_courses'=>$dummy_courses, 'courses'=>$courses,'forgotten'=>$request->forgotten]); 
   }
   
@@ -355,7 +386,13 @@ class CourseController extends Controller
   
   public function showResult(Request $request)
   {
-    return redirect()->action('Admin\CourseController@quiz',['forgotten' => $forgotten, 'category'=>$category, 'question_quantity'=>$question_quantity]);
+    // dd($request->category);
+    $category = $request->category;
+    $question_quantity = $request->question_quantity;
+    $hoge = UserQuizResult::getRankingInCategoryAndQuestionQuantity($category, $question_quantity);
+    $ranking_title = $hoge[1];
+    // dd($ranking_title);
+    return view('admin.course.showResult', ['ranking_title'=>$ranking_title,'category'=>$category, 'question_quantity'=>$question_quantity]); 
   }
   public function ranking(Request $request)
   {
@@ -431,99 +468,10 @@ class CourseController extends Controller
     // dd($rankings);
     $result = array_multisort($numbers, SORT_DESC, $times, SORT_ASC, $days, SORT_DESC,$rankings); // 今度は正解回数、タイム、挑戦日の優先順に並べ替える
     
-    $hoge = UserQuizResult::getRankingInCategoryAndQuestionQuantity(2, 67, 'TOEIC出る順1-210_easy', 5);
-    $ranking_title = $hoge[1];
+    $your_highscore_rank = UserQuizResult::getRankingInCategoryAndQuestionQuantity($category, $question_quantity);
+    $ranking_title = $your_highscore_rank[1];
+    // dd($your_highscore_rank);
     return view('admin.course.ranking', ['ranking_title'=>$ranking_title, 'rankings'=> $rankings, 'courses'=>$courses, 'category'=>$category, 'question_quantity'=>$question_quantity]); 
   }
   
-  /*public function lowerLearningLevel(Request $request)
-  {
-    //databaseを検索してレコードがある場合、ない場合で実行コードを分けるよう実装する。
-    $histories = History::where('user_id',Auth::id())->where('course_id',$request->course_id)->get();
-    dd($histories);
-    //レコードを探すコード
-    //->get();だとインスタンスの「配列」が返ってきてしまうのでエラーになる
-    //historiesテーブルを検索して、user_id , couse_idのカラム２つで検索している（whereは複数件のインスタンスを返すが、この場合firstだけ返してくる）
-    if($histories != NULL){
-      foreach($histories as histries)
-      $histories->update(['learning_level'=>$request->learning_level]);
-      return redirect('admin/course/wordbook?tango_id=' . $request->tango_id);
-    }else{
-       //インスタンス作成
-       $histories = new History;
-       $form = $request->all();
-       //Inputタグのusers_id属性がusers_idの場合 $request->users_id で値を受け取る
-       //モデルインスタンスのusers_id属性に代入
-       $histories->user_id = Auth::id(); //use Auth; と書かないと使えない！
-       
-       unset($form['tango_id']);
-       unset($form['_token']);
-       
-       //Historyモデルのインスタンスである$historiesに、$formの中にあるデータを詰め込む
-       $histories->fill($form);
-       //saveメソッドが呼ばれると新しいレコードがデータベースに挿入される
-       $histories->save();
-       
-       //return view('admin.course.wordbook');
-       //return redirect()->action('Admin\CourseController@wordbook');
-       return redirect('admin/course/wordbook?tango_id=' . $request->tango_id);
-    }
-  }*/
-  public function quiz2()
-  {     
-    return view('admin.course.quiz2');  
-  }
 }
-
-
-
-/*
-  // 7.3 csv作成画面を作るために追加(その１)
-  public function csv()   
-  {     
-    return view('admin.course.csv');  
-  }
-  // csv取り込みメソッドを作るために追加 (その２)
-  public function upload_regist(Request $rq)
-  {
-    if($rq->hasFile('csv') && $rq->file('csv')->isValid()) {
-        // CSV ファイル保存
-        $tmpname = uniqid("CSVUP_").".".$rq->file('csv')->guessExtension(); //TMPファイル名
-        $rq->file('csv')->move(public_path()."/csv/tmp",$tmpname);
-        $tmppath = public_path()."/csv/tmp/".$tmpname;
-
-        // Goodby CSVの設定
-        $config_in = new LexerConfig();
-        $config_in
-            ->setFromCharset("SJIS-win")
-            ->setToCharset("UTF-8") // CharasetをUTF-8に変換
-            ->setIgnoreHeaderLine(true) //CSVのヘッダーを無視
-        ;
-        $lexer_in = new Lexer($config_in);
-
-        $datalist = array();
-
-        $interpreter = new Interpreter();
-        $interpreter->addObserver(function (array $row) use (&$datalist){
-           // 各列のデータを取得
-           $datalist[] = $row;
-        });
-
-        // CSVデータをパース
-        $lexer_in->parse($tmppath,$interpreter);
-
-        // TMPファイル削除
-        unlink($tmppath);
-
-        // 処理
-        foreach($datalist as $row){
-            // 各データ取り出し
-            $csv_user = $this->get_csv_user($row);
-
-            // DBへの登録
-            $this->regist_user_csv($csv_user);
-        }
-        return redirect('admin.course.csv')->with('flashmessage','CSVのデータを読み込みました。');
-    }
-    return redirect('admin.course.csv')->with('flashmessage','CSVの送信エラーが発生しましたので、送信を中止しました。');
-  }*/
