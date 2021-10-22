@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class UserQuizResult extends Model
 {
@@ -17,9 +18,11 @@ class UserQuizResult extends Model
     // もしそのレコードのcourse_id のcategoryが$categoryで絞り込む
     // $questionNumで絞り込む
     // user_id=XX さんの challenge_id=XX の挑戦は category=XXXXにおいて、今xxx位です
+    $users = User::all();
+    $rankings = [];
     foreach ($users as $user) {
       $ary = []; // ここに正解回数が入る([0]が一回目の結果)
-      $maxCi = UserQuizResult::where('user_id', Auth::id)->max('challenge_id'); // そのユーザのチャレンジID最大値を取得
+      $maxCi = UserQuizResult::where('user_id', $user->id)->max('challenge_id'); // そのユーザのチャレンジID最大値を取得
       for ($ci = 1; $ci <= $maxCi; $ci++) {
         $num_of_challenge = UserQuizResult::where('user_id', $user->id)->where('challenge_id', $ci)->get();
         $n = count($num_of_challenge);
@@ -35,7 +38,7 @@ class UserQuizResult extends Model
               // success = あるチャレンジの正答数
               // running_time = あるチャレンジでn問解くのにかかった時間
               // $date = あるチャレンジの終了日
-              $ary = [ '正解回数' => $success, '挑戦日'=> $date, 'タイム'=>$running_time, 'uqz'=> $user_quiz_results];
+              $ary = [ 'name' => $user->name, '正解回数' => $success, '挑戦日'=> $date, 'タイム'=>$running_time, 'uqz'=> $user_quiz_results];
               $rankings[] = $ary;
           }
         }
@@ -67,21 +70,25 @@ class UserQuizResult extends Model
       $pre_date = $checking_date; //チェックした日付を次のループで使用する
       $count++;
     }
-    
+    $days = array_column($rankings, '挑戦日');
+    $numbers = array_column($rankings, '正解回数');
+    $times = array_column($rankings, 'タイム');
+    $result = array_multisort($numbers, SORT_DESC, $times, SORT_ASC, $days, SORT_DESC,$rankings); // 今度は正解回数、タイム、挑戦日の優先順に並べ替える
+    // dd($rankings);
     $i = 0;
-    $your_rank = 1;
     foreach($rankings as $rank){
-      if($rank["uqz"][$i]->user_id == Auth::id()){
+    // dd($user_id, $rank["uqz"][$i]->user_id, $rankings);
+      if($rank["uqz"][$i]->user_id == $user_id){
         break;
       }else{
         $i++;
-        $your_rank++;
       }
-      //dd($rank["uqz"][0]->course_id);
+    //   dd($rank["uqz"][0]->course_id,$user->name);
     }
-    $text ="あなたは {$category} の{$question_quantity}で{$your_rank}位 です";
-    dd($text);
+    $your_highscore_rank = $i + 1;
+    $your_highscore_rank_text ="{$user->name}さんは「{$category}」の{$question_quantity}問クイズで現在{$your_highscore_rank}位 です";
+    // dd($your_highscore_rank);
     
-    return $text;
+    return [$your_highscore_rank, $your_highscore_rank_text];
   }
 }

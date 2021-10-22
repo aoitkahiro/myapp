@@ -352,6 +352,11 @@ class CourseController extends Controller
     // dd($forgotten,$request->all());
     return redirect()->action('Admin\CourseController@quiz',['forgotten' => $forgotten, 'category'=>$category, 'question_quantity'=>$question_quantity]);
   }
+  
+  public function showResult(Request $request)
+  {
+    
+  }
   public function ranking(Request $request)
   {
     $courses = Course::all();
@@ -420,11 +425,15 @@ class CourseController extends Controller
       $count++;
     }
     // dd($rankings);//unset()済
+    $days = array_column($rankings, '挑戦日');
+    $numbers = array_column($rankings, '正解回数');
+    $times = array_column($rankings, 'タイム');
+    // dd($rankings);
+    $result = array_multisort($numbers, SORT_DESC, $times, SORT_ASC, $days, SORT_DESC,$rankings); // 今度は正解回数、タイム、挑戦日の優先順に並べ替える
     
-    // getRankingInCategoryAndQuestionQuantity($user_id, $challenge_id, $category, $question_quantity);
-    UserQuizResult::getRankingInCategoryAndQuestionQuantity(1, 62, 'TOEIC出る順1-210_easy', 5);
-    
-    return view('admin.course.ranking', ['rankings'=> $rankings, 'courses'=>$courses, 'category'=>$category, 'question_quantity'=>$question_quantity]); 
+    $hoge = UserQuizResult::getRankingInCategoryAndQuestionQuantity(2, 67, 'TOEIC出る順1-210_easy', 5);
+    $ranking_title = $hoge[1];
+    return view('admin.course.ranking', ['ranking_title'=>$ranking_title, 'rankings'=> $rankings, 'courses'=>$courses, 'category'=>$category, 'question_quantity'=>$question_quantity]); 
   }
   
   /*public function lowerLearningLevel(Request $request)

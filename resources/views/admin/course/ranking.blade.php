@@ -3,7 +3,7 @@
 @section('content')
 
 <div class="container">
-  <h2 id=""> "{{$category}}"にチャレンジした人たち</h2>
+  <h2 id="">{{$ranking_title}}</h2>
   
 　<p>　　1日1個 自己ベストが残ります</p>
   <ol>
