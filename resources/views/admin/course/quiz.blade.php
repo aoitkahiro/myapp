@@ -43,6 +43,7 @@
     <button type="button" id="save_button">記録を送信する</button>
   </form>
   </div>
+  <div><button><a href="{{action('Admin\CourseController@showResult',['category'=>$category, 'question_quantity'=>$question_quantity])}}">Show Result</a></button></div>
 </div>
   <p class="margin_bottom_2 text-center"></p>
   <a href="{{action('Admin\CourseController@quiz',['category'=>$category, 'question_quantity'=>$question_quantity])}}" type="button" id="restart" class="btn btn-black"><h2>↺</h2><br><h8>もう一度</h8></a>

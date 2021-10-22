@@ -355,7 +355,7 @@ class CourseController extends Controller
   
   public function showResult(Request $request)
   {
-    
+    return redirect()->action('Admin\CourseController@quiz',['forgotten' => $forgotten, 'category'=>$category, 'question_quantity'=>$question_quantity]);
   }
   public function ranking(Request $request)
   {
