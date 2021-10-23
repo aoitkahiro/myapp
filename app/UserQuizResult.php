@@ -75,12 +75,12 @@ class UserQuizResult extends Model
     $times = array_column($rankings, 'タイム');
     $result = array_multisort($numbers, SORT_DESC, $times, SORT_ASC, $days, SORT_DESC,$rankings); // 今度は正解回数、タイム、挑戦日の優先順に並べ替える
     // dd($rankings);
+    $your_name = Auth::user()->name;
+    $your_highscore_rank = NULL;
     if($rankings== NULL){
-      $your_highscore_rank = NULL;
-      $your_highscore_rank_text ="{$your_name}さんは「{$category}」の{$question_quantity}問クイズに まだランクインしていません";
+      $your_highscore_rank_text ="「{$category}」の{$question_quantity}問クイズには まだ誰もランクインしていません";
     }else{
       $your_id = Auth::id();
-      $your_name = Auth::user()->name;
       $i = 0;
       foreach($rankings as $rank){
       // dd($user_id, $your_id, Auth::user()->name, $rank["uqz"][$i]->user_id, $rankings);
@@ -91,8 +91,12 @@ class UserQuizResult extends Model
         }
       //   dd($rank["uqz"][0]->course_id,$user->name);
       }
+      if($i == count($rankings)){
+        $your_highscore_rank_text ="{$your_name}さんは「{$category}」の{$question_quantity}問クイズに まだランクインしていません";
+      }else{
       $your_highscore_rank = $i + 1;
       $your_highscore_rank_text ="{$your_name}さんは「{$category}」の{$question_quantity}問クイズで現在{$your_highscore_rank}位 です！";
+      }
     }
     // dd($your_highscore_rank);
     
