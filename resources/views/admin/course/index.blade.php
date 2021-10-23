@@ -24,9 +24,10 @@
                     <a href="{{action('Admin\CourseController@quiz',['category'=>$unique_category, 'question_quantity'=> 15])}}">
                         <button type="button" class="btn btn-orange">15 問Q</button>
                     </a>
+                    {{--
                     <a href="{{action('Admin\CourseController@quiz',['category'=>$unique_category, 'question_quantity'=> 2])}}">
                         <button type="button" class="btn btn-orange">2 問Q</button>
-                    </a>
+                    </a>--}}
                 </p>
             @endforeach
             <br>
