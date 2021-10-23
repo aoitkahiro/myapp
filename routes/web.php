@@ -28,6 +28,7 @@ Route::group(['prefix' => 'admin'], function() {
     Route::post('course/wordbook/levelChange', 'Admin\StatusController@levelChange')->middleware('auth');
     Route::get('course/write', 'Admin\CourseController@write')->middleware('auth');
     Route::post('course/write', 'Admin\CourseController@update');
+    Route::get('course/reward', 'Admin\CourseController@reward');
     
     //以下、新たに単語帳を作るRouting（createアクション）
     Route::get('course/create', 'Admin\CourseController@create')->middleware('auth');
