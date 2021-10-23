@@ -10,7 +10,7 @@
     <div class="row justify-content-center">
         <div class="card" style="width: rem;">
             <p><img class="d-block mx-auto" style="max-width:300px;" src="{{ secure_asset('image/' . 'sugoi.jpg') }}"></p>
-            <p><a href="" class="btn btn-success btn-block">>戻る</a></p>
+            <p><a href="action('Admin\CourseController@index')">戻る</a></p>
         </div>
     </div>
              {{-- <img class="d-block mx-auto" style="max-width:150px;" src="{{ asset('storage/tango/' . Auth::user()->image_path) }}">--}}

@@ -185,22 +185,34 @@ class CourseController extends Controller
     }
     // dd($id_count);
     $bunshi_num = $id_count;
-    if(count($courses) == $tango_id){
-    return view('admin.course.reward');
-    }else{
+    // if(count($courses) == $tango_id){
+    // return view('admin.course.reward');
+    // }else{
     //↓の$valueはView側で[最初から知ってる][覚えた]ボタンを裏表切り替えるために、準備するための変数
     // dd($courses,$tango_id,$user);B
     $value = History::where('user_id',$user->id)->where('course_id', $courses[$tango_id]->id)->first();
     // dd($value,$courses[$tango_id],$tango_id, $unique_category);
-    return view('admin.course.reward', ['bunshi_num'=>$bunshi_num,'bunbo_num'=>$bunbo_num,'unique_category'=>$unique_category, 'value'=>$value, 'history'=>$history, 'tango_id'=> $tango_id, 
+    return view('admin.course.wordbook', ['bunshi_num'=>$bunshi_num,'bunbo_num'=>$bunbo_num,'unique_category'=>$unique_category, 'value'=>$value, 'history'=>$history, 'tango_id'=> $tango_id, 
     'post' => $courses,  'user' => $user, 'users' =>$users, 'message' => $massage]);
     //return view('admin.course.wordbook', ['post' => $course, "all_courses_count" => $courses->count(),'page_num' => $count, 'user' => $user, 'users' =>$users , 'hoge' =>'hello']);
-    }
+    // }
   }
   public function reward(Request $request)
   {
+      $courses = Course::all();
+      $i = 0;
+      $arr = [];
+      foreach($courses as $course){
+        // dd($course);
+        array_push($arr,$course->category);
+        $i++;
+      }
+      $unique_categories = array_unique($arr);
+      // dd($unique_categories);
+      
     $massage = "お疲れ様でした";
-    return view('admin.course.reward', ['message' => $massage]);
+      
+    return view('admin.course.reward',['unique_categories'=>$unique_categories, 'courses'=>$courses]);
   }
   
   //$course にはid,front,back,kind,category,degree の値等が入っている。 
