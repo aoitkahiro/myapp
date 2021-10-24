@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Course extends Model
 {
@@ -13,6 +14,22 @@ class Course extends Model
     public function next()
     {
         return $this->where('id', '>', $this->id)->orderBy('id', 'asc')->first();
-    } 
-
+    }
+    public function getImageFileName(){
+      $path = 'public/tango/';
+    
+      $jpgFileName = $this->id. '.jpg';//このインスタンスメソッドを呼び出した、メソッドを指す。
+      //呼び出す単語によって、$thisの中身は変わる。インスタンスメソッドのポイント。
+      $pngFileName = $this->id. '.png';
+      $defaultFileName = 'noimage.jpg';
+    
+      if(Storage::exists($path . $jpgFileName)){
+        return $jpgFileName;
+      } elseif(Storage::exists($path . $pngFileName)){
+        return $pngFileName;
+      } else {
+        return $defaultFileName;
+      }
+    }
+    
 }

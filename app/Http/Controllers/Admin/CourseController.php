@@ -14,6 +14,7 @@ use App\User;
 use App\History;
 use App\UserQuizResult;
 use Log;
+use Illuminate\Support\Facades\Storage;
 
 class CourseController extends Controller
 {
@@ -176,8 +177,8 @@ class CourseController extends Controller
          $bunshi->where('learning_level', $vol1)
                 ->orWhere('learning_level', $vol2);
       })->where('user_id', $user->id)->where('course_id', $bunbo_id)->first();
-      
       // Log::info('####');
+      
       // Log::info($bunshi);
       if($bunshi != []){
         $id_count++;
@@ -185,7 +186,8 @@ class CourseController extends Controller
     }
     // dd($id_count);
     $bunshi_num = $id_count;
-    // dd(count($courses),$tango_id);
+    $noimage="hoge";
+    
     if(count($courses) <= $tango_id){
     return view('admin.course.reward');
     }else{
@@ -193,7 +195,7 @@ class CourseController extends Controller
     // dd($courses,$tango_id,$user);B
     $value = History::where('user_id',$user->id)->where('course_id', $courses[$tango_id]->id)->first();
     // dd($value,$courses[$tango_id],$tango_id, $unique_category);
-    return view('admin.course.wordbook', ['bunshi_num'=>$bunshi_num,'bunbo_num'=>$bunbo_num,'unique_category'=>$unique_category, 'value'=>$value, 'history'=>$history, 'tango_id'=> $tango_id, 
+    return view('admin.course.wordbook', ['noimage'=>$noimage, 'bunshi_num'=>$bunshi_num,'bunbo_num'=>$bunbo_num,'unique_category'=>$unique_category, 'value'=>$value, 'history'=>$history, 'tango_id'=> $tango_id, 
     'post' => $courses,  'user' => $user, 'users' =>$users, 'message' => $massage]);
     //return view('admin.course.wordbook', ['post' => $course, "all_courses_count" => $courses->count(),'page_num' => $count, 'user' => $user, 'users' =>$users , 'hoge' =>'hello']);
     }

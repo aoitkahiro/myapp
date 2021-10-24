@@ -19,7 +19,7 @@
     </div>
     <div class="row">
       <form action="{{ action('Admin\CourseController@update',['category'=>$unique_category,'page' => $page] )}}" method="post" enctype="multipart/form-data">
-        <div class="col-6 offset-3">
+        <div class="col-11 offset-1">
           @csrf
           <label class="col-md-8">表 面</label>
           <div class="col-md-10">
@@ -31,15 +31,13 @@
             <input type="text" class="form-control" name="back" value={{ $a_course->back }}>
           </div>
           <br>
-          <button type="button" class="btn btn-warning"><font size="1">画像を追加／変更</font></button>
-          <div class="col-md-10">
-            <input type="file" class="form-control-file" name="image">
-            <input type="hidden" name="course_id" value="{{$tango_id_for_write}}">  {{--前のアクションからidを送って→value=に $tango_id_for_writeとして設定  --}} 
-          </div>
+          <span style="display:inline">
+            <font size="1">画像を追加／変更</font><input type="file" class="form-control-file" name="image">
+              <input type="hidden" name="course_id" value="{{$tango_id_for_write}}">  {{--前のアクションからidを送って→value=に $tango_id_for_writeとして設定  --}} 
+            <button type="submit" >保存</button>.jpg<small> 形式の画像ファイルのみ保存できます</small>
+          </span>
         </div>
-          <br><small> 　　　　　　　.jpg 形式の画像ファイルのみ保存できます</small><br>
         <div class="col-4">
-          <button type="submit" class="btn btn-success btn-block">保存</button>
           <img src="{{ asset('storage/tango/' . $tango_id_for_write . "." . "jpg") }}"> {{--表示用 asse()でディレクトリを指定、受け取っている値で詳しいファイル名を指定 --}}
         </div>
     　</form>
