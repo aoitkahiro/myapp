@@ -23,7 +23,7 @@
     ここまでデバッグ用の記述です*<br>--}}
     <div class="row col">
         <div class="text-center">
-            <button type="button" class="btn btn-warning"><font size="6">{{ $post[$tango_id]->front }}</font></button> {{--...course_id:{{$post[$tango_id]->id}}--}}
+            <span><font size="6">{{ $post[$tango_id]->front }}</font></span> {{--...course_id:{{$post[$tango_id]->id}}--}}
         </div>
     </div>
     <div>
@@ -133,7 +133,7 @@
         </div>
         <div class="col col-lg-2">
         @if($tango_id +1 == $post->count())
-            <a href="{{action('Admin\CourseController@quiz',['category'=>$unique_category])}}">
+            <a href="{{action('Admin\CourseController@reward',['category'=>$unique_category])}}">
             <button type="button" class="btn btn-warning"><font size="1">Q</font></button><br>最後の単語です</a><br>
         @else
             <a href="{{ action('Admin\CourseController@wordbook', ['tango_id' =>$tango_id + 1, 'category' => $unique_category]) }}">
