@@ -22,6 +22,7 @@ class Course extends Model
       //呼び出す単語によって、$thisの中身は変わる。インスタンスメソッドのポイント。
       $pngFileName = $this->id. '.png';
       $defaultFileName = 'noimage.jpg';
+      $issetMessage = 'ヒント画像あり';
     
       if(Storage::exists($path . $jpgFileName)){
         return $jpgFileName;
