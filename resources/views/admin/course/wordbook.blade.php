@@ -8,7 +8,7 @@
         {{--この行に、ここ以下のコードを実行しない命令を記述するべきと考えられるものの、思いつかないため保留2021.8.13--}}
     @endif
     <p class="col">
-    <a  class="btn btn-warning" href="{{action('Admin\CourseController@write',['category'=>$unique_category,'tango_id'=>$post[$tango_id]->id,'page'=>$tango_id])}}">編集</a> {{--  URL：?tango_id=1が生成される（URLにおいて?で送られる数値をgetパラメータという--}} 
+    <a  class="btn btn-warning" href="{{ action('Admin\CourseController@index') }}">戻る</a><a> </a><a  class="btn btn-warning" href="{{action('Admin\CourseController@write',['category'=>$unique_category,'tango_id'=>$post[$tango_id]->id,'page'=>$tango_id])}}">編集</a> {{--  URL：?tango_id=1が生成される（URLにおいて?で送られる数値をgetパラメータという--}} 
     {{--<a  class="btn btn-warning" href="{{action('Admin\CourseController@quiz',['category'=>$unique_category])}}">この科目のクイズへ</a>--}}
     </p>
     {{--<div>*ここからデバッグ用の記述です</div>
