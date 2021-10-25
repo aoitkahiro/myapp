@@ -22,13 +22,13 @@
                     <input type="text" class="form-control" name="mygoal" value="{{ $a_user->mygoal }}">
                     <label class="col-md-12">カードはどのレベルまで表示しますか？</label>
                     <div>
-                        <input type="radio" name="looking_level" value="0" <?php if($a_user->looking_level == 0){ echo "checked";} ?>>looking_level == 0 / 全部表示
+                        <input type="radio" name="looking_level" value="0" <?php if($a_user->looking_level == 0){ echo "checked";} ?>> 全部表示
                     </div>
                     <div>
-                        <input type="radio" name="looking_level" value="1" <?php if($a_user->looking_level == 1){ echo "checked";} ?>>looking_level == 1 / [最初から知ってる] のカードを隠す
+                        <input type="radio" name="looking_level" value="1" <?php if($a_user->looking_level == 1){ echo "checked";} ?>> [最初から知ってる] のカードを隠す
                     </div>
                     <div>
-                        <input type="radio" name="looking_level" value="1" <?php if($a_user->looking_level == 2){ echo "checked";} ?>>looking_level == 2 / [最初から知ってる] [覚えた]のカードを隠す
+                        <input type="radio" name="looking_level" value="1" <?php if($a_user->looking_level == 2){ echo "checked";} ?>> [最初から知ってる] [覚えた]のカードを隠す
                     </div>
                     <button type="submit" class="btn btn-success btn-block">変更</button>
                 </form>
