@@ -11,6 +11,7 @@
 }
 
 .div {
+  margin-bottom: 2px;
   color: #006DD9;
   width: 400px;
   height: 100px;
@@ -24,8 +25,12 @@
   font-family: "monospace", "Yu Gothic", "Meiryo", "\30D2\30E9\30AE\30CE\89D2\30B4", "sans-serif";
 }
 
-.margin_bottom_2 {
+.margin_bottom_2em {
   margin-bottom: 2em;
+}
+
+.margin_bottom_2px {
+  margin-bottom: 2px;
 }
 
 .btn-orange,

@@ -8,29 +8,63 @@
 {{-- admin.blade.phpの@yield('content')に以下のタグを埋め込む --}}
 @section('content')
     <div class="container">
-        <div class="col-10 offset-1">
-            <br><br>
-            @foreach($unique_categories as $unique_category)
-                <p>
-                    <a href="{{ action('Admin\CourseController@wordbook', ['tango_id' => 0, 'category' => $unique_category, 'page'=> 1 ]) }}">
-                        <button type="button" class="btn btn-warning">{{$unique_category}}</button>
-                    </a> 
-                    <a href="{{action('Admin\CourseController@quiz',['category'=>$unique_category, 'question_quantity'=> 5])}}">
+        <div class="row justify-content-md-center margin_bottom_2px">
+            <div class ="col-3"><font size="2">単語帳</font><font size="1">-暗記率　</font></div>
+            <div class ="col-4"><font size="2">クイズで復習</font><font size="1">-ランキング　</font></div>
+            <div class ="col-1">　</div>
+            <div class ="col-1">　</div>
+        </div>
+            @for($i = 0; $i < count($unique_categories); $i++)
+            <div class="row justify-content-md-center margin_bottom_2px">
+                <div class ="col-3">
+                    <a href="{{ action('Admin\CourseController@wordbook', ['tango_id' => 0, 'category' => current( array_slice($unique_categories, $i, 1, true) ), 'page'=> 1 ]) }}">
+                        <button type="button" class="btn btn-warning">{{current( array_slice($unique_categories, $i, 1, true) )}}</button>
+                    @if($memory_per[$i] == 100)
+                    Complete!
+                    @elseif($memory_per[$i] >= 90)
+                    </a>{{$memory_per[$i]}}<font size="1">% もう少し！</font>
+                    @else
+                    </a>{{$memory_per[$i]}}<font size="1">%　</font>
+                    @endif
+                </div>
+                <div class ="col-2">
+                    <a href="{{action('Admin\CourseController@quiz',['category'=>current( array_slice($unique_categories, $i, 1, true) ), 'question_quantity'=> 5])}}">
                         <button type="button" class="btn btn-orange">5 問Q</button>
                     </a>
-                    <a href="{{action('Admin\CourseController@quiz',['category'=>$unique_category, 'question_quantity'=> 10])}}">
+                    @if($five[$i][0] == null)
+                    <font size="1">- 位　</font>
+                    @elseif($five[$i][0] == 1)
+                    👑 1<font size="1">位　</font>
+                    @else
+                    {{$five[$i][0]}}<font size="1">位　</font>
+                    @endif
+                </div>
+                <div class ="col-2">
+                    <a href="{{action('Admin\CourseController@quiz',['category'=>current( array_slice($unique_categories, $i, 1, true) ), 'question_quantity'=> 10])}}">
                         <button type="button" class="btn btn-orange">10 問Q</button>
                     </a>
-                    <a href="{{action('Admin\CourseController@quiz',['category'=>$unique_category, 'question_quantity'=> 15])}}">
+                    @if($ten[$i][0] == null)
+                    <font size="1">- 位　</font>
+                    @elseif($ten[$i][0] == 1)
+                    👑 1<font size="1">位　</font>
+                    @else
+                    {{$ten[$i][0]}}<font size="1">位　</font>
+                    @endif
+                </div>
+                <div class ="col-2">
+                    <a href="{{action('Admin\CourseController@quiz',['category'=>current( array_slice($unique_categories, $i, 1, true) ), 'question_quantity'=> 15])}}">
                         <button type="button" class="btn btn-orange">15 問Q</button>
                     </a>
-                    {{--
-                    <a href="{{action('Admin\CourseController@quiz',['category'=>$unique_category, 'question_quantity'=> 2])}}">
-                        <button type="button" class="btn btn-orange">2 問Q</button>
-                    </a>--}}
-                </p>
-            @endforeach
+                    @if($fifteen[$i][0] == null)
+                    <font size="1">- 位　</font>
+                    @elseif($fifteen[$i][0] == 1)
+                    👑 1<font size="1">位　</font>
+                    @else
+                    {{$fifteen[$i][0]}}<font size="1">位　</font>
+                    @endif
+                </div>
+            </div>
+            @endfor
             <br>
-        </div>
     </div>
 @endsection

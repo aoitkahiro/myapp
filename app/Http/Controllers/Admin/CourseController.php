@@ -83,19 +83,64 @@ class CourseController extends Controller
   // 7.3 コース画面を作るために追加
   public function index()   
   {     
-      $courses = Course::all();
-      $i = 0;
-      $arr = [];
-      foreach($courses as $course){
-        // dd($course);
-        array_push($arr,$course->category);
-        $i++;
+    $courses = Course::all();
+    $i = 0;
+    $arr = [];
+    foreach($courses as $course){
+      // dd($course);
+      array_push($arr,$course->category);
+      $i++;
+    }
+    $unique_categories = array_unique($arr);
+    // dd($unique_categories);
+    $five = [];
+    $ten = [];
+    $fifteen = [];
+    foreach ($unique_categories as $key => $value) {
+      // dd($value);
+      array_push($five, UserQuizResult::getRankingInCategoryAndQuestionQuantity($value, 5));
+      array_push($ten, UserQuizResult::getRankingInCategoryAndQuestionQuantity($value, 10));
+      array_push($fifteen, UserQuizResult::getRankingInCategoryAndQuestionQuantity($value, 15));
+    }
+    // dd($five,$ten,$fifteen);
+    // dd($five[2][1],$five[0],$five,$unique_categories[$key]);
+    // dd($unique_categories);
+    $user = Auth::user();
+    $memory_per =[];
+    foreach($unique_categories as $unique_category){
+      $bunbo_courses = Course::where('category',$unique_category)->get();
+      // dd($bunbo_courses,count($bunbo_courses));
+      $bunbo_num = count($bunbo_courses);
+      $bunbo_ids = [];
+      foreach($bunbo_courses as $bunbo_course){
+        array_push($bunbo_ids,$bunbo_course->id);
+      };
+      // dd($bunbo_ids);
+      // 'lerning_level 1 or 2'で絞り込む書き方が7行ほどあってやや複雑
+      $id_count = 0;
+      $vol1 = 1;
+      $vol2 = 2;
+      foreach($bunbo_ids as $bunbo_id){
+        $bunshi = History::where(function($bunshi) use($vol1,$vol2)
+        {
+           $bunshi->where('learning_level', $vol1)
+                  ->orWhere('learning_level', $vol2);
+        })->where('user_id', $user->id)->where('course_id', $bunbo_id)->first();
+        // Log::info('####');
+        
+        // Log::info($bunshi);
+        if($bunshi != []){
+          $id_count++;
+        }
       }
-      $unique_categories = array_unique($arr);
-      // dd($unique_categories);
+      // dd($id_count);
+      $bunshi_num = $id_count;
+      $memory_per[] = round($bunshi_num/$bunbo_num*100,0);
+      // dd($bunshi_num,$bunbo_num,$bunshi_num/$bunbo_num,$memory_per);
+    }
+      // dd($memory_per);
       
-      
-      return view('admin.course.index',['unique_categories'=>$unique_categories, 'courses'=>$courses]);
+      return view('admin.course.index',['memory_per'=>$memory_per,'five'=>$five,'ten'=>$ten,'fifteen'=>$fifteen,'unique_categories'=>$unique_categories, 'courses'=>$courses]);
   }
   // 7.10 単語帳orテストを作るために追加
   public function select()
@@ -157,6 +202,11 @@ class CourseController extends Controller
     Log::info('####');
     Log::info($courses);//画面遷移のときは空にならないが、「最初から知ってる」を押したときは空になる。なぜ？
     
+    $can_reward = count($courses);
+    $noimage="hoge";
+    if($can_reward <= $tango_id){
+    return view('admin.course.reward');
+    }else{
     //正解率を出すメソッドを作成
     //categoryで絞り込んだcourse_idの数が分母。分子はcategoryで絞り込んだcourse_idのうち、count(History::where('id',$the_ids)->get)
     $bunbo_courses = Course::where('category',$unique_category)->get();
@@ -198,11 +248,6 @@ class CourseController extends Controller
     }else{
       $a = "画像待ち";
     }
-    $noimage="hoge";
-    
-    if(count($courses) <= $tango_id){
-    return view('admin.course.reward');
-    }else{
     //↓の$valueはView側で[最初から知ってる][覚えた]ボタンを裏表切り替えるために、準備するための変数
     // dd($courses,$tango_id,$user);B
     $value = History::where('user_id',$user->id)->where('course_id', $courses[$tango_id]->id)->first();
