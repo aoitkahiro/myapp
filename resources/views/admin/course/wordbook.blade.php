@@ -7,10 +7,11 @@
         <p>{{$message}}</p>
         {{--この行に、ここ以下のコードを実行しない命令を記述するべきと考えられるものの、思いつかないため保留2021.8.13--}}
     @endif
-    <p class="col">
-    <a  class="btn btn-warning" href="{{ action('Admin\CourseController@index') }}">戻る</a><a> </a><a  class="btn btn-warning" href="{{action('Admin\CourseController@write',['category'=>$unique_category,'tango_id'=>$post[$tango_id]->id,'page'=>$tango_id])}}">編集</a> {{--  URL：?tango_id=1が生成される（URLにおいて?で送られる数値をgetパラメータという--}} 
+    <div class="col margin_bottom_2em">
+    <a  class="btn btn-warning" href="{{ action('Admin\CourseController@index') }}">戻る</a><a> </a>
+    <a  class="btn btn-warning" href="{{action('Admin\CourseController@write',['category'=>$unique_category,'tango_id'=>$post[$tango_id]->id,'page'=>$tango_id])}}">編集</a> {{--  URL：?tango_id=1が生成される（URLにおいて?で送られる数値をgetパラメータという--}} 
     {{--<a  class="btn btn-warning" href="{{action('Admin\CourseController@quiz',['category'=>$unique_category])}}">この科目のクイズへ</a>--}}
-    </p>
+    </div>
     {{--<div>*ここからデバッグ用の記述です</div>
     <h6>(今のページの)<br>user_idは {{$user->id}}<br>course_idは {{$post[$tango_id]->id}}<br>
     関連する<br>histories_tableのidは 
@@ -21,15 +22,13 @@
     @endif
     </h6>
     ここまでデバッグ用の記述です*<br>--}}
-    <div class="row col">
-        <div class="text-center">
-            <span><font size="6">{{ $post[$tango_id]->front }}</font></span> {{--...course_id:{{$post[$tango_id]->id}}--}}
-        </div>
+    <div>
+        <span><font size="6">{{ $post[$tango_id]->front }}</font></span> {{--...course_id:{{$post[$tango_id]->id}}--}}
     </div>
     <div>
         {{-- JavaScript --}} 
-        <p id="p1">{{ $post[$tango_id]->back }}</p>
         <input type="button" value="裏面on/off" onclick="clickBtn1()" />
+        <p id="p1"><font size="4">{{ $post[$tango_id]->back }}</font></p>
         <script>
             //初期表示は非表示
             document.getElementById("p1").style.display ="none";
@@ -48,7 +47,7 @@
         </script>
     </div>
         <input type="button" value="{{$hintImage}}" onclick="clickBtn2()" /> {{--onclick 動かす関数を指定している  --}} 
-    <div class="card" style="width: 18rem;">
+    <div class="col card" style="width: 24rem;">
 <img src="{{ secure_asset('storage/tango/' . $post[$tango_id]->getImageFileName()) }}" id="piyo" class="bd-placeholder-img card-img-top" width="100%" height="180"> 
     </div>     {{-- asset()でディレクトリを指定、受け取っている値で詳しいファイル名を指定 --}}
     <div>
@@ -144,36 +143,27 @@
     </div>
 </div>
 <div class="col-md-8 offset-md-1">
-    単語はどのレベルまで表示しますか？
+    どの単語を隠しますか？
     <form action="{{ action('Admin\StatusController@levelChange') }}" method="post" enctype="multipart/form-data">  {{--  ActionタグにURLを書く--}} 
     @csrf
-            <button type="submit" class="btn btn-primary" name="looking_level" value= 0> 全部表示</button>
+            <input type="radio" name="looking_level" value="0" <?php if($user->looking_level == 0){ echo "checked";} ?>>
+            <button type="submit" class="btn btn-primary margin_bottom_2px" name="looking_level" value= 0> 隠さない</button>
             <input type="hidden" name="tango_id" value= {{$tango_id}}>
             <input type="hidden" name="category" value= {{mb_convert_encoding($unique_category, 'UTF-8')}}>
     </form>
     <form action="{{ action('Admin\StatusController@levelChange') }}" method="post" enctype="multipart/form-data">  {{--  ActionタグにURLを書く--}} 
     @csrf
-            <button type="submit" class="btn btn-primary" name="looking_level" value= 1>「最初から知ってる」</button> をクリックした単語は隠す
+            <input type="radio" name="looking_level" value="1" <?php if($user->looking_level == 1){ echo "checked";} ?>>
+            <button type="submit" class="btn btn-primary margin_bottom_2px" name="looking_level" value= 1>「最初から知ってる」</button> をクリックした単語は隠す
             <input type="hidden" name="tango_id" value= {{$tango_id}}>
             <input type="hidden" name="category" value= {{mb_convert_encoding($unique_category, 'UTF-8')}}>
     </form>
     <form action="{{ action('Admin\StatusController@levelChange') }}" method="post" enctype="multipart/form-data">  {{--  ActionタグにURLを書く--}} 
     @csrf
-            <button type="submit" class="btn btn-primary" name="looking_level" value= 2>「最初から知ってる」「覚えた」</button> をクリックした単語は隠す
+            <input type="radio" name="looking_level" value="1" <?php if($user->looking_level == 2){ echo "checked";} ?>>
+            <button type="submit" class="btn btn-primary margin_bottom_2px" name="looking_level" value= 2>「最初から知ってる」「覚えた」</button> をクリックした単語は隠す
             <input type="hidden" name="tango_id" value= {{$tango_id}}>
             <input type="hidden" name="category" value= {{mb_convert_encoding($unique_category, 'UTF-8')}}>
     </form>
-</div>
-<div class="col-md-8 offset-md-1">
-　　☝ click！<br>
-   　　　<input type="radio" name="looking_level" value="0" <?php if($user->looking_level == 0){ echo "checked";} ?>>全部表示
-</div>
-<div class="col-md-8 offset-md-1">
-   　　　 <input type="radio" name="looking_level" value="1" <?php if($user->looking_level == 1){ echo "checked";} ?>>[最初から知ってる] のカードを隠す
-</div>
-<div class="col-md-8 offset-md-1">
-   　　　 <input type="radio" name="looking_level" value="1" <?php if($user->looking_level == 2){ echo "checked";} ?>>[最初から知ってる]と [覚えた]のカードを隠す
-</div>
-<div class="text-center">
 </div>
 @endsection

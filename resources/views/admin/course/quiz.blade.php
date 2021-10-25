@@ -4,16 +4,17 @@
 
 <p class ="text-center">{{$ranking_title}}</p>
 <div class="container">
-  <div id="QuizStart" onClick = "startQuiz()" class="btn btn-black">clickStart() ▶</div>
+  
   <div class="text-center">
+    <br>
     <div>
     <h2 id="display" class="sample2">00:00:00</h2>
       <h3 id="js-question">
         - - - -
       </h3>
     </div>
-    <div id="js-items" class="text">
-        <div id="sound">　</div>
+    <div id="js-items" class="text margin_bottom_2px">
+        <font size="4"><div id="sound"><div id="QuizStart" onClick = "startQuiz()" class="btn btn-orange">　　▶　　</div></div></font>
       <div class="m-2">
         <div><button type="button" id="js-btn-1" class="btn btn--yellow selection">――</button></div>
       </div>
@@ -40,21 +41,17 @@
     <input type="hidden" name="category" value={{urlencode($category)}}>
     <input type="hidden" name="question_quantity" value={{$question_quantity}}>
     <input type="hidden" name="forgotten" value="0" >
-    <p><input type="checkbox" {{ $forgotten == "0" ? ""  : "checked" }} class="sample2" name="forgotten"> 間違えた語の[覚えた]を解除</p>
-    <button type="button" id="save_button">記録を送信する</button>
+    <button type="button" id="save_button" class = "margin_bottom_2em">記録を送信する</button>
+    <div class="margin_bottom_2px"><input type="checkbox" {{ $forgotten == "0" ? ""  : "checked" }} class="sample2" name="forgotten"> 間違えた語の[覚えた]を解除</div>
   </form>
   </div>
   {{--<div><button><a href="{{action('Admin\CourseController@showResult',['category'=>$category, 'question_quantity'=>$question_quantity])}}">Show Result</a></button></div>--}}
+<div class="justify-content-sm-center margin_bottom_2px">
+  <a href="{{action('Admin\CourseController@index')}}" type="button" id="goIndex" class="btn btn-black col-2"><font size="2">もどる</font></a>
+  <a href="{{action('Admin\CourseController@quiz',['category'=>$category, 'question_quantity'=>$question_quantity])}}" type="button" id="restart" class="btn btn-black col-2"><font size="2">もう一度</font></a>
+  <a href="{{action('Admin\CourseController@ranking',['category'=>$category, 'question_quantity'=>$question_quantity])}}" type="button" id="goRanking" class="btn btn-black col-4">👑ランキング</a>
+  <span class= text-center id="wrongList"></span>
 </div>
-  <p class="margin_bottom_2 text-center"></p>
-  <a href="{{action('Admin\CourseController@quiz',['category'=>$category, 'question_quantity'=>$question_quantity])}}" type="button" id="restart" class="btn btn-black"><h2>↺</h2><br><h8>もう一度</h8></a>
-  <a href="{{action('Admin\CourseController@index')}}" type="button" id="goIndex" class="btn btn-black"><h2>↩</h2><br><h8>もどる</h8></a>
-  <a href="{{action('Admin\CourseController@ranking',['category'=>$category, 'question_quantity'=>$question_quantity])}}" type="button" id="goRanking" class="btn btn-black"><h2>👑</h2><br><h8>ランキング</h8></a>
-  <p class="margin_bottom_2"></p>
-  <h3>
-        今回 × だった単語
-  </h3>
-  <div id="wrongList"></div>
 </div>
 
 @endsection
