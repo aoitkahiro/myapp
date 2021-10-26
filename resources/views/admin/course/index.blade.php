@@ -34,7 +34,7 @@
                     @if($five[$i][0] == null)
                     <font size="1">　</font>
                     @elseif($five[$i][0] == 1)
-                    👑 1<font size="1">位　</font>
+                    👑 1<font size="1">位</font>
                     @else
                     {{$five[$i][0]}}<font size="1">位　</font>
                     @endif
@@ -48,7 +48,7 @@
                     @elseif($ten[$i][0] == 1)
                     👑 1<font size="1">位　</font>
                     @else
-                    {{$ten[$i][0]}}<font size="1">位　</font>
+                    {{$ten[$i][0]}}<font size="1">位</font>
                     @endif
                 </div>
                 <div class ="col-2">
@@ -58,9 +58,9 @@
                     @if($fifteen[$i][0] == null)
                     <font size="1">　</font>
                     @elseif($fifteen[$i][0] == 1)
-                    👑 1<font size="1">位　</font>
+                    👑 1<font size="1">位</font>
                     @else
-                    {{$fifteen[$i][0]}}<font size="1">位　</font>
+                    {{$fifteen[$i][0]}}<font size="1">位</font>
                     @endif
                 </div>
             </div>
