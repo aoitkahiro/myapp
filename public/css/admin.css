@@ -37,12 +37,18 @@
 a.btn-orange {
   color: #fff;
   background-color: #eb6100;
+  width: 80px;
 }
 
 .btn-orange:hover,
 a.btn-orange:hover {
   color: #fff;
   background: #f56500;
+}
+
+.btn-orange-all,
+a.btn-orange {
+  width: 330px;
 }
 
 .btn-black,
@@ -55,6 +61,13 @@ a.btn-black {
 a.btn-black:hover {
   color: #fff;
   background: #333333;
+}
+
+.btn-yellow {
+  color: #000;
+  background-color: #fff100;
+  border-bottom: 5px solid #ccc100;
+  width: 330px;
 }
 
 .btn--yellow {
