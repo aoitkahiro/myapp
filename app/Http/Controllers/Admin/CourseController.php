@@ -246,7 +246,7 @@ class CourseController extends Controller
     }elseif($pngboolean == true){
       $a = "ヒント画像あります";
     }else{
-      $a = "画像待ち";
+      $a = "画像未登録";
     }
     //↓の$valueはView側で[最初から知ってる][覚えた]ボタンを裏表切り替えるために、準備するための変数
     // dd($courses,$tango_id,$user);B
@@ -358,11 +358,12 @@ class CourseController extends Controller
     // 登録処理
     foreach($dataList as $row){
         $hoge = new Course();
-        $hoge->kind = $row[0];
-        $hoge->category = $row[1];
-        $hoge->difficulty = $row[2];
-        $hoge->front = $row[3];
-        $hoge->back = $row[4];
+        $hoge->category = $row[0];
+        $hoge->difficulty = $row[1];
+        $hoge->front = $row[2];
+        $hoge->back = $row[3];
+        $hoge->kind = $row[4];
+        $hoge->memo = $row[5];
         //$hoge->fill(['front' => $row[3]]);//Course モデルのインスタンスに、
         $hoge->save();
     }

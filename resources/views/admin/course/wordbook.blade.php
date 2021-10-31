@@ -46,6 +46,26 @@
             }
         </script>
     </div>
+    <div>
+        <input type="button" value="メモ" onclick="clickBtn3()" />
+        <p id="p3"><font size="2">{{ $post[$tango_id]->memo }}</font></p>
+        <script>
+            //初期表示は非表示
+            document.getElementById("p3").style.display ="none";
+            
+            function clickBtn3(){
+              const p3 = document.getElementById("p3");
+            
+              if(p3.style.display=="block"){
+              	// noneで非表示
+              	p3.style.display ="none";
+              }else{
+              	// blockで表示
+              	p3.style.display ="block";
+              }
+            }
+        </script>
+    </div>
         <input type="button" value="{{$hintImage}}" onclick="clickBtn2()" /> {{--onclick 動かす関数を指定している  --}} 
     <div class="col card" style="width: 24rem;">
 <img src="{{ secure_asset('storage/tango/' . $post[$tango_id]->getImageFileName()) }}" id="piyo" class="bd-placeholder-img card-img-top" width="100%" height="180"> 

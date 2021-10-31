@@ -30,12 +30,12 @@
     </div>
   <form name="recordtime"  method="post">
   @csrf
-    <input type="hidden" name="score" id="score">
+    <input type="text" name="score" id="score">
     <input type="hidden" name="user_quiz_result" id="user_quiz_result">
     <input type="hidden" name="running_time" id="running_time">
     <input type="hidden" name="result" id="result">
     <input type="hidden" name="course_id_array" id="course_id_array">
-    <input type="hidden" name="result_items" id="result_items">
+    <input type="text" name="result_items" id="result_items" value="">
     <input type="hidden" name="challenge_id" id="challenge_id">
     <input type="hidden" name="resultArray[]" id="resultArray">
     <input type="hidden" name="category" value={{urlencode($category)}}>
@@ -45,7 +45,7 @@
     <div class="margin_bottom_2px"><input type="checkbox" {{ $forgotten == "0" ? ""  : "checked" }} class="sample2" name="forgotten"> 間違えた語の[覚えた]を解除</div>
   </form>
   </div>
-  {{--<div><button><a href="{{action('Admin\CourseController@showResult',['category'=>$category, 'question_quantity'=>$question_quantity])}}">Show Result</a></button></div>--}}
+  <div><button><a href="{{action('Admin\CourseController@showResult',['category'=>$category, 'question_quantity'=>$question_quantity])}}">Show Result</a></button></div>
 <div class="justify-content-sm-center margin_bottom_2px">
   <a href="{{action('Admin\CourseController@index')}}" type="button" id="goIndex" class="btn btn-black col-2"><font size="2">もどる</font></a>
   <a href="{{action('Admin\CourseController@quiz',['category'=>$category, 'question_quantity'=>$question_quantity])}}" type="button" id="restart" class="btn btn-black col-2"><font size="2">もう一度</font></a>
@@ -265,9 +265,13 @@
       $question.textContent = score + '問 / ' + quizLen + '問中';
       let correctRatio = score / quizLen;
       const $items = $doc.getElementById('js-items');
-          {{--alert(correctRatio);--}}
-
-      switch (true) {
+          console.log("☆彡☆彡☆彡☆彡☆彡☆彡☆彡☆彡☆彡☆彡☆彡☆彡");
+          console.log(document.getElementById('result_items'));
+          console.log("☆彡☆彡☆彡☆彡☆彡☆彡☆彡☆彡☆彡☆彡☆彡☆彡");
+          alert("正解率： "+ correctRatio * 100 + " %");
+          alert(document.getElementById('result_items').value);
+          
+      {{--switch (true) {
         case correctRatio == 1:
           $items.innerHTML = '<img class="d-block mx-auto" style="max-width:150px;" src="{{ secure_asset('image/' . 'excellent.png') }}">';
           break;
@@ -282,8 +286,9 @@
         default:
           console.log('平均以下です');
           $items.innerHTML = '<img class="d-block mx-auto" style="max-width:150px;" src="{{ secure_asset('image/' . 'mugi.jpg') }}">';
-      } 
-      {{--document.forms['recordtime'].submit();--}}
+      } --}}
+      
+      document.getElementById('save_button').submit();
       
   };
   
@@ -383,8 +388,6 @@
     console.log(running_time);
     document.getElementById('running_time').value = running_time;
     document.getElementById('result').value = result;
-    console.log("コンソールログです");
-    console.log(2 + "問正解とレコード登録します");
     document.getElementById('challenge_id').value = challenge_id;  
     document.getElementById('course_id_array').value = JSON.stringify(course_id_array);
     document.getElementById('result_items').value = JSON.stringify(result_items);

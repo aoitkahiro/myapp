@@ -67,7 +67,7 @@ a.btn-black:hover {
   color: #000;
   background-color: #fff100;
   border-bottom: 5px solid #ccc100;
-  width: 330px;
+  width: 100%;
 }
 
 .btn--yellow {
