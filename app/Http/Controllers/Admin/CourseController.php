@@ -288,7 +288,7 @@ class CourseController extends Controller
   
   public function update(Request $request)  // writeからPOSTでRoutingされたらこちら
   {
-    // dd($request->category);
+    // dd($request->category,$request->all());
     $tango_data = $request->all();//ユーザーが入力した項目が連想配列で渡されている
     // dd($tango_data);
     if ($request->file('image')) { //=file()ファイル選択ダイアログで、画像(bladeでnameに設定した"image"）を選択したか true or false で返す
@@ -296,11 +296,15 @@ class CourseController extends Controller
       $path = $request->file('image')->storeAs('public/tango', $request->course_id . "." . $ext);
     } //falseの場合何もしない
     $a_course = Course::where('id',$request->course_id)->first();
+    // dd($a_course);
     if($request->front != NULL){
       $a_course->update(['front'=> $request->front]);
     }
     if($request->back != NULL){
       $a_course->update(['back'=> $request->back]);
+    }
+    if($request->memo != NULL){
+      $a_course->update(['memo'=> $request->memo]);
     }
     $page = $request->page; // この文がないと、値を渡せない？
     return redirect('admin/course/wordbook?tango_id=' . $page .'&category=' . $request->category);//->with(['extention'=>$ext]); // "with"実装してみたかったが、エラーになりそうだったので一旦コメントアウト2021.8.7
@@ -414,6 +418,7 @@ class CourseController extends Controller
   
   public function PostQuizTime(Request $request)
   {
+    // dd($request);
     $category = urldecode($request->category);
     $question_quantity = $request->question_quantity;
     // dd($request->all(),$category);
@@ -429,9 +434,8 @@ class CourseController extends Controller
     // dd($request);
     $results = array_column($result_items,'rslt');
     $running_times = array_column($result_items,'rng_time');
-    // dd($results[0],$results);
+    // dd(Auth::id(),$request->challenge_id,$user_quiz_results,$results,$running_times);
     // dd($course_id_array,$running_time_array,$request,$quiz_data);
-    // dd($running_times);
     $user_quiz_result = [];
     $i = 0;
     $pre_running_time = 0;//デバッグ用の変数（ランニングタイムでバグが起こっているため）

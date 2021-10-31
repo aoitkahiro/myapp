@@ -48,7 +48,12 @@
     </div>
     <div>
         <input type="button" value="メモ" onclick="clickBtn3()" />
-        <p id="p3"><font size="2">{{ $post[$tango_id]->memo }}</font></p>
+            <form id="p3" action="{{ action('Admin\CourseController@update',['category'=>$unique_category,'tango_id' => $tango_id, 'page'=>$tango_id] )}}" method="post" enctype="multipart/form-data">
+            @csrf
+                <input type="text" class="form-control" name="memo" value={{ $post[$tango_id]->memo }}>
+                <input type="hidden" name="course_id" value={{ $post[$tango_id]->id }}>
+                <button type="submit" >保存</button>
+            </form>
         <script>
             //初期表示は非表示
             document.getElementById("p3").style.display ="none";
@@ -66,6 +71,7 @@
             }
         </script>
     </div>
+          
         <input type="button" value="{{$hintImage}}" onclick="clickBtn2()" /> {{--onclick 動かす関数を指定している  --}} 
     <div class="col card" style="width: 24rem;">
 <img src="{{ secure_asset('storage/tango/' . $post[$tango_id]->getImageFileName()) }}" id="piyo" class="bd-placeholder-img card-img-top" width="100%" height="180"> 

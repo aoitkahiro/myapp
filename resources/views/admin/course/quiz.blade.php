@@ -30,12 +30,12 @@
     </div>
   <form name="recordtime"  method="post">
   @csrf
-    <input type="text" name="score" id="score">
+    <input type="hidden" name="score" id="score">
     <input type="hidden" name="user_quiz_result" id="user_quiz_result">
     <input type="hidden" name="running_time" id="running_time">
     <input type="hidden" name="result" id="result">
     <input type="hidden" name="course_id_array" id="course_id_array">
-    <input type="text" name="result_items" id="result_items" value="">
+    <input type="hidden" name="result_items" id="result_items" value="">
     <input type="hidden" name="challenge_id" id="challenge_id">
     <input type="hidden" name="resultArray[]" id="resultArray">
     <input type="hidden" name="category" value={{urlencode($category)}}>
@@ -216,10 +216,16 @@
         console.log(courses[count]);
         console.log(courses[count].id);
         console.log(resultArray);
+        
+        console.log("↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓");
+        console.log(result_items);
         result_items.filter(result => result.rslt == 1).forEach((missed)=>{
           let wrongList = document.getElementById("wrongList");
           wrongList.innerHTML += `<li class="list-group-item"> × ${missed.quiz.question}<br>  ${missed.quiz.answer}</li>`
         })
+        
+        console.log("↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓");
+        console.log(result_items);
         let i = 0;
         let currenctCourseIds = [];
         courses.forEach((course) =>{
@@ -255,21 +261,26 @@
         let key = Object.keys(myObject);
          
         console.log(myObject); 
-        console.log(key[1]);
+        console.log("↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓");
+        console.log(result_items);
                 
-        showEnd();
+        showEnd(result_items);
       };
   };
   
-  const showEnd = () => {
+  const showEnd = (result_items_array) => {
       $question.textContent = score + '問 / ' + quizLen + '問中';
+      console.log(result_items_array);
       let correctRatio = score / quizLen;
       const $items = $doc.getElementById('js-items');
-          console.log("☆彡☆彡☆彡☆彡☆彡☆彡☆彡☆彡☆彡☆彡☆彡☆彡");
-          console.log(document.getElementById('result_items'));
-          console.log("☆彡☆彡☆彡☆彡☆彡☆彡☆彡☆彡☆彡☆彡☆彡☆彡");
-          alert("正解率： "+ correctRatio * 100 + " %");
-          alert(document.getElementById('result_items').value);
+      let hoge = document.getElementById('result_items');
+      hoge.value  = JSON.stringify(result_items_array);
+      document.getElementById('course_id_array').value = JSON.stringify(course_id_array);
+      document.getElementById('challenge_id').value = challenge_id; 
+      let save_button = document.getElementById('save_button');{{--不要行？--}}
+      document.forms['recordtime'].submit();
+          {{--alert("正解率： "+ correctRatio * 100 + " %");
+          alert(document.getElementById('result_items').value);--}}
           
       {{--switch (true) {
         case correctRatio == 1:
@@ -286,9 +297,8 @@
         default:
           console.log('平均以下です');
           $items.innerHTML = '<img class="d-block mx-auto" style="max-width:150px;" src="{{ secure_asset('image/' . 'mugi.jpg') }}">';
-      } --}}
+      }--}}
       
-      document.getElementById('save_button').submit();
       
   };
   
@@ -384,8 +394,8 @@
     }
   })
   
+  
   document.getElementById('save_button').addEventListener('click', function(e){
-    console.log(running_time);
     document.getElementById('running_time').value = running_time;
     document.getElementById('result').value = result;
     document.getElementById('challenge_id').value = challenge_id;  
