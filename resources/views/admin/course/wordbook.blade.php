@@ -50,7 +50,7 @@
         <input type="button" value="メモ" onclick="clickBtn3()" />
             <form id="p3" action="{{ action('Admin\CourseController@update',['category'=>$unique_category,'tango_id' => $tango_id, 'page'=>$tango_id] )}}" method="post" enctype="multipart/form-data">
             @csrf
-                <input type="text" class="form-control" name="memo" value={{ $post[$tango_id]->memo }}>
+                <textarea class="form-control" name="memo" rows="3">{{ $post[$tango_id]->memo }}</textarea>
                 <input type="hidden" name="course_id" value={{ $post[$tango_id]->id }}>
                 <button type="submit" >保存</button>
             </form>
@@ -73,8 +73,8 @@
     </div>
           
         <input type="button" value="{{$hintImage}}" onclick="clickBtn2()" /> {{--onclick 動かす関数を指定している  --}} 
-    <div class="col card" style="width: 24rem;">
-<img src="{{ secure_asset('storage/tango/' . $post[$tango_id]->getImageFileName()) }}" id="piyo" class="bd-placeholder-img card-img-top" width="100%" height="180"> 
+    <div  style="width: 60%;">
+        <img src="{{ secure_asset('storage/tango/' . $post[$tango_id]->getImageFileName()) }}" id="piyo" class="bd-placeholder-img card-img-top"> 
     </div>     {{-- asset()でディレクトリを指定、受け取っている値で詳しいファイル名を指定 --}}
     <div>
         <script>

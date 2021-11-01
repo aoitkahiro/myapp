@@ -37,7 +37,7 @@
             <button type="submit" >保存</button>.jpg<small> 形式の画像ファイルのみ保存できます</small>
           </span>
         </div>
-        <div class="col-4">
+        <div class="col card" style="width: 24rem;">
           <img src="{{ asset('storage/tango/' . $tango_id_for_write . "." . "jpg") }}"> {{--表示用 asse()でディレクトリを指定、受け取っている値で詳しいファイル名を指定 --}}
         </div>
     　</form>
