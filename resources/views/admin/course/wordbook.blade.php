@@ -23,7 +23,7 @@
     </h6>
     ここまでデバッグ用の記述です*<br>--}}
     <div>
-        <span><font size="6">{{ $post[$tango_id]->front }}</font></span> {{--...course_id:{{$post[$tango_id]->id}}--}}
+        <span><font size="6">{{ $post[$tango_id]->front }}</font>{{time()."n"}}</span> {{--...course_id:{{$post[$tango_id]->id}}--}}
     </div>
     <div>
         {{-- JavaScript --}} 
@@ -73,7 +73,7 @@
     </div>
           
         <input type="button" value="{{$hintImage}}" onclick="clickBtn2()" /> {{--onclick 動かす関数を指定している  --}} 
-    <div  style="width: 60%;">
+    <div  style="width: 24rem;">
         <img src="{{ secure_asset('storage/tango/' . $post[$tango_id]->getImageFileName()) }}" id="piyo" class="bd-placeholder-img card-img-top"> 
     </div>     {{-- asset()でディレクトリを指定、受け取っている値で詳しいファイル名を指定 --}}
     <div>

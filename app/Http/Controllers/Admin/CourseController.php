@@ -58,7 +58,7 @@ class CourseController extends Controller
             //$path = Storage::disk('s3')->putFile('/',$profile_data['image'],'public');
             //$path = $request->file('image')->store('public/image'); //任意の名前での保存練習中につきコメントアウト
             $ext = $request->file('image')->extension(); // 拡張子を取るコード
-            $path = $request->file('image')->storeAs('public/tango', Auth::user()->id . "." . $ext);// store()は、画像の場所を返す。画像の場所を$pathへ代入する
+            $path = $request->file('image')->storeAs('public/tango', time() . Auth::user()->id . "." . $ext);// store()は、画像の場所を返す。画像の場所を$pathへ代入する
             //$user->image_path = Storage::disk('s3')->url($path);
             $profile_data['image_path'] = basename($path);//public/image/xxxxxx.jpg の場所情報を取り除くのがbasename。image_pathというキーがここで作られる
         } else {
