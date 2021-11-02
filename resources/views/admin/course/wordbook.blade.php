@@ -23,7 +23,7 @@
     </h6>
     ここまでデバッグ用の記述です*<br>--}}
     <div>
-        <span><font size="6">{{ $post[$tango_id]->front }}</font>{{time()."n"}}</span> {{--...course_id:{{$post[$tango_id]->id}}--}}
+        <span><font size="6">{{ $post[$tango_id]->front }}</font></span> {{--...course_id:{{$post[$tango_id]->id}}--}}
     </div>
     <div>
         {{-- JavaScript --}} 
