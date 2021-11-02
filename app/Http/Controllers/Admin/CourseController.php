@@ -93,6 +93,7 @@ class CourseController extends Controller
     }
     $unique_categories = array_unique($arr);
     // dd($unique_categories);
+    /* indexにランキングを乗せると重くなるので一時的にコメントアウト
     $five = [];
     $ten = [];
     $fifteen = [];
@@ -105,6 +106,7 @@ class CourseController extends Controller
     // dd($five,$ten,$fifteen);
     // dd($five[2][1],$five[0],$five,$unique_categories[$key]);
     // dd($unique_categories);
+      */
     $user = Auth::user();
     $memory_per =[];
     foreach($unique_categories as $unique_category){
@@ -140,7 +142,7 @@ class CourseController extends Controller
     }
       // dd($memory_per);
       
-      return view('admin.course.index',['memory_per'=>$memory_per,'five'=>$five,'ten'=>$ten,'fifteen'=>$fifteen,'unique_categories'=>$unique_categories, 'courses'=>$courses]);
+      return view('admin.course.index',['memory_per'=>$memory_per,/*'five'=>$five,'ten'=>$ten,'fifteen'=>$fifteen,*/'unique_categories'=>$unique_categories, 'courses'=>$courses]);
   }
   // 7.10 単語帳orテストを作るために追加
   public function select()

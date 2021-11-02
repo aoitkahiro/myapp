@@ -15,56 +15,62 @@
             <div class ="col-1">　</div>
         </div>
             @for($i = 0; $i < count($unique_categories); $i++)
-            <div class="row justify-content-center margin_bottom_2px">
+            <div class="row">
                 <div class ="col-md-6">
-                    <a class="d-flex" href="{{ action('Admin\CourseController@wordbook', ['tango_id' => 0, 'category' => current( array_slice($unique_categories, $i, 1, true) ), 'page'=> 1 ]) }}">
-                        <button type="button" class="btn btn-yellow">{{current( array_slice($unique_categories, $i, 1, true) )}}</button>
-                    @if($memory_per[$i] == 100)
-                        <span>Complete!</span>
-                    @elseif($memory_per[$i] >= 90)
-                        <span>{{$memory_per[$i]}}<font size="1">% もう少し！</font></span>
-                    @else
-                        <span>{{$memory_per[$i]}}<font size="1">%　</font></span>
-                    @endif
-                    </a>
+                    <div class ="row">
+                        <div class ="col-10  justify-content-center margin_bottom_2px">
+                            <a class="d-flex" href="{{ action('Admin\CourseController@wordbook', ['tango_id' => 0, 'category' => current( array_slice($unique_categories, $i, 1, true) ), 'page'=> 1 ]) }}">
+                                <button type="button" class="btn btn-yellow">{{current( array_slice($unique_categories, $i, 1, true) )}}</button>
+                            </a>
+                        </div>
+                        <div class ="col-1">
+                            @if($memory_per[$i] == 100)
+                                <span>Complete!</span>
+                            @elseif($memory_per[$i] >= 90)
+                                <span>{{$memory_per[$i]}}<font size="1">% もう少し！</font></span>
+                            @else
+                                <span>{{$memory_per[$i]}}<font size="1">%　</font></span>
+                            @endif
+                        </div>
+                    </div>
                 </div>
                 <div class ="col-md-6">
                     <div class ="row">
                     <div class ="col-4">
                         <a href="{{action('Admin\CourseController@quiz',['category'=>current( array_slice($unique_categories, $i, 1, true) ), 'question_quantity'=> 5])}}">
                             <button type="button" class="btn btn-orange">5 問Q</button>
-                        </a>
+                        </a>{{--
                         @if($five[$i][0] == null)
-                        <font size="1">-</font>
+                        <font size="1">　</font>
                         @elseif($five[$i][0] == 1)
                         👑 1<font size="1">位</font>
                         @else
                         {{$five[$i][0]}}<font size="1">位　</font>
-                        @endif
+                        @endif--}}
                     </div>
                     <div class ="col-4">
                         <a href="{{action('Admin\CourseController@quiz',['category'=>current( array_slice($unique_categories, $i, 1, true) ), 'question_quantity'=> 10])}}">
                             <button type="button" class="btn btn-orange">10 問Q</button>
-                        </a>
+                        </a>{{--
                         @if($ten[$i][0] == null)
                         <font size="1">　</font>
                         @elseif($ten[$i][0] == 1)
                         👑 1<font size="1">位　</font>
                         @else
                         {{$ten[$i][0]}}<font size="1">位</font>
-                        @endif
+                        @endif--}}
                     </div>
                     <div class ="col-4">
                         <a href="{{action('Admin\CourseController@quiz',['category'=>current( array_slice($unique_categories, $i, 1, true) ), 'question_quantity'=> 15])}}">
                             <button type="button" class="btn btn-orange">15 問Q</button>
-                        </a>
+                        </a>{{--
                         @if($fifteen[$i][0] == null)
                         <font size="1">　</font>
                         @elseif($fifteen[$i][0] == 1)
                         👑 1<font size="1">位　</font>
                         @else
                         {{$fifteen[$i][0]}}<font size="1">位</font>
-                        @endif
+                        @endif--}}
                     </div>
                     </div>
                 {{--<div class ="d-flex">
