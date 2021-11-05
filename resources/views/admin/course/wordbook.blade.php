@@ -74,7 +74,7 @@
           
         <input type="button" value="{{$hintImage}}" onclick="clickBtn2()" /> {{--onclick 動かす関数を指定している  --}} 
     <div  style="width: 24rem;">
-        <img src="{{ secure_asset('storage/tango/' . $post[$tango_id]->getImageFileName()) }}" id="piyo" class="bd-placeholder-img card-img-top"> 
+        <img src="{{ secure_asset('storage/tango/' . $post[$tango_id]->getImageFileName()) }}?{{time()}}" id="piyo" class="bd-placeholder-img card-img-top"> 
     </div>     {{-- asset()でディレクトリを指定、受け取っている値で詳しいファイル名を指定 --}}
     <div>
         <script>
