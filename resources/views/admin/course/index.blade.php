@@ -11,19 +11,17 @@
         <div class="row justify-content-center margin_bottom_2px">
             <div class ="col-6"><font size="2">単語帳</font><font size="1">-暗記率　</font></div>
             <div class ="col-4"><font size="2">Qで復習</font><font size="1"></font></div>
-            <div class ="col-1">　</div>
-            <div class ="col-1">　</div>
         </div>
             @for($i = 0; $i < count($unique_categories); $i++)
             <div class="row">
                 <div class ="col-md-6">
                     <div class ="row">
-                        <div class ="col-10  justify-content-center margin_bottom_2px">
+                        <div class ="col-9  justify-content-center margin_bottom_2px">
                             <a class="d-flex" href="{{ action('Admin\CourseController@wordbook', ['tango_id' => 0, 'category' => current( array_slice($unique_categories, $i, 1, true) ), 'page'=> 1 ]) }}">
                                 <button type="button" class="btn btn-yellow">{{current( array_slice($unique_categories, $i, 1, true) )}}</button>
                             </a>
                         </div>
-                        <div class ="col-1">
+                        <div class ="col-3">
                             @if($memory_per[$i] == 100)
                                 <span>Complete!</span>
                             @elseif($memory_per[$i] >= 90)
