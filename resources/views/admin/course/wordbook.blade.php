@@ -158,7 +158,7 @@
         </div>
         <div class="col col-lg-2">
         @if($tango_id +1 == $post->count())
-            <a href="{{action('Admin\CourseController@reward',['category'=>$unique_category])}}">
+            <a href="{{action('Admin\CourseController@reward',['unique_category'=>$unique_category])}}">
             <button type="button" class="btn btn-warning"><font size="1">Q</font></button><br>最後の単語です</a><br>
         @else
             <a href="{{ action('Admin\CourseController@wordbook', ['tango_id' =>$tango_id + 1, 'category' => $unique_category]) }}">

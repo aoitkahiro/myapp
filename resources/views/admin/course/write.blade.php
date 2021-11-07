@@ -23,12 +23,12 @@
           @csrf
           <label class="col-md-8">表 面</label>
           <div class="col-md-10">
-            <input type="text" class="form-control" name="front" value={{ $a_course->front }}> {{--"{{ old('title') }}">--}}
+            <input type="text" class="form-control" name="front" value="{{ $a_course->front }}"> {{--"{{ old('title') }}">--}}
           </div>
           <br>
           <label class="col-md-8">裏 面</label>
           <div class="col-md-10">
-            <input type="text" class="form-control" name="back" value={{ $a_course->back }}>
+            <input type="text" class="form-control" name="back" value="{{ $a_course->back }}">
           </div>
           <br>
           <span style="display:inline">

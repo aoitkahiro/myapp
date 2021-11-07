@@ -81,8 +81,9 @@ class CourseController extends Controller
   //━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━　↑ プロフィール機能　━━━━　↓ 単語帳機能　━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     
   // 7.3 コース画面を作るために追加
-  public function index()   
-  {     
+  public function index(Request $request)   
+  {
+    // dd($request);
     $courses = Course::all();
     $i = 0;
     $arr = [];
@@ -142,7 +143,8 @@ class CourseController extends Controller
     }
       // dd($memory_per);
       
-      return view('admin.course.index',['memory_per'=>$memory_per,/*'five'=>$five,'ten'=>$ten,'fifteen'=>$fifteen,*/'unique_categories'=>$unique_categories, 'courses'=>$courses]);
+      return view('admin.course.index',['memory_per'=>$memory_per,/*'five'=>$five,'ten'=>$ten,'fifteen'=>$fifteen,*/
+      'unique_categories'=>$unique_categories, 'courses'=>$courses, 'last_category'=>$request->last_category, 'has_done'=>$request->has_done]);
   }
   // 7.10 単語帳orテストを作るために追加
   public function select()
@@ -207,7 +209,7 @@ class CourseController extends Controller
     $can_reward = count($courses);
     $noimage="hoge";
     if($can_reward <= $tango_id){
-    return view('admin.course.reward');
+      return view('admin.course.reward');
     }else{
     //正解率を出すメソッドを作成
     //categoryで絞り込んだcourse_idの数が分母。分子はcategoryで絞り込んだcourse_idのうち、count(History::where('id',$the_ids)->get)
@@ -261,20 +263,21 @@ class CourseController extends Controller
   }
   public function reward(Request $request)
   {
-      $courses = Course::all();
-      $i = 0;
-      $arr = [];
-      foreach($courses as $course){
-        // dd($course);
-        array_push($arr,$course->category);
-        $i++;
-      }
-      $unique_categories = array_unique($arr);
-      // dd($unique_categories);
+    // dd($request);
+    $courses = Course::all();
+    $i = 0;
+    $arr = [];
+    foreach($courses as $course){
+      // dd($course);
+      array_push($arr,$course->category);
+      $i++;
+    }
+    $unique_categories = array_unique($arr);
+    // dd($unique_categories);
+    $unique_category = $request->unique_category;
+    $has_done = true;
       
-    $massage = "お疲れ様でした";
-      
-    return view('admin.course.reward',['unique_categories'=>$unique_categories, 'courses'=>$courses]);
+    return view('admin.course.reward',['has_done' => $has_done, 'unique_categories'=>$unique_categories, 'unique_category'=>$unique_category, 'courses'=>$courses]);
   }
   
   //$course にはid,front,back,kind,category,degree の値等が入っている。 
