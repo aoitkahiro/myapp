@@ -47,7 +47,7 @@
         </script>
     </div>
     <div>
-        <input type="button" value="メモ" onclick="clickBtn3()" />
+        <input type="button" value="{{$memo_exists}}" onclick="clickBtn3()" />
             <form id="p3" action="{{ action('Admin\CourseController@update',['category'=>$unique_category,'tango_id' => $tango_id, 'page'=>$tango_id] )}}" method="post" enctype="multipart/form-data">
             @csrf
                 <textarea class="form-control" name="memo" rows="3">{{ $post[$tango_id]->memo }}</textarea>

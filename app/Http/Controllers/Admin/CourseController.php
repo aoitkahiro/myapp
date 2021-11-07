@@ -252,11 +252,21 @@ class CourseController extends Controller
     }else{
       $a = "画像未登録";
     }
+    
+    $memorize = Course::where('id',$courses[$tango_id]->id)->first()->memo;
+    if($memorize != NULL){
+      $memo_exists = "メモあります";
+    }else{
+      $memo_exists = "メモ未登録";
+    }
+    // dd($memo_exists);
+    // dd($courses[$tango_id]->id, $courses, $tango_id, $memo_exists);
+    
     //↓の$valueはView側で[最初から知ってる][覚えた]ボタンを裏表切り替えるために、準備するための変数
     // dd($courses,$tango_id,$user);B
     $value = History::where('user_id',$user->id)->where('course_id', $courses[$tango_id]->id)->first();
     // dd($value,$courses[$tango_id],$tango_id, $unique_category);
-    return view('admin.course.wordbook', ['hintImage'=>$a,'noimage'=>$noimage, 'bunshi_num'=>$bunshi_num,'bunbo_num'=>$bunbo_num,'unique_category'=>$unique_category, 'value'=>$value, 'history'=>$history, 'tango_id'=> $tango_id, 
+    return view('admin.course.wordbook', ['memo_exists'=>$memo_exists,'hintImage'=>$a,'noimage'=>$noimage, 'bunshi_num'=>$bunshi_num,'bunbo_num'=>$bunbo_num,'unique_category'=>$unique_category, 'value'=>$value, 'history'=>$history, 'tango_id'=> $tango_id, 
     'post' => $courses,  'user' => $user, 'users' =>$users, 'message' => $massage]);
     //return view('admin.course.wordbook', ['post' => $course, "all_courses_count" => $courses->count(),'page_num' => $count, 'user' => $user, 'users' =>$users , 'hoge' =>'hello']);
     }
