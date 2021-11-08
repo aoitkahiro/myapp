@@ -82,23 +82,23 @@ class UserQuizResult extends Model
     }else{
       $your_id = Auth::id();
       $i = 0;
+      $found = false;
       foreach($rankings as $rank){
-      if($i == 1){
-        dd($rank,$rank["uqz"]);
-      }
       // dd($your_id, Auth::user()->name, $rank["uqz"][$i]->user_id, $rank["uqz"][$i], $rankings);
-        if($rank["uqz"][$i]->user_id == $your_id){
-          break;
-        }else{
-          $i++;
+        foreach($rank["uqz"]as $uqz){
+          if($uqz->user_id == $your_id){
+            $found = true;
+            break;
+          }
         }
+        $i++;
       //   dd($rank["uqz"][0]->course_id,$user->name);
       }
-      if($i == count($rankings)){
+      if(!$found){
         $your_highscore_rank_text ="{$your_name}さんは「{$category}」の{$question_quantity}問クイズに まだランクインしていません";
       }else{
-      $your_highscore_rank = $i + 1;
-      $your_highscore_rank_text ="{$your_name}さんは「{$category}」の{$question_quantity}問クイズで現在{$your_highscore_rank}位 です！";
+        $your_highscore_rank = $i + 1;
+        $your_highscore_rank_text ="{$your_name}さんは「{$category}」の{$question_quantity}問クイズで現在{$your_highscore_rank}位 です！";
       }
     }
     // dd($your_highscore_rank);
