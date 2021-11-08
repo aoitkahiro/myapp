@@ -81,7 +81,7 @@ class UserQuizResult extends Model
       $your_highscore_rank_text ="「{$category}」の{$question_quantity}問クイズには まだ誰もランクインしていません";
     }else{
       $your_id = Auth::id();
-      $i = 0;
+      $i = 1;
       $found = false;
       foreach($rankings as $rank){
       // dd($your_id, Auth::user()->name, $rank["uqz"][$i]->user_id, $rank["uqz"][$i], $rankings);
@@ -94,10 +94,11 @@ class UserQuizResult extends Model
         $i++;
       //   dd($rank["uqz"][0]->course_id,$user->name);
       }
+      dd($found);
       if(!$found){
         $your_highscore_rank_text ="{$your_name}さんは「{$category}」の{$question_quantity}問クイズに まだランクインしていません";
       }else{
-        $your_highscore_rank = $i + 1;
+        $your_highscore_rank = $i;
         $your_highscore_rank_text ="{$your_name}さんは「{$category}」の{$question_quantity}問クイズで現在{$your_highscore_rank}位 です！";
       }
     }
