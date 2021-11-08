@@ -88,8 +88,12 @@ class UserQuizResult extends Model
         foreach($rank["uqz"]as $uqz){
           if($uqz->user_id == $your_id){
             $found = true;
+            dd($i,$rankings);
             break;
           }
+        }
+        if($found){
+          break;
         }
         $i++;
       //   dd($rank["uqz"][0]->course_id,$user->name);
