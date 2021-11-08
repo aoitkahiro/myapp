@@ -100,7 +100,7 @@ class UserQuizResult extends Model
       if(!$found){
         $your_highscore_rank_text ="{$your_name}さんは「{$category}」の{$question_quantity}問クイズに まだランクインしていません";
       }else{
-        dd($i,$rankings);
+        // dd($i,$rankings);
         $your_highscore_rank = $i;
         $your_highscore_rank_text ="{$your_name}さんは「{$category}」の{$question_quantity}問クイズで現在{$your_highscore_rank}位 です！";
       }
