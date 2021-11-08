@@ -83,7 +83,7 @@ class UserQuizResult extends Model
       $your_id = Auth::id();
       // $i = 1;
       $found = false;
-      for($i = 0; !$found && $i < count($rank); $i++){
+      for($i = 0; !$found && $i < count($rankings); $i++){
         $rank = $rankings[$i];
         foreach($rank["uqz"] as $uqz){
           if($uqz->user_id == $your_id){
