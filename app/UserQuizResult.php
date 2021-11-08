@@ -94,7 +94,6 @@ class UserQuizResult extends Model
         $i++;
       //   dd($rank["uqz"][0]->course_id,$user->name);
       }
-      dd($found);
       if(!$found){
         $your_highscore_rank_text ="{$your_name}さんは「{$category}」の{$question_quantity}問クイズに まだランクインしていません";
       }else{
