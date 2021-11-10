@@ -47,7 +47,7 @@ class CourseController extends Controller
   　4. DBからidを参照して、Viewファイルで表示するようコーディングする
   　tip 作った設計が今後保守できるか。あとから来た人が壊さず使えるかという観点も持ってみよう
   */
-  public function profileUpdate(Request $request)  
+  public function profileUpdate(Request $request)
   {     
         $user = Auth::user(); // ログインユーザーのインスタンスの獲得
         $a_user = Auth::user();
@@ -84,6 +84,8 @@ class CourseController extends Controller
   public function index(Request $request)   
   {
     // dd($request);
+    // $unique_category ='虫の声クイズ';
+    // Course::deleteCategory($unique_category);
     $courses = Course::all();
     $i = 0;
     $arr = [];
@@ -209,7 +211,8 @@ class CourseController extends Controller
     $can_reward = count($courses);
     $noimage="hoge";
     if($can_reward <= $tango_id){
-      return view('admin.course.reward');
+      $has_done = true;
+      return view('admin.course.reward',['has_done' => $has_done, 'unique_category'=>$unique_category]);
     }else{
     //正解率を出すメソッドを作成
     //categoryで絞り込んだcourse_idの数が分母。分子はcategoryで絞り込んだcourse_idのうち、count(History::where('id',$the_ids)->get)

@@ -14,7 +14,7 @@
       </h3>
     </div>
     <div id="js-items" class="text margin_bottom_2px">
-        <font size="4"><div id="sound"><div id="QuizStart" onClick = "startQuiz()" class="btn btn-orange">　　▶　　</div></div></font>
+        <font size="4"><div id="sound"><div id="QuizStart" onClick = "startQuiz()" class="btn btn-orange">　▶　</div></div></font>
       <div class="m-2">
         <div><button type="button" id="js-btn-1" class="btn btn--yellow selection">――</button></div>
       </div>
@@ -164,6 +164,9 @@
   }
           {{-- ↓クリックされたボタンに基づいて、正誤文を出したり次の問題へ進める処理 --}} 
   async function clickHandler (elm) { {{--elmとは、「eventの、targetである今clickされたbuttonを取得」--}}
+      if(quizCount + 1  == quizLen){ {{--もし最終問題なら、clickした瞬間にタイマーを止めるという仕様--}}
+        stopTheWatch();
+      }
       if(elm.textContent === quiz[quizCount].correct){
         elm.className = "btn btn-orange selection"
         document.getElementById('sound').textContent = "ピンポン♪";
@@ -172,17 +175,18 @@
         result = result + "2" + " ";
         rslt = 2;
         resultArray.push(2);
-      disabledAllSelections();
-      await wait(700);{{--await：ここ（wait()）が終わるまでは進まないことを保証。関数にasyncも記述するのがお約束--}}
+        disabledAllSelections();
+        waitTime = 700;
       } else {
         elm.className = "btn btn-black selection"
         document.getElementById('sound').textContent = quiz[quizCount].correct + " が正解です";
         result = result + "1" + " ";
         rslt = 1;
         resultArray.push(1);
-      disabledAllSelections();
-      await wait(1100);{{--await：ここ（wait()）が終わるまでは進まないことを保証。関数にasyncも記述するのがお約束--}}
+        disabledAllSelections();
+        waitTime = 1100;
       }
+      await wait(waitTime);{{--await：ここ（wait()）が終わるまでは進まないことを保証。関数にasyncも記述するのがお約束--}}
       
       result_items.push({
           quiz: quiz[quizCount],
@@ -209,31 +213,18 @@
         judgeString = judgeString.replace(/2/g, '〇'); 
         judgeString = (judgeString.trimEnd());
         let someJudgements = judgeString.split(" ");
-        
-        console.log(someJudgements);
         let count = 0;
-        console.log(courses);
-        console.log(courses[count]);
-        console.log(courses[count].id);
-        console.log(resultArray);
-        
-        console.log("↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓");
-        console.log(result_items);
         result_items.filter(result => result.rslt == 1).forEach((missed)=>{
           let wrongList = document.getElementById("wrongList");
           wrongList.innerHTML += `<li class="list-group-item"> × ${missed.quiz.question}<br>  ${missed.quiz.answer}</li>`
         })
-        
-        console.log("↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓");
-        console.log(result_items);
         let i = 0;
         let currenctCourseIds = [];
         courses.forEach((course) =>{
           currenctCourseIds.push(courses[i].id);
           i++
         });
-        console.log("-----------------------------");
-        console.log(currenctCourseIds);
+        
         function createObject(keys, values) {
 	        let outputObject = {}; 
   	 

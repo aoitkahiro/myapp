@@ -192,4 +192,5 @@
             <input type="hidden" name="category" value= {{mb_convert_encoding($unique_category, 'UTF-8')}}>
     </form>
 </div>
+{{--<button>この科目を消すボタン{{App\Course::deleteCategory($unique_category)}}</button>--}}
 @endsection

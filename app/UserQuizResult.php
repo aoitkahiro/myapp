@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Log;
 
 class UserQuizResult extends Model
 {
@@ -24,12 +25,23 @@ class UserQuizResult extends Model
       $ary = []; // ここに正解回数が入る([0]が一回目の結果)
       $maxCi = UserQuizResult::where('user_id', $user->id)->max('challenge_id'); // そのユーザのチャレンジID最大値を取得
       for ($ci = 1; $ci <= $maxCi; $ci++) {
+      // dd($maxCi);
         $num_of_challenge = UserQuizResult::where('user_id', $user->id)->where('challenge_id', $ci)->get();
+        // dd($num_of_challenge);
+        // dd(Course::find($user_quiz_results->first()));
         $n = count($num_of_challenge);
         if($n == $question_quantity){
           $user_quiz_results = UserQuizResult::where('user_id', $user->id)->where('challenge_id', $ci)->where('judgement', 2)->get();
-          if(count($user_quiz_results) > 0 && Course::find($user_quiz_results->first()->course_id)->category == $category){//category一致するならいいよ
-              // 結果を示している、firstのレコードを入れましょう
+          // dd($user,$ci,count($user_quiz_results),$user_quiz_results);
+          // dd($course, $user_quiz_results->first()->course_id);
+          Log::info('start##########');
+          Log::info($user_quiz_results);
+          Log::info($user_quiz_results->first());
+          // Log::info($user_quiz_results->first()->course_id);
+          Log::info(count($user_quiz_results));
+          Log::info('end##########');
+          if(count($user_quiz_results) > 0 && Course::find($user_quiz_results->first()->course_id)->category == $category){//category一致するならTRUE
+              // 次で結果を示している、firstのレコードを入れましょう
               $modelForTimeAndDate = UserQuizResult::where('user_id', $user->id)->where('challenge_id', $ci)->orderBy('running_time','DESC')->first();
               $date = $modelForTimeAndDate->created_at->format('Y/m/d');
               $running_time = $modelForTimeAndDate->running_time;
@@ -40,6 +52,7 @@ class UserQuizResult extends Model
               // $date = あるチャレンジの終了日
               $ary = [ 'name' => $user->name, '正解回数' => $success, '挑戦日'=> $date, 'タイム'=>$running_time, 'uqz'=> $user_quiz_results];
               $rankings[] = $ary;
+              
           }
         }
       }
