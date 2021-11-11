@@ -436,7 +436,7 @@ class CourseController extends Controller
   
   public function PostQuizTime(Request $request)
   {
-    // dd($request);
+    // dd($request->all());
     $category = urldecode($request->category);
     $question_quantity = $request->question_quantity;
     // dd($request->all(),$category);
@@ -487,18 +487,20 @@ class CourseController extends Controller
       $forgotten = 0;
     }
     // dd($forgotten,$request->all());
-    return redirect()->action('Admin\CourseController@quiz',['forgotten' => $forgotten, 'category'=>$category, 'question_quantity'=>$question_quantity]);
+    // dd($forgotten,$category, $user_quiz_result, $pre_running_time, $results);
+    return redirect()->action('Admin\CourseController@showResult',['forgotten' => $forgotten, 'category'=>$category, 'question_quantity'=>$question_quantity,
+    'running_time'=>$pre_running_time]);
   }
   
   public function showResult(Request $request)
   {
-    // dd($request->category);
+    dd($request->all());
     $category = $request->category;
     $question_quantity = $request->question_quantity;
     $hoge = UserQuizResult::getRankingInCategoryAndQuestionQuantity($category, $question_quantity);
     $ranking_title = $hoge[1];
     // dd($ranking_title);
-    return view('admin.course.showResult', ['ranking_title'=>$ranking_title,'category'=>$category, 'question_quantity'=>$question_quantity]); 
+    return view('admin.course.showResult', ['ranking_title'=>$ranking_title,'category'=>$category, 'question_quantity'=>$question_quantity, 'forgotten' => $forgotten]); 
   }
   public function ranking(Request $request)
   {

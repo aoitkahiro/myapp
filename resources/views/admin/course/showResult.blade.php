@@ -5,8 +5,8 @@
     <h1 class="text-center">showResult　ページ（開発中）</h1>
     
     {{$ranking_title}}
-    <br>xxx問 / 問中
-    <br>00:00（時間）
+    <br>xxx問 / {{$question_quantity}}問中
+    <br>{{$running}}
     <br>
     <br>（メッセージ&画像 例）
     <br>（自己ベストです！お見事！）自己ベストの場合
