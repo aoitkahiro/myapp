@@ -6,7 +6,7 @@
     
     {{$ranking_title}}
     <br>xxx問 / {{$question_quantity}}問中
-    <br>{{$running}}
+    <br>{{$running_time}}
     <br>
     <br>（メッセージ&画像 例）
     <br>（自己ベストです！お見事！）自己ベストの場合

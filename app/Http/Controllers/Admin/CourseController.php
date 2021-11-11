@@ -494,13 +494,15 @@ class CourseController extends Controller
   
   public function showResult(Request $request)
   {
-    dd($request->all());
+    // dd($request->all());
     $category = $request->category;
+    $running_time = $request->running_time;
+    $forgotten = $request->forgotten;
     $question_quantity = $request->question_quantity;
     $hoge = UserQuizResult::getRankingInCategoryAndQuestionQuantity($category, $question_quantity);
     $ranking_title = $hoge[1];
     // dd($ranking_title);
-    return view('admin.course.showResult', ['ranking_title'=>$ranking_title,'category'=>$category, 'question_quantity'=>$question_quantity, 'forgotten' => $forgotten]); 
+    return view('admin.course.showResult', ['running_time'=>$running_time, 'ranking_title'=>$ranking_title,'category'=>$category, 'question_quantity'=>$question_quantity, 'forgotten' => $forgotten]); 
   }
   public function ranking(Request $request)
   {
