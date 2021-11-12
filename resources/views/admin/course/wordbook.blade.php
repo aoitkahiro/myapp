@@ -34,7 +34,7 @@
         <input type="button" value="裏面on/off" onclick="clickBtn1()" />
         <p id="p1">
         <a href="{{$google_url_back}}" target="_blank" rel="noopener noreferrer"><font size="5">{{ $post[$tango_id]->back}}</font></a>
-        　<span><font size="1"><a href="{{$JtoJ_weblio_url}}" target="_blank" rel="noopener noreferrer">[辞書]</a>
+        　<span><font size="2"><a href="{{$JtoJ_weblio_url}}" target="_blank" rel="noopener noreferrer">[辞書]</a>
         <a href="{{$JtoN_weblio_url}}" target="_blank" rel="noopener noreferrer">[インドネシア語]</a></font></span>
         </p>
         <script>
