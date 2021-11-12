@@ -269,7 +269,16 @@ class CourseController extends Controller
     // dd($courses,$tango_id,$user);B
     $value = History::where('user_id',$user->id)->where('course_id', $courses[$tango_id]->id)->first();
     // dd($value,$courses[$tango_id],$tango_id, $unique_category);
-    return view('admin.course.wordbook', ['memo_exists'=>$memo_exists,'hintImage'=>$a,'noimage'=>$noimage, 'bunshi_num'=>$bunshi_num,'bunbo_num'=>$bunbo_num,'unique_category'=>$unique_category, 'value'=>$value, 'history'=>$history, 'tango_id'=> $tango_id, 
+    // dd($courses[$tango_id]->front, $courses[$tango_id]);
+    $google_url = 'https://www.google.com/search?q=' . $courses[$tango_id]->front;
+    $google_url_back = 'https://www.google.com/search?q=' . $courses[$tango_id]->back;
+    $google_url_oboekata = 'https://www.google.com/search?q=' . $courses[$tango_id]->front . '+覚え方+画像';
+    $JtoJ_weblio_url = 'https://www.weblio.jp/content/' . $courses[$tango_id]->back;
+    $EtoJ_weblio_url = 'https://ejje.weblio.jp/content/' . $courses[$tango_id]->front;
+    $JtoN_weblio_url = 'https://njjn.weblio.jp/content/' . $courses[$tango_id]->back;
+    
+    return view('admin.course.wordbook', ['JtoN_weblio_url' => $JtoN_weblio_url, 'EtoJ_weblio_url' => $EtoJ_weblio_url, 'JtoJ_weblio_url' => $JtoJ_weblio_url, 'google_url_oboekata' => $google_url_oboekata, 'google_url_back' => $google_url_back, 'google_url' => $google_url, 
+    'memo_exists'=>$memo_exists,'hintImage'=>$a,'noimage'=>$noimage, 'bunshi_num'=>$bunshi_num,'bunbo_num'=>$bunbo_num,'unique_category'=>$unique_category, 'value'=>$value, 'history'=>$history, 'tango_id'=> $tango_id, 
     'post' => $courses,  'user' => $user, 'users' =>$users, 'message' => $massage]);
     //return view('admin.course.wordbook', ['post' => $course, "all_courses_count" => $courses->count(),'page_num' => $count, 'user' => $user, 'users' =>$users , 'hoge' =>'hello']);
     }

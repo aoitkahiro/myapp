@@ -23,12 +23,20 @@
     </h6>
     ここまでデバッグ用の記述です*<br>--}}
     <div>
-        <span><font size="6">{{ $post[$tango_id]->front }}</font></span> {{--...course_id:{{$post[$tango_id]->id}}--}}
+        <a href="{{$google_url}}" target="_blank" rel="noopener noreferrer">
+            <span><font size="6">{{$post[$tango_id]->front}}</font></span>
+        </a>
+        　<a href="{{$google_url_oboekata}}" target="_blank" rel="noopener noreferrer">[覚え方]</a>
+        <a href="{{$EtoJ_weblio_url}}" target="_blank" rel="noopener noreferrer">[英和]</a>
     </div>
     <div>
         {{-- JavaScript --}} 
         <input type="button" value="裏面on/off" onclick="clickBtn1()" />
-        <p id="p1"><font size="4">{{ $post[$tango_id]->back }}</font></p>
+        <p id="p1">
+        <a href="{{$google_url_back}}" target="_blank" rel="noopener noreferrer"><font size="5">{{ $post[$tango_id]->back}}</font></a>
+        　<span><font size="1"><a href="{{$JtoJ_weblio_url}}" target="_blank" rel="noopener noreferrer">[辞書]</a>
+        <a href="{{$JtoN_weblio_url}}" target="_blank" rel="noopener noreferrer">[インドネシア語]</a></font></span>
+        </p>
         <script>
             //初期表示は非表示
             document.getElementById("p1").style.display ="none";
