@@ -496,22 +496,57 @@ class CourseController extends Controller
       $forgotten = 0;
     }
     // dd($forgotten,$request->all());
-    // dd($forgotten,$category, $user_quiz_result, $pre_running_time, $results);
-    return redirect()->action('Admin\CourseController@showResult',['forgotten' => $forgotten, 'category'=>$category, 'question_quantity'=>$question_quantity,
-    'running_time'=>$pre_running_time]);
+    // dd($forgotten,$category, $user_quiz_result, $results);
+    $correct = 0;
+    foreach($results as $result){
+      if($result == 2){
+        $correct++;
+      }
+    }
+    $correctRatio = $correct /count($results);
+    
+    return redirect()->action('Admin\CourseController@showResult',
+    ['forgotten' => $forgotten, 'correctRatio' => $correctRatio, 'running_time'=>$pre_running_time, 'correct' => $correct,
+    'question_quantity'=>$question_quantity, 'category'=>$category]); 
   }
   
   public function showResult(Request $request)
   {
     // dd($request->all());
     $category = $request->category;
-    $running_time = $request->running_time;
-    $forgotten = $request->forgotten;
     $question_quantity = $request->question_quantity;
+    $correct = $request->correct;
+    $running_time = $request->running_time;
+    $correctRatio = $request->correctRatio;
+    switch ($correctRatio) {
+      case ($correctRatio == 1):
+        $message = "す、す…すごい！満点！";
+        $img = secure_asset('image/' . 'excellent.png');
+        break;
+      case ($correctRatio >= 0.9):
+        $message = "すごい、もう少しで満点です";
+        $img = secure_asset('image/' . 'excellent.png');
+        break;
+      case ($correctRatio >= 0.8):
+        $message = "8割越えですか…なかなかやりますね";
+        $img = secure_asset('image/' . 'mugi80.jpg');
+        break;
+      case ($correctRatio >= 0.5):
+        $message = "平均以上です。その調子！";
+        $img = secure_asset('image/' . 'hand_good.png');
+        break;
+      case ($correctRatio < 0.5):
+        $message = "たまには休憩してね";
+        $img = secure_asset('image/' . 'mugi.jpg');
+        break;
+    }
     $hoge = UserQuizResult::getRankingInCategoryAndQuestionQuantity($category, $question_quantity);
     $ranking_title = $hoge[1];
+    $forgotten = $request->forgotten;
     // dd($ranking_title);
-    return view('admin.course.showResult', ['running_time'=>$running_time, 'ranking_title'=>$ranking_title,'category'=>$category, 'question_quantity'=>$question_quantity, 'forgotten' => $forgotten]); 
+    return view('admin.course.showResult', 
+    ['img'=>$img, 'forgotten' => $forgotten, 'message' => $message, 'running_time'=>$running_time, 'correct' => $correct,
+    'question_quantity'=>$question_quantity, 'category'=>$category, 'ranking_title'=>$ranking_title]); 
   }
   public function ranking(Request $request)
   {
