@@ -270,11 +270,11 @@ class CourseController extends Controller
     $value = History::where('user_id',$user->id)->where('course_id', $courses[$tango_id]->id)->first();
     // dd($value,$courses[$tango_id],$tango_id, $unique_category);
     // dd($courses[$tango_id]->front, $courses[$tango_id]);
-    $google_url = 'https://www.google.com/search?q=' . $courses[$tango_id]->front;
+    $google_url = 'https://www.google.com/search?q=' . $courses[$tango_id]->front . '+意味';
     $google_url_back = 'https://www.google.com/search?q=' . $courses[$tango_id]->back;
     $google_url_oboekata = 'https://www.google.com/search?q=' . $courses[$tango_id]->front . '+覚え方+画像';
-    $JtoJ_weblio_url = 'https://www.weblio.jp/content/' . $courses[$tango_id]->back;
     $EtoJ_weblio_url = 'https://ejje.weblio.jp/content/' . $courses[$tango_id]->front;
+    $JtoJ_weblio_url = 'https://www.weblio.jp/content/' . $courses[$tango_id]->back;
     $JtoN_weblio_url = 'https://njjn.weblio.jp/content/' . $courses[$tango_id]->back;
     
     return view('admin.course.wordbook', ['JtoN_weblio_url' => $JtoN_weblio_url, 'EtoJ_weblio_url' => $EtoJ_weblio_url, 'JtoJ_weblio_url' => $JtoJ_weblio_url, 'google_url_oboekata' => $google_url_oboekata, 'google_url_back' => $google_url_back, 'google_url' => $google_url, 
@@ -504,7 +504,7 @@ class CourseController extends Controller
       }
     }
     $correctRatio = $correct /count($results);
-    
+    // dd($correctRatio, $correct  ,count($results));
     return redirect()->action('Admin\CourseController@showResult',
     ['forgotten' => $forgotten, 'correctRatio' => $correctRatio, 'running_time'=>$pre_running_time, 'correct' => $correct,
     'question_quantity'=>$question_quantity, 'category'=>$category]); 

@@ -8,6 +8,9 @@
 {{-- admin.blade.phpの@yield('content')に以下のタグを埋め込む --}}
 @section('content')
     <div class="container">
+    <div class ="col-md-11"><img class="gazou" style="max-height:30px;" src="{{ asset('storage/tango/' . Auth::user()->image_path) }}">　{{Auth::user()->name }}さん 　<font size="1">今の目標：</font>{{Auth::user()->mygoal }}</div>
+    </div>
+    <div class="container">
         <div class="row justify-content-center margin_bottom_2px">
             <div class ="col-6"><font size="2">単語帳</font><font size="1">-暗記率　</font></div>
             <div class ="col-4"><font size="2">Qで復習</font><font size="1"></font></div>

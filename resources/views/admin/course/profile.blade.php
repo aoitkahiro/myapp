@@ -13,9 +13,9 @@
             <div class="card-body">
                 <form action="{{ action('Admin\CourseController@profileUpdate') }}" method="post" enctype="multipart/form-data">
                     @csrf
-                    <div class="col-md-10">
-                        <input type="file" class="form-control-file" name="image">
-                    </div>
+                    <p class="col-md-10">
+                       画像を設定して下さい <input type="file" class="form-control-file" name="image">
+                    </p>
                     <label class="col-md-4">ニックネーム</label>
                     <input type="text" class="form-control" name="name" value="{{ $a_user->name }}">
                     <label class="col-md-4">目標を宣言</label>
@@ -30,10 +30,10 @@
                     <div>
                         <input type="radio" name="looking_level" value="1" <?php if($a_user->looking_level == 2){ echo "checked";} ?>> [最初から知ってる] [覚えた]のカードを隠す
                     </div>
-                    <button type="submit" class="btn btn-success btn-block">変更</button>
+                    <button type="submit" class="btn btn-success btn-block">設定</button>
                 </form>
             </div>
-            <a href="">戻る</a>
+            <p ><a href="{{ action('Admin\CourseController@index')}}">設定できたら、単語帳 / クイズへGo！</a></p>
         </div>
     </div>
              {{-- <img class="d-block mx-auto" style="max-width:150px;" src="{{ asset('storage/tango/' . Auth::user()->image_path) }}">--}}

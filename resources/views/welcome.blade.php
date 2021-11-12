@@ -81,8 +81,10 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    単語&クイズ
+                    じぶ単
+                    <br><font size="2">じぶんで作る単語帳</font>
                 </div>
+                <div class="title m-b-md"></div>
 
                 <div class="links">
                     <a href="https://laravel.com/docs">Docs</a>
