@@ -187,11 +187,11 @@
         waitTime = 1100;
       }
       await wait(waitTime);{{--await：ここ（wait()）が終わるまでは進まないことを保証。関数にasyncも記述するのがお約束--}}
-      
+      console.log(runningTime * 100) / 100;
       result_items.push({
           quiz: quiz[quizCount],
           rslt: rslt,
-          rng_time: zeroAndMinutes + zeroAndSeconds + "." + zeroAndoneHandredthOfSeconds,
+          rng_time: Math.round(runningTime * 100) /100,
       })
       console.log(result_items);
       running_time = running_time + zeroAndMinutes + zeroAndSeconds + "/";{{-- ++と書ける？ --}}
@@ -325,6 +325,7 @@
   let minutes = 0;
   let seconds = 0;
   let oneHandredthOfSeconds = 0;
+  let runningTime = 0;
   
   let zeroAndHours = 0;
   let zeroAndMinutes = 0;
@@ -335,6 +336,7 @@
   let interval;
   
   function stopWatch(){
+    runningTime += 0.01;
     oneHandredthOfSeconds++;
     if(oneHandredthOfSeconds / 100 == 1){
         seconds++;

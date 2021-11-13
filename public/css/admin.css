@@ -1,5 +1,15 @@
 @charset "UTF-8";
 
+/* サイト全体のフォント指定 */
+
+body {
+  font-family: "monospace";
+}
+
+body {
+  background-color: #D0D0F0;
+}
+
 .container {
   border: 1px solid #1b0303;
 }

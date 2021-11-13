@@ -5,7 +5,7 @@
     <h1 class="text-center">showResult　ページ（開発中）</h1>
     
     <br>{{$correct}}問 / {{$question_quantity}}問中
-    <br>{{$running_time}}
+    <br>タイム：{{$running_time}}
     <br><img class="d-block mx-auto" style="max-width:150px;" src="{{$img}}">
     <br>{{$message}}
     <br>

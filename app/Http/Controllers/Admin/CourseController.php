@@ -503,42 +503,38 @@ class CourseController extends Controller
         $correct++;
       }
     }
+    // dd($running_times[count($running_times) - 1]);
     $correctRatio = $correct /count($results);
     // dd($correctRatio, $correct  ,count($results));
     return redirect()->action('Admin\CourseController@showResult',
-    ['forgotten' => $forgotten, 'correctRatio' => $correctRatio, 'running_time'=>$pre_running_time, 'correct' => $correct,
+    ['forgotten' => $forgotten, 'correctRatio' => $correctRatio, 'running_time'=>$running_times[count($running_times) - 1], 'correct' => $correct,
     'question_quantity'=>$question_quantity, 'category'=>$category]); 
   }
   
   public function showResult(Request $request)
   {
     // dd($request->all());
+    $running_time = $request->running_time;
+    $running_time = UserQuizResult::timeFunc($running_time);
     $category = $request->category;
     $question_quantity = $request->question_quantity;
     $correct = $request->correct;
-    $running_time = $request->running_time;
     $correctRatio = $request->correctRatio;
-    switch ($correctRatio) {
-      case ($correctRatio == 1):
+    if($correctRatio == 1){
         $message = "す、す…すごい！満点！";
         $img = secure_asset('image/' . 'excellent.png');
-        break;
-      case ($correctRatio >= 0.9):
+    }elseif($correctRatio >= 0.9){
         $message = "すごい、もう少しで満点です";
-        $img = secure_asset('image/' . 'excellent.png');
-        break;
-      case ($correctRatio >= 0.8):
+        $img = secure_asset('image/' . '90%_dog.png');
+    }elseif($correctRatio >= 0.8){
         $message = "8割越えですか…なかなかやりますね";
         $img = secure_asset('image/' . 'mugi80.jpg');
-        break;
-      case ($correctRatio >= 0.5):
+    }elseif($correctRatio >= 0.5){
         $message = "平均以上です。その調子！";
         $img = secure_asset('image/' . 'hand_good.png');
-        break;
-      case ($correctRatio < 0.5):
+    }elseif($correctRatio < 0.5){
         $message = "たまには休憩してね";
         $img = secure_asset('image/' . 'mugi.jpg');
-        break;
     }
     $hoge = UserQuizResult::getRankingInCategoryAndQuestionQuantity($category, $question_quantity);
     $ranking_title = $hoge[1];

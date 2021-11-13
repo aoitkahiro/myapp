@@ -10,6 +10,15 @@ class UserQuizResult extends Model
 {
     protected $guarded = array('id'); //'id'は通常、$guarded にする？
     
+    public static function timeFunc($running_time){//running_time =148.61 作りたい値は2:28:61
+      
+      // $chibi_minuts = floor(($running_time - floor($running_time)) *100);
+      // dd($chibi_minuts);
+      $minuts = floor($running_time / 60);
+      $seconds = $running_time - ($minuts * 60) ;
+      return $minuts .":" . $seconds;
+    }
+    
     public static function getRankingInCategoryAndQuestionQuantity($category, $question_quantity){
         
     //なんやかんや処理を書く
