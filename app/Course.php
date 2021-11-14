@@ -37,7 +37,6 @@ class Course extends Model
       $jpgFileName = $this->id. '.jpg';//このインスタンスメソッドを呼び出した、メソッドを指す。
       //呼び出す単語によって、$thisの中身は変わる。インスタンスメソッドのポイント。
       $pngFileName = $this->id. '.png';
-      $defaultFileName = 'noimage.jpg';
       $issetMessage = 'ヒント画像あり';
     
       if(Storage::exists($path . $jpgFileName)){
@@ -45,7 +44,7 @@ class Course extends Model
       } elseif(Storage::exists($path . $pngFileName)){
         return $pngFileName;
       } else {
-        return $defaultFileName;
+        return false;
       }
     }
     

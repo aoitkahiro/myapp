@@ -249,11 +249,11 @@ class CourseController extends Controller
     $pngboolean = Storage::exists($path . $courses[$tango_id]->id. '.png');
     // dd($jpgboolean,$path . $courses[$tango_id]->id . '.png');
     if($jpgboolean == true){
-      $a = "ヒント画像あります";
+      $hintImage = "ヒント画像あります";
     }elseif($pngboolean == true){
-      $a = "ヒント画像あります";
+      $hintImage = "ヒント画像あります";
     }else{
-      $a = "画像未登録";
+      $hintImage = "画像未登録";
     }
     
     $memorize = Course::where('id',$courses[$tango_id]->id)->first()->memo;
@@ -278,7 +278,7 @@ class CourseController extends Controller
     $JtoN_weblio_url = 'https://njjn.weblio.jp/content/' . $courses[$tango_id]->back;
     
     return view('admin.course.wordbook', ['JtoN_weblio_url' => $JtoN_weblio_url, 'EtoJ_weblio_url' => $EtoJ_weblio_url, 'JtoJ_weblio_url' => $JtoJ_weblio_url, 'google_url_oboekata' => $google_url_oboekata, 'google_url_back' => $google_url_back, 'google_url' => $google_url, 
-    'memo_exists'=>$memo_exists,'hintImage'=>$a,'noimage'=>$noimage, 'bunshi_num'=>$bunshi_num,'bunbo_num'=>$bunbo_num,'unique_category'=>$unique_category, 'value'=>$value, 'history'=>$history, 'tango_id'=> $tango_id, 
+    'memo_exists'=>$memo_exists,'hintImage'=>$hintImage,'noimage'=>$noimage, 'bunshi_num'=>$bunshi_num,'bunbo_num'=>$bunbo_num,'unique_category'=>$unique_category, 'value'=>$value, 'history'=>$history, 'tango_id'=> $tango_id, 
     'post' => $courses,  'user' => $user, 'users' =>$users, 'message' => $massage]);
     //return view('admin.course.wordbook', ['post' => $course, "all_courses_count" => $courses->count(),'page_num' => $count, 'user' => $user, 'users' =>$users , 'hoge' =>'hello']);
     }
@@ -525,7 +525,7 @@ class CourseController extends Controller
         $img = secure_asset('image/' . 'excellent.png');
     }elseif($correctRatio >= 0.9){
         $message = "すごい、もう少しで満点です";
-        $img = secure_asset('image/' . '90%_dog.png');
+        $img = secure_asset('image/' . '90_dog.png');
     }elseif($correctRatio >= 0.8){
         $message = "8割越えですか…なかなかやりますね";
         $img = secure_asset('image/' . 'mugi80.jpg');

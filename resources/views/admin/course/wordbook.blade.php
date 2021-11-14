@@ -63,17 +63,17 @@
                 <button type="submit" >保存</button>
             </form>
         <script>
-            //初期表示は非表示
+            {{--初期表示は非表示--}}
             document.getElementById("p3").style.display ="none";
             
             function clickBtn3(){
               const p3 = document.getElementById("p3");
             
               if(p3.style.display=="block"){
-              	// noneで非表示
+              	{{-- noneで非表示--}}
               	p3.style.display ="none";
               }else{
-              	// blockで表示
+              	{{--blockで表示--}}
               	p3.style.display ="block";
               }
             }
@@ -82,21 +82,25 @@
           
         <input type="button" value="{{$hintImage}}" onclick="clickBtn2()" /> {{--onclick 動かす関数を指定している  --}} 
     <div  style="width: 24rem;">
-        <img src="{{ secure_asset('storage/tango/' . $post[$tango_id]->getImageFileName()) }}?{{time()}}" id="piyo" class="bd-placeholder-img card-img-top"> 
+        @if($post[$tango_id]->getImageFileName())
+           <img src="{{ secure_asset('storage/tango/' . $post[$tango_id]->getImageFileName()) }}?{{time()}}" id="piyo" class="bd-placeholder-img card-img-top">
+        @else
+           <img src="{{ secure_asset('image/noimage.jpg')}}" id="piyo" class="bd-placeholder-img card-img-top">
+        @endif
     </div>     {{-- asset()でディレクトリを指定、受け取っている値で詳しいファイル名を指定 --}}
     <div>
         <script>
-            //初期表示は非表示
+            {{--初期表示は非表示--}}
             document.getElementById("piyo").style.display ="none";
             
             function clickBtn2(){
               const p2 = document.getElementById("piyo"); 
             
-              if(p2.style.display=="block"){ {{--もしp2が表示されていれば  --}} 
-              	// noneで非表示
-              	p2.style.display ="none"; {{--  p2のスタイル（CSS）display属性を非表示にする（見えなくなる） --}} 
+              if(p2.style.display=="block"){ {{--もしp2が表示されていれば   
+              noneで非表示--}}
+              	p2.style.display ="none"; {{--  p2のスタイル（CSS）display属性を非表示にする（見えなくなる）--}} 
               }else{
-              	// blockで表示
+              	 {{--blockで表示--}}
               	p2.style.display ="block";{{--  p2のスタイル（CSS）display属性を表示にする（見えるようにする） --}} 
               }
             }

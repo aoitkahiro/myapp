@@ -214,6 +214,7 @@
         judgeString = (judgeString.trimEnd());
         let someJudgements = judgeString.split(" ");
         let count = 0;
+        {{--配列名.filter(callbackされる配列オブジェクト--}}
         result_items.filter(result => result.rslt == 1).forEach((missed)=>{
           let wrongList = document.getElementById("wrongList");
           wrongList.innerHTML += `<li class="list-group-item"> × ${missed.quiz.question}<br>  ${missed.quiz.answer}</li>`

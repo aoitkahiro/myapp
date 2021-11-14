@@ -10,23 +10,23 @@
     <div class="row">
         <div class="list-rank col-md-12 mx-auto">
             <div class="row">
-                <table class="table table-dark">
+                <table class="table table-dark table-hover">
                     <thead>
                         <tr style="vertical-align: middle">
                             <th width="10%" class="text-center">順位</th>
                             <th width="10%" class="text-center"><font size="1">PLAYER</font></th>
-                            <th width="20%">名前</th>
+                            <th width="15%">名前</th>
                             <th width="10%" class="text-center"><font size="1">正解数</font></th>
-                            <th width="15%">タイム</th>
+                            <th width="10%">タイム</th>
                             <th width="10%">挑戦日</th>
-                            <th width="25%">今の目標</th>
+                            <th width="35%">今の目標</th>
                         </tr>
                     </thead>
                     <tbody>
                       @php $i = 0; @endphp
                       @foreach($rankings as $rank)
                         <tr class="Ranking">
-                          @if($i == 0)
+                          {{--@if($i == 0)
                             <td class="table-dark d-flex align-items-center justify-content-center"><font size="7">👑</font></td>
                             <td class="table-dark text-center" style="vertical-align: middle"><img class="gazou" style="max-height:70px;" src="{{ asset('storage/tango/' . $rank["画像"]) }}"></td>
                             <td class="table-dark" style="vertical-align: middle">{{$rank["name"]}}</td>
@@ -34,17 +34,17 @@
                             <td class="table-dark" style="vertical-align: middle">{{$rank["タイム"]}}<font size="1">秒</font></td>
                             <td class="table-dark" style="vertical-align: middle">{{$rank["挑戦日"]}}</td>
                             <td class="table-dark" style="vertical-align: middle">{{ \Str::limit($rank["目標"], 15) }}</td>
-                          {{--@if($i == 0)
-                            <td class="table-dark d-flex align-items-center justify-content-center"><font size="7">👑</font></td>
-                            <td class="table-primary text-center" style="vertical-align: middle"><img class="gazou" style="max-height:70px;" src="{{ asset('storage/tango/' . $rank["画像"]) }}"></td>
-                            <td class="table-danger" style="vertical-align: middle">{{$rank["name"]}}</td>
-                            <td class="table-secondary text-center" style="vertical-align: middle">{{$rank["正解回数"]}}</td>
-                            <td class="table-warning" style="vertical-align: middle">{{$rank["タイム"]}}<font size="1">秒</font></td>
-                            <td class="table-light" style="vertical-align: middle">{{$rank["挑戦日"]}}</td>
-                            <td class="table-success" style="vertical-align: middle">{{ \Str::limit($rank["目標"], 15) }}</td>
                           --}}
+                          @if($i == 0)
+                            <td class= "d-flex align-items-center justify-content-center"><font size="7">👑</font></td>
+                            <td class= "text-center" style="vertical-align: middle"><img class="gazou" style="max-height:70px;" src="{{ asset('storage/tango/' . $rank["画像"]) }}"></td>
+                            <td style= "vertical-align: middle">{{$rank["name"]}}</td>
+                            <td class= "text-center" style="vertical-align: middle">{{$rank["正解回数"]}}</td>
+                            <td style= "vertical-align: middle">{{$rank["タイム"]}}<font size="1">秒</font></td>
+                            <td style= "vertical-align: middle">{{$rank["挑戦日"]}}</td>
+                            <td style= "vertical-align: middle">{{ \Str::limit($rank["目標"], 15) }}</td>
                           @else
-                            <td class="table-dark d-flex align-items-center justify-content-center">
+                            <td class="d-flex align-items-center justify-content-center">
                           　@if($i == 1)
                           　  <font size="5">🥈</font>
                           　@elseif($i == 2)

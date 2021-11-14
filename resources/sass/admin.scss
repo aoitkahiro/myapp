@@ -4,7 +4,14 @@ body {
 }
 
 body {
-  background-color: #D0D0F0;
+  background-color: #d5d0be;
+}
+// 特定箇所のフォント指定
+.stress_abc {
+  background-color: #efefef;
+  font-size: 30px;
+  color: #333;
+  margin: 0;
 }
 
 .container {
