@@ -10,9 +10,9 @@ body {
   background-color: #d5d0be;
 }
 
-.stress_abc {
-  background-color: #efefef;
-  font-size: 30px;
+.stress_roman_letter {
+  font-family: "Helvetica Neue", "Helvetica", "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+  font-size: 40px;
   color: #333;
   margin: 0;
 }

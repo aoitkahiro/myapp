@@ -24,7 +24,7 @@
     ここまでデバッグ用の記述です*<br>--}}
     <div>
         <a href="{{$google_url}}" target="_blank" rel="noopener noreferrer">
-            <span><font size="6">{{$post[$tango_id]->front}}</font></span>
+            <span class="stress_roman_letter">{{$post[$tango_id]->front}}</span>
         </a>
         　<a href="{{$google_url_oboekata}}" target="_blank" rel="noopener noreferrer">[覚え方]</a>
         <a href="{{$EtoJ_weblio_url}}" target="_blank" rel="noopener noreferrer">[英和]</a>
@@ -82,7 +82,7 @@
           
         <input type="button" value="{{$hintImage}}" onclick="clickBtn2()" /> {{--onclick 動かす関数を指定している  --}} 
     <div  style="width: 24rem;">
-        @if($post[$tango_id]->getImageFileName())
+        @if($post[$tango_id]->getImageFileName()){{--boolean--}}
            <img src="{{ secure_asset('storage/tango/' . $post[$tango_id]->getImageFileName()) }}?{{time()}}" id="piyo" class="bd-placeholder-img card-img-top">
         @else
            <img src="{{ secure_asset('image/noimage.jpg')}}" id="piyo" class="bd-placeholder-img card-img-top">

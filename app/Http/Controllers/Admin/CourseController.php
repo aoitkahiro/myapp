@@ -503,17 +503,29 @@ class CourseController extends Controller
         $correct++;
       }
     }
+    // $questions = [];
+    // $corrects = [];
+    // $j =0;
+    // foreach($result_items as $item){
+    //   dd($item,$item["rslt"]);
+    //   if($item["rslt"] == 1){
+    //     array_push($questions, $item["quiz"]["question"]);
+    //     array_push($crrects, $item["quiz"]["correct"]);
+    //   }
+    // }
+    // dd($questions,$corrects);
+    // dd($result_items[4]["quiz"]["question"], $result_items[4]["quiz"]["correct"], $result_items);
     // dd($running_times[count($running_times) - 1]);
     $correctRatio = $correct /count($results);
     // dd($correctRatio, $correct  ,count($results));
     return redirect()->action('Admin\CourseController@showResult',
-    ['forgotten' => $forgotten, 'correctRatio' => $correctRatio, 'running_time'=>$running_times[count($running_times) - 1], 'correct' => $correct,
+    ['result_items' => $result_items, 'forgotten' => $forgotten, 'correctRatio' => $correctRatio, 'running_time'=>$running_times[count($running_times) - 1], 'correct' => $correct,
     'question_quantity'=>$question_quantity, 'category'=>$category]); 
   }
   
   public function showResult(Request $request)
   {
-    // dd($request->all());
+    dd($request->all());
     $running_time = $request->running_time;
     $running_time = UserQuizResult::timeFunc($running_time);
     $category = $request->category;

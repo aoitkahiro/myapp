@@ -7,9 +7,10 @@ body {
   background-color: #d5d0be;
 }
 // 特定箇所のフォント指定
-.stress_abc {
-  background-color: #efefef;
-  font-size: 30px;
+.stress_roman_letter {
+  font-family: "Helvetica Neue", "Helvetica", "Hiragino Sans", "Hiragino Kaku Gothic ProN",  "Meiryo", sans-serif;
+  //background-color: #efefef;
+  font-size: 40px;
   color: #333;
   margin: 0;
 }

@@ -26,15 +26,6 @@
                       @php $i = 0; @endphp
                       @foreach($rankings as $rank)
                         <tr class="Ranking">
-                          {{--@if($i == 0)
-                            <td class="table-dark d-flex align-items-center justify-content-center"><font size="7">👑</font></td>
-                            <td class="table-dark text-center" style="vertical-align: middle"><img class="gazou" style="max-height:70px;" src="{{ asset('storage/tango/' . $rank["画像"]) }}"></td>
-                            <td class="table-dark" style="vertical-align: middle">{{$rank["name"]}}</td>
-                            <td class="table-dark text-center" style="vertical-align: middle">{{$rank["正解回数"]}}</td>
-                            <td class="table-dark" style="vertical-align: middle">{{$rank["タイム"]}}<font size="1">秒</font></td>
-                            <td class="table-dark" style="vertical-align: middle">{{$rank["挑戦日"]}}</td>
-                            <td class="table-dark" style="vertical-align: middle">{{ \Str::limit($rank["目標"], 15) }}</td>
-                          --}}
                           @if($i == 0)
                             <td class= "d-flex align-items-center justify-content-center"><font size="7">👑</font></td>
                             <td class= "text-center" style="vertical-align: middle"><img class="gazou" style="max-height:70px;" src="{{ asset('storage/tango/' . $rank["画像"]) }}"></td>

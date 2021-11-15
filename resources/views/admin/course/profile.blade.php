@@ -20,9 +20,10 @@
                     <input type="text" class="form-control" name="name" value="{{ $a_user->name }}">
                     <label class="col-md-4">目標を宣言</label>
                     <input type="text" class="form-control" name="mygoal" value="{{ $a_user->mygoal }}">
+                    
                     <label class="col-md-12">カードはどのレベルまで表示しますか？</label>
                     <div>
-                        <input type="radio" name="looking_level" value="0" <?php if($a_user->looking_level == 0){ echo "checked";} ?>> 全部表示
+                        <input type="radio" name="looking_level" value="0" <?php if($a_user->looking_level == 0){ echo "checked";} ?>> 全部表示　←最初はコレ
                     </div>
                     <div>
                         <input type="radio" name="looking_level" value="1" <?php if($a_user->looking_level == 1){ echo "checked";} ?>> [最初から知ってる] のカードを隠す
@@ -30,10 +31,10 @@
                     <div>
                         <input type="radio" name="looking_level" value="1" <?php if($a_user->looking_level == 2){ echo "checked";} ?>> [最初から知ってる] [覚えた]のカードを隠す
                     </div>
-                    <button type="submit" class="btn btn-success btn-block">設定</button>
+                    <br>
+                    <button type="submit" class="btn btn-warning btn-block"><a href="{{ action('Admin\CourseController@index')}}">設定完了！</a></button>
                 </form>
             </div>
-            <p ><a href="{{ action('Admin\CourseController@index')}}">設定できたら、単語帳 / クイズへGo！</a></p>
         </div>
     </div>
              {{-- <img class="d-block mx-auto" style="max-width:150px;" src="{{ asset('storage/tango/' . Auth::user()->image_path) }}">--}}

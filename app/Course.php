@@ -44,7 +44,7 @@ class Course extends Model
       } elseif(Storage::exists($path . $pngFileName)){
         return $pngFileName;
       } else {
-        return false;
+        return false; //Viewでnoimageの画像を返す
       }
     }
     

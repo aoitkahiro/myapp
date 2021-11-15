@@ -215,10 +215,11 @@
         let someJudgements = judgeString.split(" ");
         let count = 0;
         {{--配列名.filter(callbackされる配列オブジェクト--}}
+        let wrongList = document.getElementById("wrongList");
+        {{--↓の行で、filter()で抽出した配列（missedの集団）をforeachで回す--}}
         result_items.filter(result => result.rslt == 1).forEach((missed)=>{
-          let wrongList = document.getElementById("wrongList");
           wrongList.innerHTML += `<li class="list-group-item"> × ${missed.quiz.question}<br>  ${missed.quiz.answer}</li>`
-        })
+        }){{--spanタグのwrongListをどんどんlist化します--}}
         let i = 0;
         let currenctCourseIds = [];
         courses.forEach((course) =>{
@@ -259,7 +260,7 @@
         showEnd(result_items);
       };
   };
-  
+  {{--無名関数をshowEnd()に入れるという書き方--}}
   const showEnd = (result_items_array) => {
       $question.textContent = score + '問 / ' + quizLen + '問中';
       console.log(result_items_array);
