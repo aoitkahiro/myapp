@@ -541,9 +541,6 @@ class CourseController extends Controller
     // dd($running_time,$correct,$incorrect,$correctRatio,$currenct_results);
     $running_time = UserQuizResult::timeFunc($running_time);
     $category = $request->category;
-    $question_quantity = $request->question_quantity;
-    $correct = $request->correct;
-    $correctRatio = $request->correctRatio;
     if($correctRatio == 1){
         $message = "す、す…すごい！満点！";
         $img = secure_asset('image/' . 'excellent.png');
