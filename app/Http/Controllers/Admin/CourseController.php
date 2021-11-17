@@ -516,17 +516,29 @@ class CourseController extends Controller
     // dd($questions,$corrects);
     // dd($result_items[4]["quiz"]["question"], $result_items[4]["quiz"]["correct"], $result_items);
     // dd($running_times[count($running_times) - 1]);
-    $correctRatio = $correct /count($results);
-    // dd($correctRatio, $correct  ,count($results));
     return redirect()->action('Admin\CourseController@showResult',
-    ['result_items' => $result_items, 'forgotten' => $forgotten, 'correctRatio' => $correctRatio, 'running_time'=>$running_times[count($running_times) - 1], 'correct' => $correct,
-    'question_quantity'=>$question_quantity, 'category'=>$category]); 
+    ['forgotten' => $forgotten, 'question_quantity'=>$question_quantity, 'category'=>$category]); 
   }
   
   public function showResult(Request $request)
   {
-    dd($request->all());
-    $running_time = $request->running_time;
+    // dd($request->all());
+    $currenct_challenge_id = UserQuizResult::where('user_id', Auth::id())->max('challenge_id');
+    $currenct_results = UserQuizResult::where('user_id', Auth::id())->where('challenge_id', $currenct_challenge_id)->orderBy('id','ASC')->get();
+    $question_quantity = count($currenct_results);
+    $running_time = $currenct_results[$question_quantity-1]->running_time;
+    $correct = 0;
+    $incorrect = 0;
+    // dd($currenct_results,$currenct_results[0]);
+    foreach($currenct_results as $result){
+      if($result->judgement == 2){
+        $correct++;
+      }else{
+        $incorrect++;
+      }
+    }
+    $correctRatio = $correct / $question_quantity;
+    // dd($running_time,$correct,$incorrect,$correctRatio,$currenct_results);
     $running_time = UserQuizResult::timeFunc($running_time);
     $category = $request->category;
     $question_quantity = $request->question_quantity;

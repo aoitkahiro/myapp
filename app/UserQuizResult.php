@@ -16,7 +16,14 @@ class UserQuizResult extends Model
       // dd($chibi_minuts);
       $minuts = floor($running_time / 60);
       $seconds = $running_time - ($minuts * 60) ;
-      return $minuts .":" . $seconds;
+      if($minuts < 10){
+        $minuts = "0" . $minuts;
+      }
+      if($seconds > 10){
+        return $minuts .":" . $seconds;
+      }else{
+        return $minuts .":" . "0" . $seconds;
+      }
     }
     
     public static function getRankingInCategoryAndQuestionQuantity($category, $question_quantity){
