@@ -16,6 +16,9 @@
     <br>
     {{$ranking_title}}
     <br>今回間違えた単語
+    @foreach($incorrect_fronts as $front)
+      {{$front}}
+    @endforeach
     <br>
 </div>
 @endsection

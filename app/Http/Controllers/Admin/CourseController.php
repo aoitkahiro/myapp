@@ -529,14 +529,23 @@ class CourseController extends Controller
     $running_time = $currenct_results[$question_quantity-1]->running_time;
     $correct = 0;
     $incorrect = 0;
-    // dd($currenct_results,$currenct_results[0]);
+    $incorrect_list = [];
     foreach($currenct_results as $result){
       if($result->judgement == 2){
         $correct++;
       }else{
         $incorrect++;
+        array_push($incorrect_list,$result->course_id);
       }
     }
+    $incorrect_fronts = [];
+    $incorrect_backs = [];
+    foreach($incorrect_list as $word){
+      $course = Course::where('id',$word)->first();
+      array_push($incorrect_fronts,$course->front);
+      array_push($incorrect_backs,$course->back);
+    }
+      // dd($incorrect_backs,$incorrect_fronts);
     $correctRatio = $correct / $question_quantity;
     // dd($running_time,$correct,$incorrect,$correctRatio,$currenct_results);
     $running_time = UserQuizResult::timeFunc($running_time);
@@ -562,7 +571,7 @@ class CourseController extends Controller
     $forgotten = $request->forgotten;
     // dd($ranking_title);
     return view('admin.course.showResult', 
-    ['img'=>$img, 'forgotten' => $forgotten, 'message' => $message, 'running_time'=>$running_time, 'correct' => $correct,
+    ['incorrect_fronts'=>$incorrect_fronts, 'incorrect_backs'=>$incorrect_backs, 'img'=>$img, 'forgotten' => $forgotten, 'message' => $message, 'running_time'=>$running_time, 'correct' => $correct,
     'question_quantity'=>$question_quantity, 'category'=>$category, 'ranking_title'=>$ranking_title]); 
   }
   public function ranking(Request $request)
