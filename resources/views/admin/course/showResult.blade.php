@@ -16,9 +16,26 @@
     <br>
     {{$ranking_title}}
     <br>今回間違えた単語
-    @foreach($incorrect_fronts as $front)
-      {{$front}}
-    @endforeach
+            <div class="row">
+                <table class="table table-dark table-hover">
+                <thead>
+                      <tr style="vertical-align: middle">
+                          <th width="10%" class="text-center"><font size="1">問題</font></th>
+                          <th width="35%">答え</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                @foreach($incorrect_fronts as $front)
+                      <tr class="Ranking">
+                          <td class= "d-flex align-items-center justify-content-center"><font size="7">{{$front}}</font></td>
+                          <td class= "text-center" style="vertical-align: middle">答えは準備中{{--<img class="gazou" style="max-height:70px;" src="{{ asset('storage/tango/' . $rank["画像"]) }}">--}}</td>
+                          {{--<td style= "vertical-align: middle">{{ \Str::limit($rank["目標"], 15) }}</td>--}}
+                      </tr>
+                @endforeach
+                  </tbody>
+                </table>
+            </div>
+        </div>
     <br>
 </div>
 @endsection
