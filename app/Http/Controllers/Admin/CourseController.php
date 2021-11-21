@@ -571,7 +571,7 @@ class CourseController extends Controller
     $forgotten = $request->forgotten;
     // dd($ranking_title);
     return view('admin.course.showResult', 
-    ['incorrect_fronts'=>$incorrect_fronts, 'incorrect_backs'=>$incorrect_backs, 'img'=>$img, 'forgotten' => $forgotten, 'message' => $message, 'running_time'=>$running_time, 'correct' => $correct,
+    ['list_length'=>count($incorrect_fronts),'incorrect_fronts'=>$incorrect_fronts, 'incorrect_backs'=>$incorrect_backs, 'img'=>$img, 'forgotten' => $forgotten, 'message' => $message, 'running_time'=>$running_time, 'correct' => $correct,
     'question_quantity'=>$question_quantity, 'category'=>$category, 'ranking_title'=>$ranking_title]); 
   }
   public function ranking(Request $request)
