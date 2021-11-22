@@ -10,7 +10,7 @@
     <br>{{$message}}
     <br>
     <br>
-      <a href="{{action('Admin\CourseController@index')}}" type="button" id="goIndex" class="btn btn-black col-3"><font size="2">もどる</font></a>
+      <a href="{{action('Admin\CourseController@index')}}" type="button" id="goIndex" class="btn btn-black col-3"><font size="3">もどる</font></a>
       <a href="{{action('Admin\CourseController@quiz',['category'=>$category, 'question_quantity'=>$question_quantity])}}" type="button" id="restart" class="btn btn-black col-3"><font size="2">もう一度</font></a>
       <a href="{{action('Admin\CourseController@ranking',['category'=>$category, 'question_quantity'=>$question_quantity])}}" type="button" id="goRanking" class="btn btn-black col-3">👑ランキング</a>
     <br>
@@ -21,7 +21,7 @@
                 <table class="col-md-8 mx-auto table table-dark table-hover">
                 <thead>
                       <tr style="vertical-align: middle">
-                          <th width="40%" class="text-center"><font size="1">問題</font></th>
+                          <th width="40%" class="text-center">問題</th>
                           <th width="40%">答え</th>
                       </tr>
                   </thead>
