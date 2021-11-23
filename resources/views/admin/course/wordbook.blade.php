@@ -1,7 +1,9 @@
 @extends('layouts.admin')
 @section('title', '単語帳')
 @section('content')
-　　　　{{$user->name}}さんの単語帳 <font size="5">「{{$unique_category}}」</font>  記憶率<font size="5">「{{$bunshi_num}} / {{$bunbo_num}}」</font>
+<div class="container">
+    {{$user->name}}さんの単語帳 <font size="5">「{{$unique_category}}」</font>  記憶率<font size="5">「{{$bunshi_num}} / {{$bunbo_num}}」</font>
+</div>
 <div class="container">
     @if($message != "")
         <p>{{$message}}</p>
@@ -180,7 +182,7 @@
         </div>
     </div>
 </div>
-<div class="col-md-8 offset-md-1">
+<div class="container">
     どの単語を隠しますか？
     <form action="{{ action('Admin\StatusController@levelChange') }}" method="post" enctype="multipart/form-data">  {{--  ActionタグにURLを書く--}} 
     @csrf
