@@ -90,3 +90,26 @@ body {
   background: #fff20a;
   border-bottom: 2px solid #ccc100;
 }
+//丸いボタン
+a.btn--circle {
+  width: 60px;
+  height: 60px;
+  padding: 0;
+  background: #fff;
+  border-radius: 50%;
+  -webkit-box-shadow: 0 3px 5px rgba(0, 0, 0, .3);
+  box-shadow: 0 3px 5px rgba(0, 0, 0, .3);
+}
+
+a.btn--circle i {
+  font-size: 150%;
+  line-height: 60px;
+  -webkit-transition: all .3s;
+  transition: all .3s;
+  letter-spacing: 0;
+}
+a.btn--circle:hover i {
+  line-height: 55px;
+}
+
+
