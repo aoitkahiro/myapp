@@ -9,12 +9,9 @@
         <p>{{$message}}</p>
         {{--この行に、ここ以下のコードを実行しない命令を記述するべきと考えられるものの、思いつかないため保留2021.8.13--}}
     @endif
-    <div class="col margin_bottom_2em">
-    <a href="{{ action('Admin\CourseController@index',['has_done'=> 1,'last_category'=>$unique_category]) }}" class="btn btn--circle btn--circle-c btn--shadow"><i class="fas fa-arrow-up"></i></a>
-    <a href="{{ action('Admin\CourseController@index',['has_done'=> 1,'last_category'=>$unique_category]) }}" class="btn btn--circle btn--circle-c btn--shadow"><i class="fas fa-arrow-up">←</i></a>
-    <a  class="btn btn-warning" href="{{ action('Admin\CourseController@index',['has_done'=> 1,'last_category'=>$unique_category]) }}">戻る</a><a> </a>
-    <a  class="btn btn-warning" href="{{action('Admin\CourseController@write',['category'=>$unique_category,'tango_id'=>$post[$tango_id]->id,'page'=>$tango_id])}}">編集</a> {{--  URL：?tango_id=1が生成される（URLにおいて?で送られる数値をgetパラメータという--}} 
-    {{--<a  class="btn btn-warning" href="{{action('Admin\CourseController@quiz',['category'=>$unique_category])}}">この科目のクイズへ</a>--}}
+    <div class="margin_bottom_2em">
+        <a href="{{ action('Admin\CourseController@index',['has_done'=> 1,'last_category'=>$unique_category]) }}" class="btn btn--circle btn--circle-c btn--shadow"><i class="fas fa-arrow-up">←</i></a>
+        <a href="{{action('Admin\CourseController@write',['category'=>$unique_category,'tango_id'=>$post[$tango_id]->id,'page'=>$tango_id])}}" class="btn btn--circle btn--circle-c btn--shadow"><i class="fas fa-arrow-up">✍</i></a>
     </div>
     {{--<div>*ここからデバッグ用の記述です</div>
     <h6>(今のページの)<br>user_idは {{$user->id}}<br>course_idは {{$post[$tango_id]->id}}<br>
@@ -92,7 +89,7 @@
            <img src="{{ secure_asset('image/noimage.jpg')}}" id="piyo" class="bd-placeholder-img card-img-top">
         @endif
     </div>     {{-- asset()でディレクトリを指定、受け取っている値で詳しいファイル名を指定 --}}
-    <div>
+    <div class="margin_bottom_2em">
         <script>
             {{--初期表示は非表示--}}
             document.getElementById("piyo").style.display ="none";
@@ -111,7 +108,7 @@
         </script>
     </div>
     
-    <div class="col">
+    <div>
         @if($value == NULL or $value->learning_level == 0 or $value->learning_level == 1 ) {{-- もしhistoriesテーブルのtango_id番めのレコードの learning_level が0かNULLなら --}}
             <form action="{{ action('Admin\StatusController@store') }}" method="post" enctype="multipart/form-data">  {{--  ActionタグにURLを書く--}} 
             @csrf
@@ -136,7 +133,7 @@
             </form>
         @endif
     </div>
-    <div class="col">
+    <div>
         @if($value == NULL or $value->learning_level == 0 ) {{-- もしhistoriesテーブルのtango_id番めのレコードの learning_level が1,0かNULLなら --}}
             <form action="{{ action('Admin\StatusController@store') }}" method="post" enctype="multipart/form-data">  {{--  ActionタグにURLを書く--}} 
             @csrf
