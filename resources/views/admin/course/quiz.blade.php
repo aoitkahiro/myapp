@@ -28,24 +28,25 @@
         <button type="button" id="js-btn-4" class="btn btn--yellow selection">――</button>
       </div>
     </div>
-  <form name="recordtime"  method="post">
-  @csrf
-    <input type="hidden" name="score" id="score">
-    <input type="hidden" name="user_quiz_result" id="user_quiz_result">
-    <input type="hidden" name="running_time" id="running_time">
-    <input type="hidden" name="result" id="result">
-    <input type="hidden" name="course_id_array" id="course_id_array">
-    <input type="hidden" name="result_items" id="result_items" value="">
-    <input type="hidden" name="challenge_id" id="challenge_id">
-    <input type="hidden" name="resultArray[]" id="resultArray">
-    <input type="hidden" name="category" value={{urlencode($category)}}>
-    <input type="hidden" name="question_quantity" value={{$question_quantity}}>
-    <input type="hidden" name="forgotten" value="0" >
-    <button type="button" id="save_button" class = "margin_bottom_2em">記録を送信する</button>
-    <div class="margin_bottom_2px"><input type="checkbox" {{ $forgotten == "0" ? ""  : "checked" }} class="sample2" name="forgotten"> 間違えた語の[覚えた]を解除</div>
-  </form>
+    <form name="recordtime"  method="post">
+    @csrf
+      <input type="hidden" name="score" id="score">
+      <input type="hidden" name="user_quiz_result" id="user_quiz_result">
+      <input type="hidden" name="running_time" id="running_time">
+      <input type="hidden" name="result" id="result">
+      <input type="hidden" name="course_id_array" id="course_id_array">
+      <input type="hidden" name="result_items" id="result_items" value="">
+      <input type="hidden" name="challenge_id" id="challenge_id">
+      <input type="hidden" name="resultArray[]" id="resultArray">
+      <input type="hidden" name="category" value={{urlencode($category)}}>
+      <input type="hidden" name="question_quantity" value={{$question_quantity}}>
+      <input type="hidden" name="forgotten" value="0" >
+      {{--
+      <button type="button" id="save_button" class = "margin_bottom_2em">記録を送信する</button>
+      <div class="margin_bottom_2px"><input type="checkbox" {{ $forgotten == "0" ? ""  : "checked" }} class="sample2" name="forgotten"> 間違えた語の[覚えた]を解除</div>
+      --}}
+    </form>
   </div>
-  <div><button><a href="{{action('Admin\CourseController@showResult',['category'=>$category, 'question_quantity'=>$question_quantity])}}">Show Result</a></button></div>
 <div class="justify-content-sm-center margin_bottom_2px">
   <a href="{{action('Admin\CourseController@index')}}" type="button" id="goIndex" class="btn btn-black col-2"><font size="2">もどる</font></a>
   <a href="{{action('Admin\CourseController@quiz',['category'=>$category, 'question_quantity'=>$question_quantity])}}" type="button" id="restart" class="btn btn-black col-2"><font size="2">もう一度</font></a>
