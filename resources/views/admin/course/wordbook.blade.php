@@ -175,10 +175,14 @@
             <button type="button" class="btn btn-warning"><font size="1">Q</font></button><br>最後の単語です</a><br>
         @else
             <a href="{{ action('Admin\CourseController@wordbook', ['tango_id' =>$tango_id + 1, 'category' => $unique_category]) }}">
-            <button type="button" class="btn btn-warning"><font size="1">▶</font></button><br>次へ</a><br>
+                <button type="button" class="btn btn-warning"><font size="1">▶</font></button><br>次へ
+            </a><br>
             <a href="{{ action('Admin\CourseController@wordbook', ['tango_id' =>$tango_id + 5, 'category' => $unique_category]) }}">5個次へ</a>
         @endif
         </div>
+        <br>
+        <button onclick=""><input type="file"></button>
+        <button onclick="location.href='{{ action('Admin\CourseController@wordbook', ['tango_id' =>$tango_id + 1, 'category' => $unique_category]) }}'" target="_blank" rel="noopener noreferrer">Google</button>
     </div>
 </div>
 <div class="container">
