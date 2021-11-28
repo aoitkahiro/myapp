@@ -30,13 +30,37 @@
                     </div>
                 </div>
             </div>
-            <button type="submit" class="btn btn-success btn-block">送信</button>
+            <button type="submit" class="btn btn-success btn-block">登録</button>
         </form>
         @if(Session::has('done')) {{-- フラッシュメッセージ --}} 
                         {{ session('done') }}
         @endif
-         <br><br>
-         <button type="button" class="btn btn-warning"><font size="1">データのひな形をダウンロード　　→</font></button>
+        <br><br>
+          	
+        <a href="{{secure_asset('csv/' . 'form.csv')}}" download>
+            <button type="button" onclick="clickBtn2()" class="btn btn-warning">ひな型をGETする (Get form_template)</button>
+        </a>
+        <div  style="width: 30rem;">
+            <img src="{{ secure_asset('image/csvExam.png')}}" id="example" class="bd-placeholder-img card-img-top">
+        </div>     {{-- asset()でディレクトリを指定、受け取っている値で詳しいファイル名を指定 --}}
+        <div class="margin_bottom_2em">
+            <script>
+                {{--初期表示は非表示--}}
+                document.getElementById("example").style.display = "none";
+                
+                function clickBtn2(){
+                  const ex = document.getElementById("example"); 
+                
+                  if(ex.style.display == "block"){ {{--もしexが表示されていれば   
+                  noneで非表示--}}
+                  	ex.style.display = "none"; {{--  exのスタイル（CSS）display属性を非表示にする（見えなくなる）--}} 
+                  }else{
+                  	 {{--blockで表示--}}
+                  	ex.style.display = "block";{{--  exのスタイル（CSS）display属性を表示にする（見えるようにする） --}} 
+                  }
+                }
+            </script>
+        </div>
       </div>
     </div>
 </div>

@@ -180,9 +180,6 @@
             <a href="{{ action('Admin\CourseController@wordbook', ['tango_id' =>$tango_id + 5, 'category' => $unique_category]) }}">5個次へ</a>
         @endif
         </div>
-        <br>
-        <button onclick=""><input type="file"></button>
-        <button onclick="location.href='{{ action('Admin\CourseController@wordbook', ['tango_id' =>$tango_id + 1, 'category' => $unique_category]) }}'" target="_blank" rel="noopener noreferrer">Google</button>
     </div>
 </div>
 <div class="container">
@@ -209,5 +206,7 @@
             <input type="hidden" name="category" value= {{mb_convert_encoding($unique_category, 'UTF-8')}}>
     </form>
 </div>
-{{--<button>この科目を消すボタン{{App\Course::deleteCategory($unique_category)}}</button>--}}
+<br>
+<button onclick="location.href='mailto:wordquizmaster&#64;outlook.jp?subject=Request for deletion（削除依頼）&amp;body=To master(T.Aoi) Plese delete {{$unique_category}} from {{$user->name}} {{$unique_category}}を消して欲しいです。{{$user->name}}より。'">この科目の削除依頼</button>
+{{--<button onclick="location.href='{{App\Course::deleteCategory($unique_category)}}'">この科目を消すボタン</button>--}}
 @endsection
