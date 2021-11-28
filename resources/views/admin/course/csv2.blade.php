@@ -13,24 +13,20 @@
 
 
 <div class="container">
-      <div class="col-3 offset-9">
-        <a href="">戻る</a>
-         <br></br>
-      </div>
     <div class="row">
       <div class="col-6 offset-3">
         <form action="{{ action('Admin\CourseController@csv2') }}" method="post" enctype="multipart/form-data">
             {{ csrf_field() }}
             <div class="row">
-                <label class="col-1 text-right" for="form-file-1">File:</label>
+                {{--<label class="col-1 text-right" for="form-file-1">File:</label>--}}
                 <div class="col-11">
                     <div class="custom-file">
                         <input type="file" name="csv" class="custom-file-input" id="customFile">
-                        <label class="custom-file-label" for="customFile" data-browse="参照">ファイル選択...</label>
+                        <label class="custom-file-label" for="customFile" data-browse="参照">作ったcsvをこちらへ...</label>
                     </div>
                 </div>
             </div>
-            <button type="submit" class="btn btn-success btn-block">登録</button>
+            <button type="submit" class="btn btn-success btn-block" style="width:70%">登録</button>
         </form>
         @if(Session::has('done')) {{-- フラッシュメッセージ --}} 
                         {{ session('done') }}
@@ -38,7 +34,7 @@
         <br><br>
           	
         <a href="{{secure_asset('csv/' . 'form.csv')}}" download>
-            <button type="button" onclick="clickBtn2()" class="btn btn-warning">ひな型をGETする (Get form_template)</button>
+            <button type="button" onclick="clickBtn2()" class="btn btn-success" style="width:70%">ひな型をGETする (Get form_template)</button>
         </a>
         <div  style="width: 30rem;">
             <img src="{{ secure_asset('image/csvExam.png')}}" id="example" class="bd-placeholder-img card-img-top">

@@ -16,16 +16,16 @@
     <div id="js-items" class="text margin_bottom_2px">
         <font size="4"><div id="sound"><div id="QuizStart" onClick = "startQuiz()" class="btn btn-orange">　▶　</div></div></font>
       <div class="m-2">
-        <div><button type="button" id="js-btn-1" class="btn btn--yellow selection">――</button></div>
+        <div><button type="button" id="js-btn-1" style="min-width:50%" class="btn btn--yellow selection">???</button></div>
       </div>
       <div class="m-2">
-        <div><button type="button" id="js-btn-2" class="btn btn--yellow selection">――</button></div>
+        <div><button type="button" id="js-btn-2" style="min-width:50%" class="btn btn--yellow selection">???</button></div>
       </div>
       <div class="m-2">
-        <button type="button" id="js-btn-3" class="btn btn--yellow selection">――</button>
+        <button type="button" id="js-btn-3" style="min-width:50%" class="btn btn--yellow selection">???</button>
       </div>
       <div class="m-2">
-        <button type="button" id="js-btn-4" class="btn btn--yellow selection">――</button>
+        <button type="button" id="js-btn-4" style="min-width:50%" class="btn btn--yellow selection">???</button>
       </div>
     </div>
     <form name="recordtime"  method="post">

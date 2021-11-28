@@ -17,8 +17,8 @@
     {{$ranking_title}}
     <br>
     <p>今回間違えた単語</p>
-            <div class="row">
-                <table class="col-md-8 mx-auto table table-dark table-hover">
+            <div style="max-width:98%" class="row">
+                <table style="max-width:98%" class="col-md-8 mx-auto table table-dark table-hover">
                 <thead>
                       <tr style="vertical-align: middle">
                           <th width="40%" class="text-center">問題</th>

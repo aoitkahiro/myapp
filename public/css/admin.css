@@ -120,3 +120,8 @@ a.btn--circle:hover i {
   line-height: 55px;
 }
 
+.copyright {
+  color: #777;
+  text-align: center;
+}
+
