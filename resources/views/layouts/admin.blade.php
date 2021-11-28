@@ -65,7 +65,7 @@
         </main>
     @yield('js')
     </body>
-    <footer>
+    <footer style="text-align: center">
       <p class="copyright">(C) 2021 T.Aoi</p>
     </footer>
 </html>

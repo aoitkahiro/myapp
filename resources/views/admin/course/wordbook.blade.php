@@ -207,8 +207,7 @@
     </form>
 </div>
 <div class="container">
-<button onclick="location.href='mailto:wordquizmaster&#64;outlook.jp?subject=Request for deletion（削除依頼）&amp;body=To master(T.Aoi)%0d%0aPlese delete category:{{$unique_category}}%0d%0afrom {{$user->name}}
-%0d%0a%0d%0acategory:{{$unique_category}}を消して欲しいです。%0d%0a{{$user->name}}より。'">この科目の削除依頼</button>
+<button onclick="location.href='mailto:wordquizmaster&#64;outlook.jp?subject=Request for deletion（削除依頼）&amp;body=To master(T.Aoi)%0d%0aPlese delete category:{{$unique_category}}%0d%0afrom {{$user->name}}%0d%0a%0d%0acategory:{{$unique_category}}を消して欲しいです。%0d%0a{{$user->name}}より。'">この科目の削除依頼</button>
 {{--<button onclick="location.href='{{App\Course::deleteCategory($unique_category)}}'">この科目を消すボタン</button>--}}
 </div>
 @endsection
