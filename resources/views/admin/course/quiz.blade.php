@@ -50,7 +50,7 @@
 <div class="text-center margin_bottom_2px">
   <a href="{{action('Admin\CourseController@index')}}" type="button" id="goIndex" class="btn btn-black col-3"><font size="3">←</font></a>
   <a href="{{action('Admin\CourseController@quiz',['category'=>$category, 'question_quantity'=>$question_quantity])}}" type="button" id="restart" class="btn btn-black col-3"><font size="3">↻</font> やりなおす</a>
-  <a href="{{action('Admin\CourseController@ranking',['category'=>$category, 'question_quantity'=>$question_quantity])}}" type="button" id="goRanking" class="btn btn-black col-3"><font size="3">👑</font>ランキング</a>
+  <a href="{{action('Admin\CourseController@ranking',['category'=>$category, 'question_quantity'=>$question_quantity])}}" type="button" id="goRanking" class="btn btn-black col-3"><font size="3">👑</font> ランキング</a>
   {{--<span class= text-center id="wrongList"></span>--}}
 </div>
 </div>
