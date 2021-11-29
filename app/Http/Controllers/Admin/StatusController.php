@@ -56,7 +56,21 @@ class StatusController extends Controller
    {
       $user = Auth::user();
       $user->update(['looking_level'=>$request->looking_level]);
-      // dd($request->looking_level,$user->looking_level);
+      // dd($request->looking_level,$user->looking_level,$request->all());
+      $url = 'admin/course/wordbook?tango_id=' . $request->tango_id . '&category=' . $request->category;
+      return redirect($url);
+   }
+   public function changeIsImageDisplayed(Request $request)
+   {
+      $user = Auth::user();
+      if($request->is_image_displayed =="true"){
+         $bool = true;
+      }else{
+         $bool = false;
+      }
+      $user->is_image_displayed = $bool;
+      // dd($bool,$request->is_image_displayed,$user->is_image_displayed,$request->all(),$user);
+      $user->save();
       $url = 'admin/course/wordbook?tango_id=' . $request->tango_id . '&category=' . $request->category;
       return redirect($url);
    }

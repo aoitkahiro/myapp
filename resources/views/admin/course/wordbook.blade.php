@@ -80,8 +80,9 @@
             }
         </script>
     </div>
-          
-        <input type="button" value="{{$hintImage}}" onclick="clickBtn2()" /> {{--onclick 動かす関数を指定している  --}} 
+    {{-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ --}} 
+    
+    <input type="button" value="{{$hintImage}}" onclick="clickBtn2()" /> {{--onclick 動かす関数を指定している  --}} 
     <div  style="width: 24rem;">
         @if($post[$tango_id]->getImageFileName()){{--boolean--}}
            <img src="{{ secure_asset('storage/tango/' . $post[$tango_id]->getImageFileName()) }}?{{time()}}" id="piyo" class="bd-placeholder-img card-img-top">
@@ -92,8 +93,11 @@
     <div class="margin_bottom_2em">
         <script>
             {{--初期表示は非表示--}}
+        @if( $user->is_image_displayed == true)
+            document.getElementById("piyo").style.display ="block";
+        @else
             document.getElementById("piyo").style.display ="none";
-            
+        @endif
             function clickBtn2(){
               const p2 = document.getElementById("piyo"); 
             
@@ -107,7 +111,7 @@
             }
         </script>
     </div>
-    
+    {{-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ --}} 
     <div>
         @if($value == NULL or $value->learning_level == 0 or $value->learning_level == 1 ) {{-- もしhistoriesテーブルのtango_id番めのレコードの learning_level が0かNULLなら --}}
             <form action="{{ action('Admin\StatusController@store') }}" method="post" enctype="multipart/form-data">  {{--  ActionタグにURLを書く--}} 
@@ -207,7 +211,19 @@
     </form>
 </div>
 <div class="container">
+    <form action="{{ action('Admin\StatusController@changeIsImageDisplayed') }}" method="post" enctype="multipart/form-data">  {{--  ActionタグにURLを書く--}} 
+    @csrf
+    @if( $user->is_image_displayed == true)
+            <button type="submit" class="btn btn-secondary margin_bottom_2px" name="is_image_displayed" value="false">image画像を最初から表示しない</button>に切りかえる
+    @else    
+            <button type="submit" class="btn btn-primary margin_bottom_2px" name="is_image_displayed" value="true">image画像を最初から表示する</button>に切りかえる
+    @endif
+            <input type="hidden" name="tango_id" value= {{$tango_id}}>
+            <input type="hidden" name="category" value= {{mb_convert_encoding($unique_category, 'UTF-8')}}>
+    </form>
 <button onclick="location.href='mailto:wordquizmaster&#64;outlook.jp?subject=Request for deletion（削除依頼）&amp;body=To master(T.Aoi)%0d%0aPlese delete category:{{$unique_category}}%0d%0afrom {{$user->name}}%0d%0a%0d%0acategory:{{$unique_category}}を消して欲しいです。%0d%0a{{$user->name}}より。'">この科目の削除依頼</button>
-{{--<button onclick="location.href='{{App\Course::deleteCategory($unique_category)}}'">この科目を消すボタン</button>--}}
+@if($user->id == 3){{--user_idが管理者なら--}}
+    <button onclick="location.href='{{--{{App\Course::deleteCategory($unique_category)}}--}}'">この科目を消すボタン</button>
+@endif
 </div>
 @endsection
