@@ -7,7 +7,7 @@ body {
 }
 
 body {
-  background-color: #d5d0be;
+  background-image: url(/images/concrete_wall_2.png?45e744a586234a77aea26a55a64dfa2f);
 }
 
 .stress_roman_letter {
@@ -54,7 +54,7 @@ body {
 a.btn-orange {
   color: #fff;
   background-color: #eb6100;
-  width: 80px;
+  width: 90px;
 }
 
 .btn-orange:hover,
@@ -78,6 +78,11 @@ a.btn-black {
 a.btn-black:hover {
   color: #fff;
   background: #333333;
+}
+
+.btn-outline-success,
+a.btn-outline-success {
+  width: 100%;
 }
 
 .btn-yellow {

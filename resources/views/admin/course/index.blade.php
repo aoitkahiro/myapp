@@ -23,7 +23,7 @@
                             <a class="d-flex" href="{{ action('Admin\CourseController@wordbook', ['tango_id' => 0, 'category' => current( array_slice($unique_categories, $i, 1, true) ), 'page'=> 1 ]) }}">
                             @if($has_done != NULL)
                                 @if($last_category == current( array_slice($unique_categories, $i, 1, true) ))
-                                    <button type="button" class="btn btn-primary">{{current( array_slice($unique_categories, $i, 1, true) )}}(閲覧済)</button>
+                                    <button type="button" class="btn btn-outline-success">{{current( array_slice($unique_categories, $i, 1, true) )}}:DONE!</button>
                                 @else
                                     <button type="button" class="btn btn-yellow">{{current( array_slice($unique_categories, $i, 1, true) )}}</button>
                                 @endif
