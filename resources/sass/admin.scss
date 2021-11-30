@@ -1,11 +1,12 @@
 /* サイト全体のフォント指定 */
 body {
   font-family: "monospace" ;
+  color: white;
 }
 
 body {
   // background-color: #d5d0be;
-  background-image:url("../image/concrete_wall_2.png");
+  background-image:url("../image/vintage-wallpaper.png");
 }
 // 特定箇所のフォント指定
 .stress_roman_letter {
@@ -119,3 +120,15 @@ a.btn--circle:hover i {
   color: #777;
   text-align: center;
 }
+//wordbook.blade.phpのfront-text用ボタン
+a.btn-border {
+  border: 2px solid #000;
+  border-radius: 0;
+  background: #fff;
+}
+
+a.btn-border:hover {
+  color: #fff;
+  background: #000;
+}
+

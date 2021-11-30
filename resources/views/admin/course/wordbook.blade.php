@@ -24,7 +24,7 @@
     </h6>
     ここまでデバッグ用の記述です*<br>--}}
     <div>
-        <a href="{{$google_url}}" target="_blank" rel="noopener noreferrer">
+        <a href="{{$google_url}}" target="_blank" rel="noopener noreferrer" class="btn btn-border">
             <span class="stress_roman_letter">{{$post[$tango_id]->front}}</span>
         </a>
         　<a href="{{$google_url_oboekata}}" target="_blank" rel="noopener noreferrer">[覚え方]</a>

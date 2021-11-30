@@ -4,10 +4,11 @@
 
 body {
   font-family: "monospace";
+  color: white;
 }
 
 body {
-  background-image: url(/images/concrete_wall_2.png?45e744a586234a77aea26a55a64dfa2f);
+  background-image: url(/images/vintage-wallpaper.png?78ee9c8a6a9f322010a59e932bc83920);
 }
 
 .stress_roman_letter {
@@ -128,5 +129,16 @@ a.btn--circle:hover i {
 .copyright {
   color: #777;
   text-align: center;
+}
+
+a.btn-border {
+  border: 2px solid #000;
+  border-radius: 0;
+  background: #fff;
+}
+
+a.btn-border:hover {
+  color: #fff;
+  background: #000;
 }
 
