@@ -48,9 +48,9 @@
     </form>
   </div>
 <div class="text-center margin_bottom_2px">
-  <a href="{{action('Admin\CourseController@index')}}" type="button" id="goIndex" class="btn btn-black col-3"><font size="3">←</font></a>
+  {{--<a href="{{action('Admin\CourseController@index')}}" type="button" id="goIndex" class="btn btn-black col-3"><font size="3">←</font></a>--}}
   <a href="{{action('Admin\CourseController@quiz',['category'=>$category, 'question_quantity'=>$question_quantity])}}" type="button" id="restart" class="btn btn-black col-3"><font size="3">↻</font> やりなおす</a>
-  <a href="{{action('Admin\CourseController@ranking',['category'=>$category, 'question_quantity'=>$question_quantity])}}" type="button" id="goRanking" class="btn btn-black col-3"><font size="3">👑</font> ランキング</a>
+  {{--<a href="{{action('Admin\CourseController@ranking',['category'=>$category, 'question_quantity'=>$question_quantity])}}" type="button" id="goRanking" class="btn btn-black col-3"><font size="3">👑</font> ランキング</a>--}}
   <span class= text-center id="wrongList"></span>
 </div>
 </div>
@@ -216,11 +216,11 @@
         let someJudgements = judgeString.split(" ");
         let count = 0;
         {{--配列名.filter(callbackされる配列オブジェクト--}}
-        let wrongList = document.getElementById("wrongList");
+        {{--let wrongList = document.getElementById("wrongList");--}}
         {{--↓の行で、filter()で抽出した配列（missedの集団）をforeachで回す--}}
-        result_items.filter(result => result.rslt == 1).forEach((missed)=>{
+        {{--result_items.filter(result => result.rslt == 1).forEach((missed)=>{
           wrongList.innerHTML += `<li class="list-group-item"> × ${missed.quiz.question}<br>  ${missed.quiz.answer}</li>`
-        }){{--spanタグのwrongListをどんどんlist化します--}}
+        })--}}{{--spanタグのwrongListをどんどんlist化します--}}
         let i = 0;
         let currenctCourseIds = [];
         courses.forEach((course) =>{
