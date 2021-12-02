@@ -8,6 +8,11 @@ body {
   // background-color: #d5d0be;
   background-image:url("../image/vintage-wallpaper.png");
 }
+
+.cardPropaty {
+  // background-color: #d5d0be;
+  background-image:url("../image/vintage-wallpaper.png");
+}
 // 特定箇所のフォント指定
 .stress_roman_letter {
   font-family: "Helvetica Neue", "Helvetica", "Hiragino Sans", "Hiragino Kaku Gothic ProN",  "Meiryo", sans-serif;
@@ -140,4 +145,21 @@ a.btn-border:hover {
 .example {
   margin: 10px auto;
   width:50px;
+}
+
+.centering {
+  text-align: center;
+}
+
+a.btn--red.btn--border-outset {
+  border: 6px outset #b9000e;
+}
+
+.primaryBtnWidth {
+  width: 216px;	
+}
+
+.loginBody {
+  // background-color: #d5d0be;
+  background-image:url("../image/stardust.png");
 }

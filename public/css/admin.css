@@ -11,6 +11,10 @@ body {
   background-image: url(/images/vintage-wallpaper.png?78ee9c8a6a9f322010a59e932bc83920);
 }
 
+.cardPropaty {
+  background-image: url(/images/vintage-wallpaper.png?78ee9c8a6a9f322010a59e932bc83920);
+}
+
 .stress_roman_letter {
   font-family: "Helvetica Neue", "Helvetica", "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
   font-size: 40px;
@@ -150,5 +154,21 @@ a.btn-border:hover {
 .example {
   margin: 10px auto;
   width: 50px;
+}
+
+.centering {
+  text-align: center;
+}
+
+a.btn--red.btn--border-outset {
+  border: 6px outset #b9000e;
+}
+
+.primaryBtnWidth {
+  width: 216px;
+}
+
+.loginBody {
+  background-image: url(/images/stardust.png?81bd6cdf3df8d40a7eb2100d60dc1147);
 }
 
