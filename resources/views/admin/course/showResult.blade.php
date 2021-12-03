@@ -2,7 +2,7 @@
 @section('title', 'showResult')
 @section('content')
 <div class="text-center">
-    <h1 class="text-center">showResult　ページ（開発中）</h1>
+    <h1 class="text-center">結 果</h1>
     
     <br>{{$correct}}問 / {{$question_quantity}}問中
     <br>タイム：{{$running_time}}
