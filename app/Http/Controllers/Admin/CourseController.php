@@ -54,6 +54,7 @@ class CourseController extends Controller
          // $id= Auth::id(); 【参考】ログインユーザーのidの獲得　【参考２】Auth::user() == User::find(Auth::id()); 同じことをしている
          // idはinputではなく、サーバーからuserに与えられる値。ゆえにnameとmygoalだけでOK
         $profile_data = $request->all();//ユーザーが入力した項目  名前、目標、画像選択のみが連想配列で渡されている
+        // dd($request->all());
         if ($request->file('image')) { //=file()ファイル選択ダイアログで、画像(bladeで設定した"image"を選択したかtrue or false
             //$path = Storage::disk('s3')->putFile('/',$profile_data['image'],'public');
             //$path = $request->file('image')->store('public/image'); //任意の名前での保存練習中につきコメントアウト
@@ -69,7 +70,7 @@ class CourseController extends Controller
         //unsetは、以下のように1件ずつ代入する場合は不要。fillメソッドを使う場合は必要
         $user->name = $profile_data["name"];
         $user->mygoal = $profile_data["mygoal"];
-        $user->looking_level = $profile_data["looking_level"];
+        $user->is_image_displayed = $profile_data["is_image_displayed"];
         $user->image_path = $profile_data['image_path'];
         $user->save();
             // 該当するデータを上書きして保存する

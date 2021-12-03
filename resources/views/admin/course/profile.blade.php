@@ -21,16 +21,15 @@
                     <label class="col-md-4">目標を宣言</label>
                     <input type="text" class="form-control" name="mygoal" value="{{ $a_user->mygoal }}">
                     
-                    <label class="col-md-12">カードはどのレベルまで表示しますか？</label>
-                    <div>
-                        <input type="radio" name="looking_level" value="0" <?php if($a_user->looking_level == 0){ echo "checked";} ?>> 全部表示　←最初はコレ
-                    </div>
-                    <div>
-                        <input type="radio" name="looking_level" value="1" <?php if($a_user->looking_level == 1){ echo "checked";} ?>> [最初から知ってる] のカードを隠す
-                    </div>
-                    <div>
-                        <input type="radio" name="looking_level" value="1" <?php if($a_user->looking_level == 2){ echo "checked";} ?>> [最初から知ってる] [覚えた]のカードを隠す
-                    </div>
+                        <br>
+                        <form action="{{ action('Admin\StatusController@changeIsImageDisplayed') }}" method="post" enctype="multipart/form-data">  {{--  ActionタグにURLを書く--}} 
+                        @csrf
+                        @if( Auth::user()->is_image_displayed == true)
+                            <button type="submit" class="btn btn-secondary margin_bottom_2px primaryBtnWidth" name="is_image_displayed" value=0 >画像を最初から表示しない</button>
+                        @else    
+                            <button type="submit" class="btn btn-primary margin_bottom_2px primaryBtnWidth" name="is_image_displayed" value=1>画像を最初から表示する</button>
+                        @endif
+                        </form>
                     <br>
                     <button type="submit" class="btn btn-warning btn-block"><a href="{{ action('Admin\CourseController@index')}}">設定完了！</a></button>
                 </form>

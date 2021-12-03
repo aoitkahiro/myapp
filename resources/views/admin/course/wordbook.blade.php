@@ -222,7 +222,8 @@
 </div>
 <div class="container text-center">
     <br>
-    <form action="{{ action('Admin\StatusController@changeIsImageDisplayed') }}" method="post" enctype="multipart/form-data">  {{--  ActionタグにURLを書く--}} 
+    {{--
+    <form action="{{ action('Admin\StatusController@changeIsImageDisplayed') }}" method="post" enctype="multipart/form-data">
     @csrf
     @if( $user->is_image_displayed == true)
             <button type="submit" class="btn btn-secondary margin_bottom_2px primaryBtnWidth" name="is_image_displayed" value="false">画像を最初から表示しない</button>
@@ -232,6 +233,7 @@
             <input type="hidden" name="tango_id" value= {{$tango_id}}>
             <input type="hidden" name="category" value= {{mb_convert_encoding($unique_category, 'UTF-8')}}>
     </form>
+    --}}
 <button onclick="location.href='mailto:wordquizmaster&#64;outlook.jp?subject=Request for deletion（削除依頼）&amp;body=To master(T.Aoi)%0d%0aPlese delete category:{{$unique_category}}%0d%0afrom {{$user->name}}%0d%0a%0d%0acategory:{{$unique_category}}を消して欲しいです。%0d%0a{{$user->name}}より。'">この科目の削除依頼</button>
 @if($user->id == 1){{--user_idが管理者なら--}}
     <button onclick="location.href='{{App\Course::deleteCategory($unique_category)}}'">この科目を消すボタン</button>
