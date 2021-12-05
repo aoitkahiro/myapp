@@ -102,14 +102,14 @@
         {{-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ --}} 
         <div class="btn btn--red btn--border-outset">
             <input type="button" value="{{$hintImage}}" onclick="clickBtn2()" /> {{--onclick 動かす関数を指定している  --}} 
-            <div style="width: 24rem;">
+            <div  class="centering" style="text-align: center;">
                 @if($post[$tango_id]->getImageFileName()){{--boolean--}}
                    <img src="{{ secure_asset('storage/tango/' . $post[$tango_id]->getImageFileName()) }}?{{time()}}" id="piyo" class="bd-placeholder-img card-img-top">
                 @else
                    <img src="{{ secure_asset('image/noimage.jpg')}}" id="piyo" class="bd-placeholder-img card-img-top">
                 @endif
             </div>     {{-- asset()でディレクトリを指定、受け取っている値で詳しいファイル名を指定 --}}
-            <div class="margin_bottom_2em text-center">
+            <div class="margin_bottom_2em centering" style="text-align: center;">
                 <script>
                     {{--初期表示は非表示--}}
                 @if( $user->is_image_displayed == true)

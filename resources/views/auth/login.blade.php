@@ -3,13 +3,12 @@
 @section('content')
 
 <div class="loginBody">
-    <div class="container">
+    <div class="container2">
         <div class="row justify-content-center">
             <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">{{ __('Login') }}</div>
-    
-                    <div class="card-body cardPropaty">
+                    
+                <div class="card-body">
+                    <div class="">
                         <form method="POST" action="{{ route('login') }}">
                             @csrf
     
@@ -17,7 +16,7 @@
                                 <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
     
                                 <div class="col-md-6">
-                                    <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
+                                    <input id="email" style="background-color: transparent;" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
     
                                     @error('email')
                                         <span class="invalid-feedback" role="alert">
@@ -31,7 +30,7 @@
                                 <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
     
                                 <div class="col-md-6">
-                                    <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
+                                    <input id="password" style="background-color: transparent;" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
     
                                     @error('password')
                                         <span class="invalid-feedback" role="alert">
@@ -67,8 +66,8 @@
                                 </div>
                             </div>
                         </form>
-                    </div>
-                </div>
+                    </div>　
+                </div>　
             </div>
         </div>
     </div>

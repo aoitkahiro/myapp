@@ -27,6 +27,11 @@ body {
   //box-sizing: border-box;
 }
 
+.containerInb {
+  border: 0px solid #1b0303;
+  padding : 20px;
+}
+
 .box {
   background-color: #f53838;
   width: 300px;
@@ -82,22 +87,22 @@ body {
 }
 
 .btn-yellow {
-  color: #000;
-  background-color: #fff100;
-  border-bottom: 5px solid #ccc100;
+  color: #09090a;
+  background-color: #c5d1e6;
+  border-bottom: 5px solid #382f23;
   width: 100%;
 }
 .btn--yellow {
-  color: #000;
-  background-color: #fff100;
-  border-bottom: 5px solid #ccc100;
+  color: #09090a;
+  background-color: #c5d1e6;
+  border-bottom: 5px solid #382f23;
 }
 
 .btn--yellow:hover {
   margin-top: 3px;
   color: #000;
   background: #fff20a;
-  border-bottom: 2px solid #ccc100;
+  border-bottom: 2px solid #382f23;
 }
 //丸いボタン
 a.btn--circle {
@@ -160,6 +165,12 @@ a.btn--red.btn--border-outset {
 }
 
 .loginBody {
-  // background-color: #d5d0be;
-  background-image:url("../image/stardust.png");
+  // background-color: red;
+  background-image:url("../image/loginKitty.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+  background-size:contain;
+  width:100%;
+  height:400px;         
 }

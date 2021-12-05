@@ -6,11 +6,11 @@
 
 {{-- admin.blade.phpの@yield('content')に以下のタグを埋め込む --}}
 @section('content')
-<div class="container">
+<div class="container cardPropaty">
     <div class="row justify-content-center">
-        <div class="card" style="width: 28rem;">
+        <div  style="width: 28rem;">
             <img class="d-block mx-auto" style="max-width:150px;" src="{{ asset('storage/tango/' . Auth::user()->image_path) }}"> 
-            <div class="card-body">
+            <div class="card-body cardPropaty">
                 <form action="{{ action('Admin\CourseController@profileUpdate') }}" method="post" enctype="multipart/form-data">
                     @csrf
                     <p class="col-md-10">
