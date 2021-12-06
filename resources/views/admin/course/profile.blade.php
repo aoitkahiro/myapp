@@ -22,15 +22,15 @@
                     <input type="text" class="form-control" name="mygoal" value="{{ $a_user->mygoal }}">
                     
                         <br>
-                        <form action="{{ action('Admin\StatusController@changeIsImageDisplayed') }}" method="post" enctype="multipart/form-data">  {{--  ActionタグにURLを書く--}} 
-                        @csrf
-                        @if( Auth::user()->is_image_displayed == true)
-                            <button type="submit" class="btn btn-secondary margin_bottom_2px primaryBtnWidth" name="is_image_displayed" value=0 >画像を最初から表示しない</button>
-                        @else    
-                            <button type="submit" class="btn btn-primary margin_bottom_2px primaryBtnWidth" name="is_image_displayed" value=1>画像を最初から表示する</button>
-                        @endif
-                        </form>
-                    <br>
+                        <!--<form action="{{ action('Admin\StatusController@changeIsImageDisplayed') }}" method="post" enctype="multipart/form-data">  {{--  ActionタグにURLを書く--}} -->
+                        <!--@csrf-->
+                        <!--@if( Auth::user()->is_image_displayed == true)-->
+                        <!--    <button type="submit" class="btn btn-secondary margin_bottom_2px primaryBtnWidth" name="is_image_displayed" value=0 >画像を最初は表示しない</button>-->
+                        <!--@else    -->
+                        <!--    <button type="submit" class="btn btn-primary margin_bottom_2px primaryBtnWidth" name="is_image_displayed" value=1>画像を最初から表示する</button>-->
+                        <!--@endif-->
+                        <!--</form>-->
+                    <br><br>
                     <button type="submit" class="btn btn-warning btn-block"><a href="{{ action('Admin\CourseController@index')}}">設定完了！</a></button>
                 </form>
             </div>

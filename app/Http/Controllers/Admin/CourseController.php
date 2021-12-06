@@ -70,7 +70,7 @@ class CourseController extends Controller
         //unsetは、以下のように1件ずつ代入する場合は不要。fillメソッドを使う場合は必要
         $user->name = $profile_data["name"];
         $user->mygoal = $profile_data["mygoal"];
-        $user->is_image_displayed = $profile_data["is_image_displayed"];
+        // $user->is_image_displayed = $profile_data["is_image_displayed"];
         $user->image_path = $profile_data['image_path'];
         $user->save();
             // 該当するデータを上書きして保存する

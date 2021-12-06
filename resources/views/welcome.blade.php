@@ -90,7 +90,7 @@
                 <div class="title m-b-md"></div>
 --}}
 @section('content')
-<div class="container2">
+<div class="container2 margin_top_50px">
     <div class="row justify-content-center">
         <div class="col-md-8">
 
