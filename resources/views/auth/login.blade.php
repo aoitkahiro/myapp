@@ -65,13 +65,15 @@
                                         </a>
                                     @endif
                                 </div>
-                                <div class="col-md-8 offset-md-4">
-                                    <button href="{{ url('/') }}" class="btn btn-primary" style="margin-top: 20px;">
-                                        New User
-                                    </button>
-                                </div>
                             </div>
                         </form>
+                        <div class="col-md-8 offset-md-4">
+                            <a href="{{ url('/') }}">  
+                                <button class="btn btn-primary" style="margin-top: 20px;">
+                                    New User
+                                </button>
+                            </a>
+                        </div>
                     </div>　
                 </div>　
             </div>
