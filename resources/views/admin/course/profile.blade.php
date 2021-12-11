@@ -31,7 +31,7 @@
                         <!--@endif-->
                         <!--</form>-->
                     <br><br>
-                    <button type="submit" class="btn btn-warning btn-block"><a href="{{ action('Admin\CourseController@index')}}">設定完了！</a></button>
+                    <button type="submit" class="btn btn-warning btn-block">設定完了！</button>
                 </form>
             </div>
         </div>

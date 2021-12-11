@@ -104,28 +104,28 @@
             <input type="button" value="{{$hintImage}}" onclick="clickBtn2()" /> {{--onclick 動かす関数を指定している  --}} 
             <div  class="centering" style="text-align: center;">
                 @if($post[$tango_id]->getImageFileName()){{--boolean--}}
-                   <img src="{{ secure_asset('storage/tango/' . $post[$tango_id]->getImageFileName()) }}?{{time()}}" id="piyo" class="bd-placeholder-img card-img-top">
+                   <img src="{{ secure_asset('storage/tango/' . $post[$tango_id]->getImageFileName()) }}?{{time()}}" id="piyo" class="bd-placeholder-img card-img-top" style="width: 24rem;">
                 @else
-                   <img src="{{ secure_asset('image/noimage.jpg')}}" id="piyo" class="bd-placeholder-img card-img-top">
+                   <img src="{{ secure_asset('image/noimage.jpg')}}" id="piyo" class="bd-placeholder-img card-img-top" style="width: 24rem;">
                 @endif
             </div>     {{-- asset()でディレクトリを指定、受け取っている値で詳しいファイル名を指定 --}}
             <div class="margin_bottom_2em centering" style="text-align: center;">
                 <script>
                     {{--初期表示は非表示--}}
                 @if( $user->is_image_displayed == true)
-                    document.getElementById("piyo").style.display ="block";
+                    document.getElementById("piyo").style.display ="initial";
                 @else
                     document.getElementById("piyo").style.display ="none";
                 @endif
                     function clickBtn2(){
                       const p2 = document.getElementById("piyo"); 
                     
-                      if(p2.style.display=="block"){ {{--もしp2が表示されていれば   
+                      if(p2.style.display=="initial"){ {{--もしp2が表示されていれば   
                       noneで非表示--}}
                       	p2.style.display ="none"; {{--  p2のスタイル（CSS）display属性を非表示にする（見えなくなる）--}} 
                       }else{
                       	 {{--blockで表示--}}
-                      	p2.style.display ="block";{{--  p2のスタイル（CSS）display属性を表示にする（見えるようにする） --}} 
+                      	p2.style.display ="initial";{{--  p2のスタイル（CSS）display属性を表示にする（見えるようにする） --}} 
                       }
                     }
                 </script>
