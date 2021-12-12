@@ -22,6 +22,7 @@
                     <input type="text" class="form-control" name="mygoal" value="{{ $a_user->mygoal }}">
                     
                         <br>
+                        {{-- FIX ME:--}}
                         <!--<form action="{{ action('Admin\StatusController@changeIsImageDisplayed') }}" method="post" enctype="multipart/form-data">  {{--  ActionタグにURLを書く--}} -->
                         <!--@csrf-->
                         <!--@if( Auth::user()->is_image_displayed == true)-->

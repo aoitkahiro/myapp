@@ -7,7 +7,7 @@
 <div class="container">
     @if($message != "")
         <p>{{$message}}</p>
-        {{--この行に、ここ以下のコードを実行しない命令を記述するべきと考えられるものの、思いつかないため保留2021.8.13--}}
+        {{-- TODO: この行に、ここ以下のコードを実行しない命令を記述するべきと考えられるものの、思いつかないため保留2021.8.13--}}
     @endif
     <div class="card text-center cardPropaty">
         <div class="margin_bottom_2em">
@@ -15,12 +15,12 @@
             <a href="{{action('Admin\CourseController@write',['category'=>$unique_category,'tango_id'=>$post[$tango_id]->id,'page'=>$tango_id])}}" class="btn btn--circle btn--circle-c btn--shadow"><i class="fas fa-arrow-up">✍</i></a>
         </div>
         
-        <div class="row justify-content-center">
+        <div class="row justify-content-center pagenation">
             <div>
             @if($tango_id == 0)
             @else
                 <a href="{{ action('Admin\CourseController@wordbook', ['tango_id' =>$tango_id -1, 'category' => $unique_category]) }}">
-                <button type="button" class="btn btn-warning"><font size="1">◀</font></button><br>前へ</a>
+                <button type="button" class="btn btn-warning"><span>◀</span></button><br>前へ</a>
             @endif
             </div>
             <div>
@@ -29,10 +29,10 @@
             <div>
             @if($tango_id +1 == $post->count())
                 <a href="{{action('Admin\CourseController@reward',['unique_category'=>$unique_category])}}">
-                <button type="button" class="btn btn-warning"><font size="1">Q</font></button><br>最後の単語です</a><br>
+                <button type="button" class="btn btn-warning">Q</button><br>最後の単語です</a><br>
             @else
                 <a href="{{ action('Admin\CourseController@wordbook', ['tango_id' =>$tango_id + 1, 'category' => $unique_category]) }}">
-                    <button type="button" class="btn btn-warning"><font size="1">▶</font></button><br>次へ
+                    <button type="button" class="btn btn-warning"><span>▶</span></font></button><br>次へ
                 </a><br>
                 {{--<a href="{{ action('Admin\CourseController@wordbook', ['tango_id' =>$tango_id + 5, 'category' => $unique_category]) }}">5個次へ</a>--}}
             @endif
@@ -99,7 +99,6 @@
                 }
             </script>
         </div>
-        {{-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ --}} 
         <div class="btn btn--red btn--border-outset">
             <input type="button" value="{{$hintImage}}" onclick="clickBtn2()" /> {{--onclick 動かす関数を指定している  --}} 
             <div  class="centering" style="text-align: center;">
@@ -131,7 +130,6 @@
                 </script>
             </div>
         </div>
-        {{-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ --}} 
         <div>
             @if($value == NULL or $value->learning_level == 0 or $value->learning_level == 1 ) {{-- もしhistoriesテーブルのtango_id番めのレコードの learning_level が0かNULLなら --}}
                 <form action="{{ action('Admin\StatusController@store') }}" method="post" enctype="multipart/form-data">  {{--  ActionタグにURLを書く--}} 

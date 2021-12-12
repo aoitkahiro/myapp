@@ -193,3 +193,7 @@ a.btn--red.btn--border-outset {
   margin: auto;
 }
 
+.pagenation span {
+  font-size: 10px;
+}
+

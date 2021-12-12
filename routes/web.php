@@ -15,36 +15,37 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::group(['prefix' => 'admin','middeware' => 'auth'], function() {
-    Route::get('course/profile', 'Admin\CourseController@profile');
-    Route::get('course/upImage', 'Admin\CourseController@upImage');
-    Route::post('course/profile', 'Admin\CourseController@profileUpdate');
+Route::group(['prefix' => 'admin'], function() {
+    Route::get('course/start', 'Admin\CourseController@start');
+    Route::get('course/profile', 'Admin\CourseController@profile')->middleware('auth');
+    Route::get('course/upImage', 'Admin\CourseController@upImage')->middleware('auth');
+    Route::post('course/profile', 'Admin\CourseController@profileUpdate')->middleware('auth');
     //Route::get('course/index', 'Admin\CourseController@index');
-    Route::get('course/index', 'Admin\CourseController@index');
-    Route::get('course/select', 'Admin\CourseController@select');
-    Route::get('course/wordbook', 'Admin\CourseController@wordbook');
-    Route::post('course/wordbook', 'Admin\StatusController@store');
-    Route::post('course/wordbook/levelChange', 'Admin\StatusController@levelChange');
-    Route::post('course/wordbook/changeIsImageDisplayed', 'Admin\StatusController@changeIsImageDisplayed');
-    Route::get('course/write', 'Admin\CourseController@write');
-    Route::post('course/write', 'Admin\CourseController@update');
-    Route::get('course/reward', 'Admin\CourseController@reward');
-    
+    Route::get('course/index', 'Admin\CourseController@index')->middleware('auth'); //->middleware('auth')はログイン用のコード
+    Route::get('course/select', 'Admin\CourseController@select')->middleware('auth');
+    Route::get('course/wordbook', 'Admin\CourseController@wordbook')->middleware('auth');
+    Route::post('course/wordbook', 'Admin\StatusController@store')->middleware('auth');
+    Route::post('course/wordbook/levelChange', 'Admin\StatusController@levelChange')->middleware('auth');
+    Route::post('course/wordbook/changeIsImageDisplayed', 'Admin\StatusController@changeIsImageDisplayed')->middleware('auth');
+    Route::get('course/write', 'Admin\CourseController@write')->middleware('auth');
+    Route::post('course/write', 'Admin\CourseController@update')->middleware('auth');
+    Route::get('course/reward', 'Admin\CourseController@reward')->middleware('auth');
+
     //以下、新たに単語帳を作るRouting（createアクション）
-    Route::get('course/create', 'Admin\CourseController@create');
+    Route::get('course/create', 'Admin\CourseController@create')->middleware('auth');
     /*Route::get('course/csv', 'Admin\CourseController@csv'); //csv表示
     Route::post('course/csv', 'Admin\CourseController@upload_regist'); //csv取込み-登録*/
-    Route::get('course/csv2', 'Admin\CourseController@csv2'); //csv表示
-    Route::post('course/csv2', 'Admin\CourseController@inportCsv'); //csv取込み-登録
-    
+    Route::get('course/csv2', 'Admin\CourseController@csv2')->middleware('auth'); //csv表示
+    Route::post('course/csv2', 'Admin\CourseController@inportCsv')->middleware('auth'); //csv取込み-登録
+
     //CSS練習用のページ（削除予定）
-    Route::get('course/practice', 'Admin\CourseController@practice');
+    Route::get('course/practice', 'Admin\CourseController@practice')->middleware('auth');
     //JavaScriptで作ってみたページ
-    Route::get('course/quiz', 'Admin\CourseController@quiz');
-    Route::post('course/quiz', 'Admin\CourseController@PostQuizTime');
-    Route::get('course/quiz2', 'Admin\CourseController@quiz2');
-    Route::get('course/ranking', 'Admin\CourseController@ranking');
-    Route::get('course/showResult', 'Admin\CourseController@showResult');
+    Route::get('course/quiz', 'Admin\CourseController@quiz')->middleware('auth');
+    Route::post('course/quiz', 'Admin\CourseController@PostQuizTime')->middleware('auth');
+    Route::get('course/quiz2', 'Admin\CourseController@quiz2')->middleware('auth');
+    Route::get('course/ranking', 'Admin\CourseController@ranking')->middleware('auth');
+    Route::get('course/showResult', 'Admin\CourseController@showResult')->middleware('auth');
     
 });
 Auth::routes();
