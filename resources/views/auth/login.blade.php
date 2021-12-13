@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class="loginBody">
+<div class="">
     <div class="container2 margin_top_100px">
         <div class="row justify-content-center">
             <div class="col-md-8">
