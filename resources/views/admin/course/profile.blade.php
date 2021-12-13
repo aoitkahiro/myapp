@@ -1,10 +1,7 @@
-{{-- layouts/admin.blade.phpを読み込む --}}
 @extends('layouts.admin')
 
-{{-- admin.blade.phpの@yield('title')に'最初の画面'を埋め込む --}}
 @section('title', 'プロフィール編集画面')
 
-{{-- admin.blade.phpの@yield('content')に以下のタグを埋め込む --}}
 @section('content')
 <div class="container cardPropaty">
     <div class="row justify-content-center">
@@ -21,7 +18,6 @@
                     <label class="col-md-4">目標を宣言</label>
                     <input type="text" class="form-control" name="mygoal" value="{{ $a_user->mygoal }}">
                     
-                        <br>
                         {{-- FIX ME:--}}
                         <!--<form action="{{ action('Admin\StatusController@changeIsImageDisplayed') }}" method="post" enctype="multipart/form-data">  {{--  ActionタグにURLを書く--}} -->
                         <!--@csrf-->
@@ -31,12 +27,10 @@
                         <!--    <button type="submit" class="btn btn-primary margin_bottom_2px primaryBtnWidth" name="is_image_displayed" value=1>画像を最初から表示する</button>-->
                         <!--@endif-->
                         <!--</form>-->
-                    <br><br>
-                    <button type="submit" class="btn btn-warning btn-block">設定完了！</button>
+                    <button type="submit" class="btn btn-warning btn-block margin_top_20px">設定完了！</button>
                 </form>
             </div>
         </div>
     </div>
-             {{-- <img class="d-block mx-auto" style="max-width:150px;" src="{{ asset('storage/tango/' . Auth::user()->image_path) }}">--}}
 </div>
 @endsection

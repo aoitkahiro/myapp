@@ -4,55 +4,53 @@
 
 <p class ="text-center">{{$ranking_title}}</p>
 <div class="container">
-  
-  <div class="text-center">
-    <br>
-    <div>
-    <h2 id="display" class="sample2">00:00:00</h2>
-      <h3 id="js-question">
-        - - - -
-      </h3>
+    
+    <div class="text-center">
+      <br>
+      <div>
+      <h2 id="display" class="sample2">00:00:00</h2>
+        <h3 id="js-question">
+          - - - -
+        </h3>
+      </div>
+      <div id="js-items" class="text margin_bottom_2px">
+          <div id="sound"><div id="QuizStart" onClick = "startQuiz()" class="btn btn-orange eye_catching_word">▶</div></div>
+        <div class="m-2">
+          <div><button type="button" id="js-btn-1" style="min-width:50%" class="btn btn--yellow selection">???</button></div>
+        </div>
+        <div class="m-2">
+          <div><button type="button" id="js-btn-2" style="min-width:50%" class="btn btn--yellow selection">???</button></div>
+        </div>
+        <div class="m-2">
+          <button type="button" id="js-btn-3" style="min-width:50%" class="btn btn--yellow selection">???</button>
+        </div>
+        <div class="m-2">
+          <button type="button" id="js-btn-4" style="min-width:50%" class="btn btn--yellow selection">???</button>
+        </div>
+      </div>
+      <form name="recordtime"  method="post">
+      @csrf
+        <input type="hidden" name="score" id="score">
+        <input type="hidden" name="user_quiz_result" id="user_quiz_result">
+        <input type="hidden" name="running_time" id="running_time">
+        <input type="hidden" name="result" id="result">
+        <input type="hidden" name="course_id_array" id="course_id_array">
+        <input type="hidden" name="result_items" id="result_items" value="">
+        <input type="hidden" name="challenge_id" id="challenge_id">
+        <input type="hidden" name="resultArray[]" id="resultArray">
+        <input type="hidden" name="category" value={{urlencode($category)}}>
+        <input type="hidden" name="question_quantity" value={{$question_quantity}}>
+        <input type="hidden" name="forgotten" value="0" >
+        {{-- FIXME:
+        <button type="button" id="save_button" class = "margin_bottom_2em">記録を送信する</button>
+        <div class="margin_bottom_2px"><input type="checkbox" {{ $forgotten == "0" ? ""  : "checked" }} class="sample2" name="forgotten"> 間違えた語の[覚えた]を解除</div>
+        --}}
+      </form>
     </div>
-    <div id="js-items" class="text margin_bottom_2px">
-        <font size="4"><div id="sound"><div id="QuizStart" onClick = "startQuiz()" class="btn btn-orange">　▶　</div></div></font>
-      <div class="m-2">
-        <div><button type="button" id="js-btn-1" style="min-width:50%" class="btn btn--yellow selection">???</button></div>
-      </div>
-      <div class="m-2">
-        <div><button type="button" id="js-btn-2" style="min-width:50%" class="btn btn--yellow selection">???</button></div>
-      </div>
-      <div class="m-2">
-        <button type="button" id="js-btn-3" style="min-width:50%" class="btn btn--yellow selection">???</button>
-      </div>
-      <div class="m-2">
-        <button type="button" id="js-btn-4" style="min-width:50%" class="btn btn--yellow selection">???</button>
-      </div>
-    </div>
-    <form name="recordtime"  method="post">
-    @csrf
-      <input type="hidden" name="score" id="score">
-      <input type="hidden" name="user_quiz_result" id="user_quiz_result">
-      <input type="hidden" name="running_time" id="running_time">
-      <input type="hidden" name="result" id="result">
-      <input type="hidden" name="course_id_array" id="course_id_array">
-      <input type="hidden" name="result_items" id="result_items" value="">
-      <input type="hidden" name="challenge_id" id="challenge_id">
-      <input type="hidden" name="resultArray[]" id="resultArray">
-      <input type="hidden" name="category" value={{urlencode($category)}}>
-      <input type="hidden" name="question_quantity" value={{$question_quantity}}>
-      <input type="hidden" name="forgotten" value="0" >
-      {{--
-      <button type="button" id="save_button" class = "margin_bottom_2em">記録を送信する</button>
-      <div class="margin_bottom_2px"><input type="checkbox" {{ $forgotten == "0" ? ""  : "checked" }} class="sample2" name="forgotten"> 間違えた語の[覚えた]を解除</div>
-      --}}
-    </form>
+  <div class="text-center margin_bottom_2px">
+    <a href="{{action('Admin\CourseController@quiz',['category'=>$category, 'question_quantity'=>$question_quantity])}}" type="button" id="restart" class="btn btn-black col-3 margin_top_20px"><span class="eye_catching_word">↻</span> やりなおす</a>
+    <span class= text-center id="wrongList"></span>
   </div>
-<div class="text-center margin_bottom_2px">
-  {{--<a href="{{action('Admin\CourseController@index')}}" type="button" id="goIndex" class="btn btn-black col-3"><font size="3">←</font></a>--}}
-  <a href="{{action('Admin\CourseController@quiz',['category'=>$category, 'question_quantity'=>$question_quantity])}}" type="button" id="restart" class="btn btn-black col-3"><font size="3">↻</font> やりなおす</a>
-  {{--<a href="{{action('Admin\CourseController@ranking',['category'=>$category, 'question_quantity'=>$question_quantity])}}" type="button" id="goRanking" class="btn btn-black col-3"><font size="3">👑</font> ランキング</a>--}}
-  <span class= text-center id="wrongList"></span>
-</div>
 </div>
 
 @endsection
@@ -63,7 +61,7 @@
   
   const courses = {!!$courses!!}; {{-- '$courses'を渡す時、' がquotと表示されてしまうのを防ぐため --}}
   const dummy_courses =  {!!$dummy_courses!!};
-  const dummy_answers = @json($dummy_answers);{{--@json とは配列をJavaScriptで扱いやすくしたデータ構造（詳しくしる）--}}
+  const dummy_answers = @json($dummy_answers);
   const correct_and_dummy_answers = @json($correct_and_dummy_answers);
   const challenge_id =  {!!$challenge_id!!};
   let quiz = [];
@@ -103,10 +101,8 @@
   const soundPinpon = new Audio("{{secure_asset('music/sound_pinpon.mp3')}}");
   
   const setupQuiz = () => {
-      console.log("setquiz関数が呼ばれました");
       $question.textContent = quiz[quizCount].question;
       $buttons = $doc.getElementsByClassName('selection');
-      console.log($buttons);
       buttonLen = $buttons.length;
       document.getElementById('sound').textContent = whereQuizNum + "問目 / " + quizLen + "問";
       
@@ -114,26 +110,19 @@
       quiz[quizCount].selections.forEach(selection =>
         new_value.push(selection.back)
       )
-       {{-- new_valueの中身は['正','誤','誤','誤'] --}} 
-       {{-- new_value(配列)の中身をシャッフルする --}} 
+       {{--NOTE: new_valueの中身は['正','誤','誤','誤'] --}} 
+       {{--NOTE:  new_value(配列)の中身をシャッフルする --}} 
       for (let i = new_value.length - 1; i >= 0; i--) {
        const randomNumber = Math.floor(Math.random() * (i + 1));
        [new_value[i], new_value[randomNumber]] = [new_value[randomNumber], new_value[i]];
       }
-      {{--　ここに配列を４つに絞るコードを書く？  --}}
-      console.log("new_value = " + new_value);
       
       let btnIndex = 0;
-      console.log("btnIndex:" + btnIndex + "  buttonLen:" + buttonLen)
-      console.log($buttons);
       while(btnIndex < buttonLen){
             if($buttons[btnIndex]){
-                  console.log("正常  btnindex:" + btnIndex);
-                  console.log($buttons[btnIndex]);
                     $buttons[btnIndex].textContent = new_value[btnIndex];
                     btnIndex++;
             }else{
-                 console.log("異常  btnindex:" + btnIndex)
                      btnIndex++;  
             }
       }
@@ -142,15 +131,9 @@
         document.getElementById('js-btn-'+ i).className = "btn btn--yellow selection";
       }
   };
-    {{--ビジーwaitを使う方法--}}
-  function sleep(waitMsec) {
-    var startMsec = new Date();
   
-    {{--指定ミリ秒間だけループさせる（CPUは常にビジー状態）--}}
-    while (new Date() - startMsec < waitMsec);
-  };
   function wait(ms) {
-    return new Promise( resolve => { setTimeout( resolve, ms ) } ); {{--Promiseとawaitはセット  --}} 
+    return new Promise( resolve => { setTimeout( resolve, ms ) } ); {{--NOTE: Promiseとawaitはセット  --}} 
   };
   function activeAllSelections(){
     selections.forEach((s)=>{
@@ -163,9 +146,9 @@
       s.disabled = true;
     })
   }
-          {{-- ↓クリックされたボタンに基づいて、正誤文を出したり次の問題へ進める処理 --}} 
-  async function clickHandler (elm) { {{--elmとは、「eventの、targetである今clickされたbuttonを取得」--}}
-      if(quizCount + 1  == quizLen){ {{--もし最終問題なら、clickした瞬間にタイマーを止めるという仕様--}}
+  {{--NOTE:  ↓クリックされたボタンに基づいて、正誤文を出したり次の問題へ進める処理 --}} 
+  async function clickHandler (elm) { {{--NOTE: elmとは、「eventの、targetである今clickされたbuttonを取得」--}}
+      if(quizCount + 1  == quizLen){ {{--NOTE: もし最終問題なら、clickした瞬間にタイマーを止めるという仕様--}}
         stopTheWatch();
       }
       if(elm.textContent === quiz[quizCount].correct){
@@ -187,17 +170,13 @@
         disabledAllSelections();
         waitTime = 1100;
       }
-      await wait(waitTime);{{--await：ここ（wait()）が終わるまでは進まないことを保証。関数にasyncも記述するのがお約束--}}
-      console.log(runningTime * 100) / 100;
+      await wait(waitTime);{{--await：ここ（wait()）が終わるまでは進まないことを保証。関数にasyncも記述するのが規則--}}
       result_items.push({
           quiz: quiz[quizCount],
           rslt: rslt,
           rng_time: Math.round(runningTime * 100) /100,
       })
-      console.log(result_items);
       running_time = running_time + zeroAndMinutes + zeroAndSeconds + "/";{{-- ++と書ける？ --}}
-      console.log(running_time);
-      console.log("結果："+ result);
       goToNext();
   };
   
@@ -215,12 +194,6 @@
         judgeString = (judgeString.trimEnd());
         let someJudgements = judgeString.split(" ");
         let count = 0;
-        {{--配列名.filter(callbackされる配列オブジェクト--}}
-        {{--let wrongList = document.getElementById("wrongList");--}}
-        {{--↓の行で、filter()で抽出した配列（missedの集団）をforeachで回す--}}
-        {{--result_items.filter(result => result.rslt == 1).forEach((missed)=>{
-          wrongList.innerHTML += `<li class="list-group-item"> × ${missed.quiz.question}<br>  ${missed.quiz.answer}</li>`
-        })--}}{{--spanタグのwrongListをどんどんlist化します--}}
         let i = 0;
         let currenctCourseIds = [];
         courses.forEach((course) =>{
@@ -231,33 +204,26 @@
         function createObject(keys, values) {
 	        let outputObject = {}; 
   	 
-        	{{--配列の長さが一致しているか確認--}} 
+        	{{--NOTE: 配列の長さが一致しているか確認--}} 
         	if (keys.length != values.length) { 
             	console.error("配列の長さが一致しないので、空を返します"); 
             	return outputObject; 
           } 
         	 
-        	{{--両方の配列をループしてオブジェクトに追加--}} 
+        	{{--NOTE: 両方の配列をループしてオブジェクトに追加--}} 
         	for (let i = 0; i < keys.length; ++i) { 
             	let key = keys[i]; 
             	let value = values[i]; 
             	 
           	outputObject[key] = value; 
           } 
-        	 
-        	{{--関数の最後でオブジェクトをアウトプット--}} 
         	return outputObject;
         };
-        {{--使い方--}} 
         let keys = currenctCourseIds; 
         let values = someJudgements; 
         let myObject = createObject(keys, values); 
         let key = Object.keys(myObject);
          
-        console.log(myObject); 
-        console.log("↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓");
-        console.log(result_items);
-                
         showEnd(result_items);
       };
   };
@@ -271,34 +237,13 @@
       hoge.value  = JSON.stringify(result_items_array);
       document.getElementById('course_id_array').value = JSON.stringify(course_id_array);
       document.getElementById('challenge_id').value = challenge_id; 
-      let save_button = document.getElementById('save_button');{{--不要行？--}}
+      let save_button = document.getElementById('save_button');{{--OPTIMIZE--}}
       document.forms['recordtime'].submit();
-          {{--alert("正解率： "+ correctRatio * 100 + " %");
-          alert(document.getElementById('result_items').value);--}}
-          
-      {{--switch (true) {
-        case correctRatio == 1:
-          $items.innerHTML = '<img class="d-block mx-auto" style="max-width:150px;" src="{{ secure_asset('image/' . 'excellent.png') }}">';
-          break;
-        case correctRatio >= 0.8:
-          console.log('すごい、8割以上です');
-          $items.innerHTML = '<img class="d-block mx-auto" style="max-width:150px;" src="{{ secure_asset('image/' . 'mugi80.jpg') }}">';
-          break;
-        case correctRatio >= 0.5:
-          console.log('平均的です');
-          $items.innerHTML = '<img class="d-block mx-auto" style="max-width:150px;" src="{{ secure_asset('image/' . 'hand_good.png') }}">';
-          break;
-        default:
-          console.log('平均以下です');
-          $items.innerHTML = '<img class="d-block mx-auto" style="max-width:150px;" src="{{ secure_asset('image/' . 'mugi.jpg') }}">';
-      }--}}
-      
       
   };
   
   
   let handlerIndex = 0;
-      {{-- let answersLen = quiz[quizCount].answers.length; --}} 
   function startQuiz(){
       document.getElementById('QuizStart').textContent = 'STARTED!!';
       setupQuiz();
@@ -318,7 +263,8 @@
         startStop.innerHTML = "成 績";
         status = "stop";
   }
-   {{-- 以下ストップウォッチのコード ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━--}} 
+  
+   {{-- 以下ストップウォッチのコード--}} 
   
   let display = document.getElementById("display");
   let startStop = document.getElementById("QuizStart");
@@ -399,7 +345,7 @@
     document.getElementById('result_items').value = JSON.stringify(result_items);
     document.getElementById('resultArray').value = resultArray;
     document.forms['recordtime'].submit();
-      {{--このフォームの送信ボタンを押した時と同じ挙動をする <input type="submit" value="送信ボタン">のsubmitと同じ意味 --}} 
+      {{--NOTE: このフォームの送信ボタンを押した時と同じ挙動をする <input type="submit" value="送信ボタン">のsubmitと同じ意味 --}} 
   })
   
   $('#record_result_submit').click(function(){

@@ -34,7 +34,6 @@
                 <a href="{{ action('Admin\CourseController@wordbook', ['tango_id' =>$tango_id + 1, 'category' => $unique_category]) }}">
                     <button type="button" class="btn btn-warning"><span>▶</span></font></button><br>次へ
                 </a><br>
-                {{--<a href="{{ action('Admin\CourseController@wordbook', ['tango_id' =>$tango_id + 5, 'category' => $unique_category]) }}">5個次へ</a>--}}
             @endif
             </div>
         </div>
@@ -49,7 +48,6 @@
             <a href="{{$EtoJ_weblio_url}}" target="_blank" rel="noopener noreferrer">[英和]</a>
         </div>
         <div class="btn btn--red btn--border-outset">
-            {{-- JavaScript --}} 
             <input type="button" value="裏面on/off" onclick="clickBtn1()" />
             <p id="p1">
             <a href="{{$google_url_back}}" target="_blank" rel="noopener noreferrer"><font size="5">{{ $post[$tango_id]->back}}</font></a>
@@ -58,7 +56,7 @@
             </p>
         </div>
             <script>
-                //初期表示は非表示
+                {{--初期表示は非表示--}}
                 document.getElementById("p1").style.display ="none";
                 
                 function clickBtn1(){
@@ -66,10 +64,10 @@
                   const p1 = document.getElementById("p1");
                 
                   if(p1.style.display=="block"){
-                  	// noneで非表示
+                  	{{-- noneで非表示--}}
                   	p1.style.display ="none";
                   }else{
-                  	// blockで表示
+                  	{{--blockで表示--}}
                   	p1.style.display ="block";
                   }
                 }
@@ -90,24 +88,22 @@
                   const p3 = document.getElementById("p3");
                 
                   if(p3.style.display=="block"){
-                  	{{-- noneで非表示--}}
                   	p3.style.display ="none";
                   }else{
-                  	{{--blockで表示--}}
                   	p3.style.display ="block";
                   }
                 }
             </script>
         </div>
         <div class="btn btn--red btn--border-outset">
-            <input type="button" value="{{$hintImage}}" onclick="clickBtn2()" /> {{--onclick 動かす関数を指定している  --}} 
+            <input type="button" value="{{$hintImage}}" onclick="clickBtn2()" />
             <div  class="centering" style="text-align: center;">
                 @if($post[$tango_id]->getImageFileName()){{--boolean--}}
                    <img src="{{ secure_asset('storage/tango/' . $post[$tango_id]->getImageFileName()) }}?{{time()}}" id="piyo" class="bd-placeholder-img card-img-top" style="width: 24rem;">
                 @else
                    <img src="{{ secure_asset('image/noimage.jpg')}}" id="piyo" class="bd-placeholder-img card-img-top" style="width: 24rem;">
                 @endif
-            </div>     {{-- asset()でディレクトリを指定、受け取っている値で詳しいファイル名を指定 --}}
+            </div>
             <div class="margin_bottom_2em centering" style="text-align: center;">
                 <script>
                     {{--初期表示は非表示--}}
@@ -119,11 +115,9 @@
                     function clickBtn2(){
                       const p2 = document.getElementById("piyo"); 
                     
-                      if(p2.style.display=="initial"){ {{--もしp2が表示されていれば   
-                      noneで非表示--}}
+                      if(p2.style.display=="initial"){ {{--もしp2が表示されていれnoneで非表示--}}
                       	p2.style.display ="none"; {{--  p2のスタイル（CSS）display属性を非表示にする（見えなくなる）--}} 
                       }else{
-                      	 {{--blockで表示--}}
                       	p2.style.display ="initial";{{--  p2のスタイル（CSS）display属性を表示にする（見えるようにする） --}} 
                       }
                     }
@@ -131,19 +125,19 @@
             </div>
         </div>
         <div>
-            @if($value == NULL or $value->learning_level == 0 or $value->learning_level == 1 ) {{-- もしhistoriesテーブルのtango_id番めのレコードの learning_level が0かNULLなら --}}
-                <form action="{{ action('Admin\StatusController@store') }}" method="post" enctype="multipart/form-data">  {{--  ActionタグにURLを書く--}} 
+            @if($value == NULL or $value->learning_level == 0 or $value->learning_level == 1 )
+                <form action="{{ action('Admin\StatusController@store') }}" method="post" enctype="multipart/form-data">
                 @csrf
                     <p>
                         <input type="hidden" name="course_id" value={{$post[$tango_id]->id}}> {{--1ページごとなので、foreachではなく具体的な数値を$tango_idで渡している--}} 
-                        <input type="hidden" name="learning_level" value="2"> {{--すでに知っている」をsubmitしたとき、0→1へ切り替える--}}
+                        <input type="hidden" name="learning_level" value="2">
                         <input type="hidden" name="tango_id" value= {{$tango_id}}>{{--再度同じページにredirectするために、$tango_idを渡す--}}
                         <input type="hidden" name="category" value= {{urlencode($unique_category)}}>
                         <input type="submit" class="btn btn-primary primaryBtnWidth" value="最初から知ってる">
                     </p>
                 </form>
             @else
-                <form action="{{ action('Admin\StatusController@store') }}" method="post" enctype="multipart/form-data">  {{--  ActionタグにURLを書く--}}
+                <form action="{{ action('Admin\StatusController@store') }}" method="post" enctype="multipart/form-data">
                 @csrf
                     <p>
                         <input type="hidden" name="course_id" value={{$post[$tango_id]->id}}>
@@ -157,7 +151,7 @@
         </div>
         <div>
             @if($value == NULL or $value->learning_level == 0 ) {{-- もしhistoriesテーブルのtango_id番めのレコードの learning_level が1,0かNULLなら --}}
-                <form action="{{ action('Admin\StatusController@store') }}" method="post" enctype="multipart/form-data">  {{--  ActionタグにURLを書く--}} 
+                <form action="{{ action('Admin\StatusController@store') }}" method="post" enctype="multipart/form-data">  
                 @csrf
                     <p>
                         <input type="hidden" name="course_id" value={{$post[$tango_id]->id}}> {{--1ページごとなので、foreachではなく具体的な数値を$tango_idで渡している--}} 
@@ -168,7 +162,7 @@
                     </p>
                 </form>
             @else
-                <form action="{{ action('Admin\StatusController@store') }}" method="post" enctype="multipart/form-data">  {{--  ActionタグにURLを書く--}}
+                <form action="{{ action('Admin\StatusController@store') }}" method="post" enctype="multipart/form-data">
                 @csrf
                     <p>
                         <input type="hidden" name="course_id" value={{$post[$tango_id]->id}}>
@@ -184,7 +178,7 @@
 </div>
 <div class="container text-center">
     どの単語を隠しますか？
-    <form action="{{ action('Admin\StatusController@levelChange') }}" method="post" enctype="multipart/form-data">  {{--  ActionタグにURLを書く--}} 
+    <form action="{{ action('Admin\StatusController@levelChange') }}" method="post" enctype="multipart/form-data">
     @csrf
         @if($user->looking_level == 0)
             <button type="submit" class="btn btn-outline-primary margin_bottom_2px primaryBtnWidth" name="looking_level" value= 0> 隠さない</button>
@@ -194,7 +188,7 @@
             <input type="hidden" name="tango_id" value= {{$tango_id}}>
             <input type="hidden" name="category" value= {{mb_convert_encoding($unique_category, 'UTF-8')}}>
     </form>
-    <form action="{{ action('Admin\StatusController@levelChange') }}" method="post" enctype="multipart/form-data">  {{--  ActionタグにURLを書く--}} 
+    <form action="{{ action('Admin\StatusController@levelChange') }}" method="post" enctype="multipart/form-data">
     @csrf
         @if($user->looking_level == 1)
             <button type="submit" class="btn btn-outline-primary margin_bottom_2px primaryBtnWidth" name="looking_level" value= 1>最初から知ってる</button>
@@ -216,22 +210,9 @@
             <input type="hidden" name="tango_id" value= {{$tango_id}}>
             <input type="hidden" name="category" value= {{mb_convert_encoding($unique_category, 'UTF-8')}}>
     </form>
-    <br>
+    
 </div>
-<div class="container text-center">
-    <br>
-    {{--
-    <form action="{{ action('Admin\StatusController@changeIsImageDisplayed') }}" method="post" enctype="multipart/form-data">
-    @csrf
-    @if( $user->is_image_displayed == true)
-            <button type="submit" class="btn btn-secondary margin_bottom_2px primaryBtnWidth" name="is_image_displayed" value="false">画像を最初から表示しない</button>
-    @else    
-            <button type="submit" class="btn btn-primary margin_bottom_2px primaryBtnWidth" name="is_image_displayed" value="true">画像を最初から表示する</button>
-    @endif
-            <input type="hidden" name="tango_id" value= {{$tango_id}}>
-            <input type="hidden" name="category" value= {{mb_convert_encoding($unique_category, 'UTF-8')}}>
-    </form>
-    --}}
+<div class="container text-center margin_top_20px">
 <button onclick="location.href='mailto:wordquizmaster&#64;outlook.jp?subject=Request for deletion（削除依頼）&amp;body=To master(T.Aoi)%0d%0aPlese delete category:{{$unique_category}}%0d%0afrom {{$user->name}}%0d%0a%0d%0acategory:{{$unique_category}}を消して欲しいです。%0d%0a{{$user->name}}より。'">この科目の削除依頼</button>
 @if($user->id == 1){{--user_idが管理者なら--}}
     <button onclick="location.href='{{App\Course::deleteCategory($unique_category)}}'">この科目を消すボタン</button>

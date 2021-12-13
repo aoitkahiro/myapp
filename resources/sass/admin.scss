@@ -13,6 +13,10 @@ body {
   background-image:url("../image/vintage-wallpaper.png");
 }
 
+.loginWallpaper {
+  background-color: #d5d0be;
+}
+
 .cardPropaty {
   // background-color: #d5d0be;
   background-image:url("../image/vintage-wallpaper.png");
@@ -57,9 +61,16 @@ body {
     font-size: 20px;
     font-family: "monospace","Yu Gothic","Meiryo","ヒラギノ角ゴ","sans-serif";
 }
+.eye_catching_word {
+    font-size: 30px;
+}
 
 .margin_top_100px {
     margin-top: 100px;
+}
+
+.margin_top_20px {
+    margin-top: 20px;
 }
 
 .margin_bottom_2em {

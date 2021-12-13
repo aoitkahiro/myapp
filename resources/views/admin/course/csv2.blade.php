@@ -42,12 +42,10 @@
                 function clickBtn2(){
                   const ex = document.getElementById("example"); 
                 
-                  if(ex.style.display == "block"){ {{--もしexが表示されていれば   
-                  noneで非表示--}}
-                  	ex.style.display = "none"; {{--  exのスタイル（CSS）display属性を非表示にする（見えなくなる）--}} 
+                  if(ex.style.display == "block"){
+                  	ex.style.display = "none";
                   }else{
-                  	 {{--blockで表示--}}
-                  	ex.style.display = "block";{{--  exのスタイル（CSS）display属性を表示にする（見えるようにする） --}} 
+                  	ex.style.display = "block";
                   }
                 }
             </script>

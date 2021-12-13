@@ -20,7 +20,7 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/admin.css') }}" rel="stylesheet">
 </head>
-<body>
+<body class="loginWallpaper">
     <div id="app" class="loginBody">
         <nav class="navbar navbar-expand-md navbar-light shadow-sm">
             <div class="container2">

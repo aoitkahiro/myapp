@@ -45,8 +45,6 @@ class CourseController extends Controller
         return redirect('admin/course/index');  
   } 
   
-  //━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━　↑ プロフィール機能　━━━━　↓ 単語帳機能　━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-    
   public function index(Request $request)   
   {
     $courses = Course::all();
@@ -79,7 +77,7 @@ class CourseController extends Controller
       foreach($bunbo_courses as $bunbo_course){
         array_push($bunbo_ids,$bunbo_course->id);
       };
-      // 'lerning_level 1 or 2'で絞り込む書き方が7行ほどあってやや複雑
+      // 'lerning_level 1 or 2'で絞り込む機能
       $id_count = 0;
       $vol1 = 1;
       $vol2 = 2;
@@ -93,7 +91,6 @@ class CourseController extends Controller
           $id_count++;
         }
       }
-      // dd($id_count);
       $bunshi_num = $id_count;
       $memory_per[] = round($bunshi_num/$bunbo_num*100,0);
     }
@@ -113,31 +110,31 @@ class CourseController extends Controller
     $user = Auth::user(); 
     $count = 0; // 最終的にページ数になる変数
     $tango_id = $request->tango_id;
-    $looking_level = $user->looking_level; // 特定のuserレコードの、looking_level"0~2"を$looking_level に取得
+    $looking_level = $user->looking_level;
     $some_history = History::where('user_id', $user->id)->get();
     $history = History::where('user_id',$user->id)->where('course_id', $tango_id + 1)->first();
     
     $course_id_in_histories_1 = [];
     $course_id_in_histories_2 = [];
-    foreach($some_history as $a_history){ // 当ユーザーのhistoryを一つずつ入れていって…
-      if($a_history->learning_level == 2){ // もし一つのhistoryのlearning_levelが2なら
-        $course_id_in_histories_2[]= $a_history->course_id; //この配列に、learning_levelが2（覚えた）のhistoryのcourse_idを入れる
-      }elseif($a_history->learning_level == 1){ // もし一つのhistoryのlearning_levelが1なら
-        $course_id_in_histories_1[]= $a_history->course_id; //この配列に、learning_levelが1（最初から知ってる）のhistoryのcourse_idを入れる
+    foreach($some_history as $a_history){
+      if($a_history->learning_level == 2){
+        $course_id_in_histories_2[]= $a_history->course_id;
+      }elseif($a_history->learning_level == 1){
+        $course_id_in_histories_1[]= $a_history->course_id;
       }
     }
     $unique_category = $request->category;
-    // dd($request,$unique_category);
+    
     if($some_history != NULL){
       if($looking_level == 2){
-      $courses = Course::where('category',$unique_category)->whereNotIn('id', $course_id_in_histories_2)->WhereNotIn('id', $course_id_in_histories_1)->get();//get();
+      $courses = Course::where('category',$unique_category)->whereNotIn('id', $course_id_in_histories_2)->WhereNotIn('id', $course_id_in_histories_1)->get();
       }elseif($looking_level == 1){
-        $courses = Course::where('category',$unique_category)->whereNotIn('id', $course_id_in_histories_2)->get(); //learning_levelが1のcourse_id以外を表示させる
+        $courses = Course::where('category',$unique_category)->whereNotIn('id', $course_id_in_histories_2)->get();
       }elseif($looking_level == 0){
         $courses = Course::where('category',$unique_category)->get();
       }
     }
-    if($courses->count() == 0){ //もし、courseテーブルの全てのデータを取得してデータ件数が0だったら（大前提として0ではない。開発中のエラーを回避するためのif文）
+    if($courses->count() == 0){
         $massage ="この科目にはデータがありません";
     }else{
         $massage = "";
@@ -150,7 +147,6 @@ class CourseController extends Controller
       return view('admin.course.reward',['has_done' => $has_done, 'unique_category'=>$unique_category]);
     }else{
     $bunbo_courses = Course::where('category',$unique_category)->get();
-    // dd($bunbo_courses,count($bunbo_courses));
     $bunbo_num = count($bunbo_courses);
     $bunbo_ids = [];
     foreach($bunbo_courses as $bunbo_course){
@@ -165,20 +161,16 @@ class CourseController extends Controller
          $bunshi->where('learning_level', $vol1)
                 ->orWhere('learning_level', $vol2);
       })->where('user_id', $user->id)->where('course_id', $bunbo_id)->first();
-      // Log::info('####');
       
-      // Log::info($bunshi);
       if($bunshi != []){
         $id_count++;
       }
     }
-    // dd($id_count);
     $bunshi_num = $id_count;
     
     $path = 'public/tango/';
     $jpgboolean = Storage::exists($path . $courses[$tango_id]->id. '.jpg');
     $pngboolean = Storage::exists($path . $courses[$tango_id]->id. '.png');
-    // dd($jpgboolean,$path . $courses[$tango_id]->id . '.png');
     if($jpgboolean == true){
       $hintImage = "ヒント画像あります";
     }elseif($pngboolean == true){
@@ -193,8 +185,6 @@ class CourseController extends Controller
     }else{
       $memo_exists = "メモ未登録";
     }
-    // dd($memo_exists);
-    // dd($courses[$tango_id]->id, $courses, $tango_id, $memo_exists);
     
     //↓の$valueはView側で[最初から知ってる][覚えた]ボタンを裏表切り替えるために、準備するための変数
     $value = History::where('user_id',$user->id)->where('course_id', $courses[$tango_id]->id)->first();
@@ -212,45 +202,35 @@ class CourseController extends Controller
   }
   public function reward(Request $request)
   {
-    // dd($request);
     $courses = Course::all();
     $i = 0;
     $arr = [];
     foreach($courses as $course){
-      // dd($course);
       array_push($arr,$course->category);
       $i++;
     }
     $unique_categories = array_unique($arr);
-    // dd($unique_categories);
     $unique_category = $request->unique_category;
     $has_done = true;
       
     return view('admin.course.reward',['has_done' => $has_done, 'unique_categories'=>$unique_categories, 'unique_category'=>$unique_category, 'courses'=>$courses]);
   }
   
-  //$course にはid,front,back,kind,category,degree の値等が入っている。 
-  // 7.10 書き込み画面を作るために追加
-  public function write(Request $request)  // wordbookからGETできたらこちら
+  public function write(Request $request) 
   {
     $a_course = Course::where('id',$request->tango_id)->first();
-  //dd(session('extention')); // ->with で渡された場合は settion('xxxxx')で受ける
-  // dd($request);
     return view('admin.course.write',['tango_id_for_write'=>$request->tango_id, 'a_course'=>$a_course, 'ext'=> session('extention'),
     'unique_category'=>$request->category,'page'=>$request->page]); // $request->tango_id の中身は整数値。URLの?tango_id=1 ならば、1）
-  }                                 //　　↑次のViewで使う値に↑getパラメータのtango_idを取得している
+  }
   
-  public function update(Request $request)  // writeからPOSTでRoutingされたらこちら
+  public function update(Request $request) 
   {
-    // dd($request->category,$request->all());
-    $tango_data = $request->all();//ユーザーが入力した項目が連想配列で渡されている
-    // dd($tango_data);
-    if ($request->file('image')) { //=file()ファイル選択ダイアログで、画像(bladeでnameに設定した"image"）を選択したか true or false で返す
+    $tango_data = $request->all();
+    if ($request->file('image')) {
       $ext = $request->file('image')->extension();
       $path = $request->file('image')->storeAs('public/tango', $request->course_id . "." . $ext);
-    } //falseの場合何もしない
+    }
     $a_course = Course::where('id',$request->course_id)->first();
-    // dd($a_course);
     if($request->front != NULL){
       $a_course->update(['front'=> $request->front]);
     }
@@ -260,17 +240,10 @@ class CourseController extends Controller
     if($request->memo != NULL){
       $a_course->update(['memo'=> $request->memo]);
     }
-    $page = $request->page; // この文がないと、値を渡せない？
-    return redirect('admin/course/wordbook?tango_id=' . $page .'&category=' . $request->category);//->with(['extention'=>$ext]); // "with"実装してみたかったが、エラーになりそうだったので一旦コメントアウト2021.8.7
+    $page = $request->page;
+    return redirect('admin/course/wordbook?tango_id=' . $page .'&category=' . $request->category);
   }
   
-  //━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━　↑ 単語帳機能　━━　↓ 単語帳新規作成機能　━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  
-  // 7.10 作成開始画面を作るために追加
-  public function create()
-  {     
-    return view('admin.course.create');  
-  }
  
   // 7.10 csv作成画面を作るために追加(その２)㈱ビヨンドのWebサイト参考
   public function csv2()   
@@ -278,7 +251,6 @@ class CourseController extends Controller
     return view('admin.course.csv2');  
   }
   
-  // 7.13 csvインポートメソッドを作るために追加(その２)
   public function inportCsv(Request $request)
   {
     // CSV ファイル保存
@@ -372,38 +344,24 @@ class CourseController extends Controller
   
   public function PostQuizTime(Request $request)
   {
-    // dd($request->all());
     $category = urldecode($request->category);
     $question_quantity = $request->question_quantity;
-    // dd($request->all(),$category);
     $user_quiz_results = UserQuizResult::where('user_id', Auth::id())->where('challenge_id', $request->challenge_id)->
         orderBy("id")->get();
-    // $quiz_data = $request->all(); //$quiz_data にはrunning_time や score などHTMLからsubmitされた値が入っている。
-    // $running_time_in_string = $quiz_data['running_time'];
-    // $running_time_array = explode("/" , $running_time_in_string);
-    // $result_in_string = $quiz_data['result'];
-    // $result_array = explode(" " , $result_in_string);
     $course_id_array = json_decode($request->course_id_array,true);//true は連想配列に、falseはオブジェクトにデコードする
     $result_items = json_decode($request->result_items,true);
-    // dd($request);
     $results = array_column($result_items,'rslt');
     $running_times = array_column($result_items,'rng_time');
-    // dd(Auth::id(),$request->challenge_id,$user_quiz_results,$results,$running_times);
-    // dd($course_id_array,$running_time_array,$request,$quiz_data);
     $user_quiz_result = [];
     $i = 0;
-    $pre_running_time = 0;//デバッグ用の変数（ランニングタイムでバグが起こっているため）
+    $pre_running_time = 0;
     foreach($user_quiz_results as $user_quiz_result){
       $user_quiz_result->update(['running_time' => $running_times[$i]]);
       $user_quiz_result->update(['judgement' => $results[$i]]);
-      if($running_times[$i] < $pre_running_time){
-          dd("running_time の保存がバグっているようです",$running_times,$user_quiz_results,$results);
-      }
       $user_quiz_result->save();
       $pre_running_time = $running_times[$i];
       $i++;
     }
-    //もし"覚えたを解除するswitch"がonなら
     if($request->forgotten == "on"){
       $i = 0;
       foreach($course_id_array as $course_id){
@@ -422,27 +380,12 @@ class CourseController extends Controller
     }else{
       $forgotten = 0;
     }
-    // dd($forgotten,$request->all());
-    // dd($forgotten,$category, $user_quiz_result, $results);
     $correct = 0;
     foreach($results as $result){
       if($result == 2){
         $correct++;
       }
     }
-    // $questions = [];
-    // $corrects = [];
-    // $j =0;
-    // foreach($result_items as $item){
-    //   dd($item,$item["rslt"]);
-    //   if($item["rslt"] == 1){
-    //     array_push($questions, $item["quiz"]["question"]);
-    //     array_push($crrects, $item["quiz"]["correct"]);
-    //   }
-    // }
-    // dd($questions,$corrects);
-    // dd($result_items[4]["quiz"]["question"], $result_items[4]["quiz"]["correct"], $result_items);
-    // dd($running_times[count($running_times) - 1]);
     return redirect()->action('Admin\CourseController@showResult',
     ['forgotten' => $forgotten, 'question_quantity'=>$question_quantity, 'category'=>$category]); 
   }
@@ -472,9 +415,7 @@ class CourseController extends Controller
       array_push($incorrect_fronts,$course->front);
       array_push($incorrect_backs,$course->back);
     }
-      // dd($incorrect_backs,$incorrect_fronts);
     $correctRatio = $correct / $question_quantity;
-    // dd($running_time,$correct,$incorrect,$correctRatio,$currenct_results);
     $running_time = UserQuizResult::timeFunc($running_time);
     $category = $request->category;
     if($correctRatio == 1){
@@ -496,11 +437,11 @@ class CourseController extends Controller
     $hoge = UserQuizResult::getRankingInCategoryAndQuestionQuantity($category, $question_quantity);
     $ranking_title = $hoge[1];
     $forgotten = $request->forgotten;
-    // dd($ranking_title);
     return view('admin.course.showResult', 
     ['list_length'=>count($incorrect_fronts),'incorrect_fronts'=>$incorrect_fronts, 'incorrect_backs'=>$incorrect_backs, 'img'=>$img, 'forgotten' => $forgotten, 'message' => $message, 'running_time'=>$running_time, 'correct' => $correct,
     'question_quantity'=>$question_quantity, 'category'=>$category, 'ranking_title'=>$ranking_title]); 
   }
+  
   public function ranking(Request $request)
   {
     $courses = Course::all();
@@ -516,22 +457,19 @@ class CourseController extends Controller
       for ($ci = 1; $ci <= $maxCi; $ci++) {
         $num_of_challenge = UserQuizResult::where('user_id', $user->id)->where('challenge_id', $ci)->get();
         $n = count($num_of_challenge);
-        // dd($n,$question_quantity);
         if($n == $question_quantity){
           $user_quiz_results = UserQuizResult::where('user_id', $user->id)->where('challenge_id', $ci)->where('judgement', 2)->get();
-          // dd($user_quiz_results);
           if(count($user_quiz_results) > 0 && Course::find($user_quiz_results->first()->course_id)->category == $category){
               $modelForTimeAndDate = UserQuizResult::where('user_id', $user->id)->where('challenge_id', $ci)->orderBy('running_time','DESC')->first();
-              // dd($user->id, $ci, $modelForDate);
               $date = $modelForTimeAndDate->created_at->format('Y/m/d');
               $running_time = $modelForTimeAndDate->running_time;
               $mygoal = $user->mygoal;
-              // $date, $success, $running_time　の帳尻が合わないと、ランキングのソートが正常に動かなさそう
+              // $date, $success, $running_time　の帳尻が合わないと、ランキングのソートが正常に動かなない
               // success = あるチャレンジの正答数
               // running_time = あるチャレンジの３問解くのにかかった時間
               // $date = あるチャレンジの終了日
               $success = count($user_quiz_results);
-              $ary = ['name' => $user->name, '挑戦回数' => $ci, /*'c_id'=> $c_id,*/ '正解回数' => $success, '挑戦日'=> $date, 
+              $ary = ['name' => $user->name, '挑戦回数' => $ci, '正解回数' => $success, '挑戦日'=> $date, 
               'タイム'=>$running_time, '目標'=>$mygoal, '画像'=>$user->image_path, 'uqz'=> $user_quiz_results];
               $rankings[] = $ary;
           }
@@ -542,23 +480,18 @@ class CourseController extends Controller
     $days = array_column($rankings, '挑戦日');
     $numbers = array_column($rankings, '正解回数');
     $times = array_column($rankings, 'タイム');
-    // dd($rankings);
-    // $beforeSort = $rankings;
     $result = array_multisort($days, SORT_DESC,$numbers, SORT_DESC, $times, SORT_ASC, $rankings); // 上位以外をはじくために、配列を整える
-    // dd($beforeSort,$rankings,$result);
     $existed_user_names = [];
     $pre_date = "";
     $count = 0;
-    // dd($rankings);
     
     foreach($rankings as $ranking){
-      // dd($rankings);
       $checking_date = $ranking["挑戦日"];
       $checking_name = $ranking["name"];
       
       if($checking_date != $pre_date){ // 同日のデータをはじくために、"" あるいは 前のループの日付と比較
         $existed_user_names = [];
-      }//もし日付が前ループと同じなら、$ $existed_user_names[] は初期化しない
+      }
       
       if(in_array($checking_name, $existed_user_names)){ // 既存の名前をはじくために、配列に存在するかcheck
         unset($rankings[$count]);  //$rankngを$rankingsから削除する
@@ -568,16 +501,13 @@ class CourseController extends Controller
       $pre_date = $checking_date; //チェックした日付を次のループで使用する
       $count++;
     }
-    // dd($rankings);//unset()済
     $days = array_column($rankings, '挑戦日');
     $numbers = array_column($rankings, '正解回数');
     $times = array_column($rankings, 'タイム');
-    // dd($rankings);
-    $result = array_multisort($numbers, SORT_DESC, $times, SORT_ASC, $days, SORT_DESC,$rankings); // 今度は正解回数、タイム、挑戦日の優先順に並べ替える
+    $result = array_multisort($numbers, SORT_DESC, $times, SORT_ASC, $days, SORT_DESC,$rankings);
     
     $your_highscore_rank = UserQuizResult::getRankingInCategoryAndQuestionQuantity($category, $question_quantity);
     $ranking_title = $your_highscore_rank[1];
-    // dd($your_highscore_rank);
     return view('admin.course.ranking', ['ranking_title'=>$ranking_title, 'rankings'=> $rankings, 'courses'=>$courses, 'category'=>$category, 'question_quantity'=>$question_quantity]); 
   }
   
