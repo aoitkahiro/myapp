@@ -3,10 +3,8 @@
 @section('content')
 
 <div class="container">
-  <h2 id="">{{$ranking_title}}</h2>
-  
-　<p>　　1日1個 自己ベストが残ります</p>
-  {{--<ol>--}}
+    <h2 id="">{{$ranking_title}}</h2>
+  　<p>　1日1個 自己ベストが残ります</p>
     <div class="row">
         <div class="list-rank col-md-12 mx-auto">
             <div class="row">
@@ -59,13 +57,11 @@
             </div>
         </div>
     </div>
-  {{--</ol>--}}
 </div>
   <p class="margin_bottom_2"></p>
 <div class="container">
   <p class="margin_bottom_2"></p>
   <a href="{{action('Admin\CourseController@quiz',['category'=>$category, 'question_quantity'=>$question_quantity])}}" type="button" id="goIndex" class="btn btn-black"><h2>↩</h2><br><h8>もどる</h8></a>
-
 </div>
 
 @endsection

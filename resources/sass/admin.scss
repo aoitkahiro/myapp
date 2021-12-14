@@ -35,7 +35,7 @@ body {
   //box-sizing: border-box;
 }
 .container2 {
-  border: 1px solid #1b0303;
+  border: 0px solid #1b0303;
   //box-sizing: border-box;
 }
 .containerInb {
@@ -65,12 +65,20 @@ body {
     font-size: 30px;
 }
 
+.half_font {
+    font-size: 0.5em;
+}
+
 .margin_top_100px {
     margin-top: 100px;
 }
 
 .margin_top_20px {
     margin-top: 20px;
+}
+
+.margin_bottom_100px {
+    margin-bottom: 100px;
 }
 
 .margin_bottom_2em {
@@ -176,6 +184,10 @@ a.btn-border:hover {
 
 .centering {
   text-align: center;
+}
+.centering * {
+  margin-right: auto;
+  margin-left: auto;
 }
 
 a.btn--red.btn--border-outset {

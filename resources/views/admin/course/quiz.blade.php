@@ -3,54 +3,50 @@
 @section('content')
 
 <p class ="text-center">{{$ranking_title}}</p>
-<div class="container">
-    
+<div class="container pb-4">
     <div class="text-center">
-      <br>
-      <div>
-      <h2 id="display" class="sample2">00:00:00</h2>
-        <h3 id="js-question">
-          - - - -
-        </h3>
-      </div>
-      <div id="js-items" class="text margin_bottom_2px">
-          <div id="sound"><div id="QuizStart" onClick = "startQuiz()" class="btn btn-orange eye_catching_word">▶</div></div>
-        <div class="m-2">
-          <div><button type="button" id="js-btn-1" style="min-width:50%" class="btn btn--yellow selection">???</button></div>
+        <div class="mt-4">
+            <h2 id="display" class="sample2">00:00:00</h2>
+            <h3 id="js-question">- - - -</h3>
         </div>
-        <div class="m-2">
-          <div><button type="button" id="js-btn-2" style="min-width:50%" class="btn btn--yellow selection">???</button></div>
+        <div id="js-items" class="text margin_bottom_2px">
+            <div id="sound"><div id="QuizStart" onClick = "startQuiz()" class="btn btn-orange eye_catching_word">▶</div></div>
+            <div class="m-2">
+                <div><button type="button" id="js-btn-1" style="min-width:50%" class="btn btn--yellow selection">???</button></div>
+            </div>
+            <div class="m-2">
+                <div><button type="button" id="js-btn-2" style="min-width:50%" class="btn btn--yellow selection">???</button></div>
+            </div>
+            <div class="m-2">
+                <button type="button" id="js-btn-3" style="min-width:50%" class="btn btn--yellow selection">???</button>
+            </div>
+            <div class="m-2">
+                <button type="button" id="js-btn-4" style="min-width:50%" class="btn btn--yellow selection">???</button>
+            </div>
         </div>
-        <div class="m-2">
-          <button type="button" id="js-btn-3" style="min-width:50%" class="btn btn--yellow selection">???</button>
-        </div>
-        <div class="m-2">
-          <button type="button" id="js-btn-4" style="min-width:50%" class="btn btn--yellow selection">???</button>
-        </div>
-      </div>
-      <form name="recordtime"  method="post">
-      @csrf
-        <input type="hidden" name="score" id="score">
-        <input type="hidden" name="user_quiz_result" id="user_quiz_result">
-        <input type="hidden" name="running_time" id="running_time">
-        <input type="hidden" name="result" id="result">
-        <input type="hidden" name="course_id_array" id="course_id_array">
-        <input type="hidden" name="result_items" id="result_items" value="">
-        <input type="hidden" name="challenge_id" id="challenge_id">
-        <input type="hidden" name="resultArray[]" id="resultArray">
-        <input type="hidden" name="category" value={{urlencode($category)}}>
-        <input type="hidden" name="question_quantity" value={{$question_quantity}}>
-        <input type="hidden" name="forgotten" value="0" >
-        {{-- FIXME:
-        <button type="button" id="save_button" class = "margin_bottom_2em">記録を送信する</button>
-        <div class="margin_bottom_2px"><input type="checkbox" {{ $forgotten == "0" ? ""  : "checked" }} class="sample2" name="forgotten"> 間違えた語の[覚えた]を解除</div>
-        --}}
-      </form>
+        <form name="recordtime" method="post">
+        @csrf
+            <input type="hidden" name="score" id="score">
+            <input type="hidden" name="user_quiz_result" id="user_quiz_result">
+            <input type="hidden" name="running_time" id="running_time">
+            <input type="hidden" name="result" id="result">
+            <input type="hidden" name="course_id_array" id="course_id_array">
+            <input type="hidden" name="result_items" id="result_items" value="">
+            <input type="hidden" name="challenge_id" id="challenge_id">
+            <input type="hidden" name="resultArray[]" id="resultArray">
+            <input type="hidden" name="category" value={{urlencode($category)}}>
+            <input type="hidden" name="question_quantity" value={{$question_quantity}}>
+            <input type="hidden" name="forgotten" value="0" >
+            {{-- FIXME:
+            <button type="button" id="save_button" class = "margin_bottom_2em">記録を送信する</button>
+            <div class="margin_bottom_2px"><input type="checkbox" {{ $forgotten == "0" ? ""  : "checked" }} class="sample2" name="forgotten"> 間違えた語の[覚えた]を解除</div>
+            --}}
+        </form>
     </div>
-  <div class="text-center margin_bottom_2px">
-    <a href="{{action('Admin\CourseController@quiz',['category'=>$category, 'question_quantity'=>$question_quantity])}}" type="button" id="restart" class="btn btn-black col-3 margin_top_20px"><span class="eye_catching_word">↻</span> やりなおす</a>
-    <span class= text-center id="wrongList"></span>
-  </div>
+    <div class="text-center margin_bottom_2px">
+        <a href="{{action('Admin\CourseController@quiz',['category'=>$category, 'question_quantity'=>$question_quantity])}}" type="button" id="restart" class="btn btn-black col-3 margin_top_20px"><span class="eye_catching_word">↻</span> やりなおす</a>
+        <span class= text-center id="wrongList"></span>
+    </div>
 </div>
 
 @endsection
@@ -230,7 +226,6 @@
   {{--無名関数をshowEnd()に入れるという書き方--}}
   const showEnd = (result_items_array) => {
       $question.textContent = score + '問 / ' + quizLen + '問中';
-      console.log(result_items_array);
       let correctRatio = score / quizLen;
       const $items = $doc.getElementById('js-items');
       let hoge = document.getElementById('result_items');
