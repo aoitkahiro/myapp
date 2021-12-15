@@ -19,11 +19,13 @@
                 <div class="col-md-10">
                     <input type="text" class="form-control" name="back" value="{{ $a_course->back }}">
                 </div>
-                <span style="display:inline">
-                    <font size="1">画像を追加／変更</font><input type="file" class="form-control-file" name="image">
-                        <input type="hidden" name="course_id" value="{{$tango_id_for_write}}">  {{--前のアクションからidを送って→value=に $tango_id_for_writeとして設定  --}} 
-                    <button type="submit" >保存</button>.jpg か.png<small> 形式の画像ファイルが保存できます</small>
-                </span>
+                <div class="mt-2">
+                    <span style="display:inline">
+                        <span class="small">画像を追加／変更</span><input type="file" class="form-control-file" name="image">
+                            <input type="hidden" name="course_id" value="{{$tango_id_for_write}}">  {{--前のアクションからidを送って→value=に $tango_id_for_writeとして設定  --}} 
+                        <button type="submit" >保存</button>.jpg か.png<small> 形式の画像ファイルが保存できます</small>
+                    </span>
+                </div>
             </div>
             <div class="col card" style="width: 24rem;">
                 <img src="{{ asset('storage/tango/' . $tango_id_for_write . "." . "jpg") }}">

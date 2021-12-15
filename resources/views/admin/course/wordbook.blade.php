@@ -2,7 +2,7 @@
 @section('title', '単語帳')
 @section('content')
 <div class="container text-center">
-    {{$user->name}}さんの単語帳 <span class="half_font">「{{$unique_category}}」</span>  記憶率<font size="5">「{{$bunshi_num}} / {{$bunbo_num}}」</font>
+    {{$user->name}}さんの単語帳 <span class="per200_font">「{{$unique_category}}」</span>  記憶率<span class="per200_font">「{{$bunshi_num}} / {{$bunbo_num}}」</span>
 </div>
 <div class="container">
     @if($message != "")
@@ -12,7 +12,7 @@
     <div class="card text-center cardPropaty">
         <div class="my-2">
             <a href="{{ action('Admin\CourseController@index',['has_done'=> 1,'last_category'=>$unique_category]) }}" class="btn btn--circle btn--circle-c btn--shadow"><i class="fas fa-arrow-up">←</i></a>
-            <a href="{{action('Admin\CourseController@write',['category'=>$unique_category,'tango_id'=>$post[$tango_id]->id,'page'=>$tango_id])}}" class="btn btn--circle btn--circle-c btn--shadow"><i class="fas fa-arrow-up">✍</i></a>
+            <a href="{{action('Admin\CourseController@write',['category'=>$unique_category,'tango_id'=>$post[$tango_id]->id,'page'=>$tango_id])}}" class="btn btn--circle btn--circle-c btn--shadow"><i class="fas fa-arrow-up"><span class="per200_font">✍</span></i></a>
         </div>
         
         <div class="row justify-content-center pagenation my-2">
@@ -49,7 +49,7 @@
         <div class="btn btn--red btn--border-outset">
             <input type="button" value="裏面on/off" onclick="clickBtn1()" />
             <p id="p1">
-                <a href="{{$google_url_back}}" target="_blank" rel="noopener noreferrer"><font size="5">{{ $post[$tango_id]->back}}</font></a>
+                <a href="{{$google_url_back}}" target="_blank" rel="noopener noreferrer"><span class="per200_font">{{ $post[$tango_id]->back}}</span></a>
                         <a href="{{$JtoJ_weblio_url}}" target="_blank" rel="noopener noreferrer">[辞書]</a>
                 {{--TODO adding portuguese: <a href="{{$JtoN_weblio_url}}" target="_blank" rel="noopener noreferrer">[インドネシア語]</a>--}}
             </p>
