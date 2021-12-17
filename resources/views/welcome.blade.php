@@ -90,6 +90,7 @@
                 <div class="title m-b-md"></div>
 --}}
 @section('content')
+<a class="btn btn-primary ml-5" href="{{ route('login') }}">{{ __('ログイン') }}</a>
 <div class="container2 margin_top_50px">
     <div class="row justify-content-center">
         <div class="col-md-8">
