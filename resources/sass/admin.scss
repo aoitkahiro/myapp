@@ -11,6 +11,7 @@ body {
 body {
   // background-color: #d5d0be;
   background-image:url("../image/vintage-wallpaper.png");
+  height: 100vh;
 }
 
 .loginWallpaper {
@@ -213,11 +214,11 @@ a.btn--red.btn--border-outset {
   background-position: center;
   // background-attachment: fixed;
   // background-size: contain;
-  background-size: 100% auto;
+  background-size: cover;
   width: 100%;
   height: 100%;        
-  max-width: 1200px;
-  min-width: 800px;
+  // max-width: 1200px;
+  // min-width: 800px;
   margin: auto; 
 }
 
