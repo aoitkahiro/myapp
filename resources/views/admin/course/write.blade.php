@@ -21,16 +21,24 @@
                 </div>
                 <div class="mt-2">
                     <span style="display:inline">
-                        <span class="small">画像を追加／変更</span><input type="file" class="form-control-file" name="image">
+                        <span class="small">画像を追加／変更</span>
+                            <input type="file" class="form-control-file" name="image" id="myImage" accept="image/*">
+                                <img id="preview" class="image_width">
                             <input type="hidden" name="course_id" value="{{$tango_id_for_write}}">  {{--前のアクションからidを送って→value=に $tango_id_for_writeとして設定  --}} 
-                        <button type="submit" >保存</button>.jpg か.png<small> 形式の画像ファイルが保存できます</small>
+                        <p><button type="submit" >保存</button><p>.jpg か.png<small> 形式の画像ファイルが保存できます</small></p></p>
                     </span>
                 </div>
-            </div>
-            <div class="col card" style="width: 24rem;">
-                <img src="{{ asset('storage/tango/' . $tango_id_for_write . "." . "jpg") }}">
             </div>
       　</form>
     </div>
 </div>
+<script>
+    $('#myImage').on('change', function (e) {
+    var reader = new FileReader();
+    reader.onload = function (e) {
+        $("#preview").attr('src', e.target.result);
+    }
+    reader.readAsDataURL(e.target.files[0]);
+});
+</script>
 @endsection

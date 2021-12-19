@@ -11,7 +11,8 @@
                 <form action="{{ action('Admin\CourseController@profileUpdate') }}" method="post" enctype="multipart/form-data">
                     @csrf
                     <p class="col-md-10">
-                       画像を設定して下さい <input type="file" class="form-control-file" name="image">
+                       画像を設定して下さい <input type="file" class="form-control-file" name="image"id="myImage" accept="image/*">
+                        <img id="preview" class="image_width" >
                     </p>
                     <label class="col-md-4">ニックネーム</label>
                         <input type="text" class="form-control" name="name" value="{{ $a_user->name }}">
@@ -33,4 +34,13 @@
         </div>
     </div>
 </div>
+<script>
+    $('#myImage').on('change', function (e) {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            $("#preview").attr('src', e.target.result);
+        }
+        reader.readAsDataURL(e.target.files[0]);
+    });
+</script>
 @endsection
