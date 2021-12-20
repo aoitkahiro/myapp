@@ -54,7 +54,7 @@ class StatusController extends Controller
       }
       $user->is_image_displayed = $bool;
       $user->save();
-      $url = 'admin/course/wordbook?tango_id=' . $request->tango_id . '&category=' . $request->category;
+      $url = 'admin/course/profile';
       return redirect($url);
    }
 }

@@ -53,7 +53,7 @@ class CourseController extends Controller
       array_push($arr,$course->category);
     }
     $unique_categories = array_unique($arr);
-    /* TODO indexにランキングを乗せると重くなるので一時的にコメントアウト
+    /* TODO indexにランキングを乗せると重くなるので適切な技術を習得するまでコメントアウト
     $five = [];
     $ten = [];
     $fifteen = [];
