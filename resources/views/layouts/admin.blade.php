@@ -23,7 +23,7 @@
         <link href="{{ secure_asset('css/app.css') }}" rel="stylesheet"> {{-- secure_asset()はpublicディレクトリのパスを返す関数 --}} 
         <link href="{{ secure_asset('css/admin.css') }}" rel="stylesheet">
         <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
-            <img class="gazou" style="max-height:30px;" src="{{ secure_asset('image/' . 'q&t3.png') }}">
+            <img class="gazou" style="max-height:30px;" src="{{ secure_asset('image/' . 'Quitan!.png') }}">
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
@@ -31,16 +31,16 @@
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
               <li class="nav-item">
-                <a class="nav-link" href="{{action('Admin\CourseController@index')}}">🏠<span class="sr-only">(current)</span></a>
+                <a class="nav-link per200_font" href="{{action('Admin\CourseController@index')}}">🏠<span class="sr-only">(current)</span></a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{{action('Admin\CourseController@profile')}}">⚙ </a>
+                <a class="nav-link per200_font" href="{{action('Admin\CourseController@profile')}}">⚙ </a>
               </li>
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                  
                 </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <div class="dropdown-menu per200_font" aria-labelledby="navbarDropdown">
                   <a class="dropdown-item" href="{{action('Admin\CourseController@csv2')}}">Create（単語帳を作る）</a>
                   <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="{{ route('logout') }}"
