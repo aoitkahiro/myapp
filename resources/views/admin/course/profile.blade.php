@@ -11,7 +11,7 @@
                 <form action="{{ action('Admin\CourseController@profileUpdate') }}" method="post" enctype="multipart/form-data">
                     @csrf
                     <p class="col-md-10">
-                       好きな画像を登録して下さい（しなくてもOKです） <input type="file" class="form-control-file" name="image"id="myImage" accept="image/*">
+                       好きな画像を登録して下さい（登録は任意） <input type="file" class="form-control-file" name="image"id="myImage" accept="image/*">
                         <img id="preview" class="image_width" >
                     </p>
                     <label class="col-md-4">ニックネーム</label>
