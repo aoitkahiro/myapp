@@ -7,8 +7,13 @@
     <div class ="col-md-11"><img class="gazou" style="max-height:30px;" src="{{ asset('storage/tango/' . Auth::user()->image_path) }}">　{{Auth::user()->name }}さん 　<span class="half_font">今の目標：</span>{{Auth::user()->mygoal }}</div>
 </div>
 <div class="container py-2">
-    <div class="row justify-content-center margin_bottom_2px">
-        <div class ="col-6">単語帳<span class="half_font">-暗記率</span></div>
+    <div class="row margin_bottom_2px">
+        <div class ="col-md-6">
+            <div class ="row">
+                <div class ="col-9 text-center">単語帳</div>
+                <div class ="col-3"><span class="half_font">暗記率</span></div>
+            </div>
+        </div>
         <div class ="col-3">クイズで復習<span class="half_font"></span></div>
     </div>
     @for($i = 0; $i < count($unique_categories); $i++)
