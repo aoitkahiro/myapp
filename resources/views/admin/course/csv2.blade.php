@@ -24,7 +24,8 @@
             <a href="{{secure_asset('csv/' . 'form.csv')}}" download>
                 <button type="button" onclick="clickBtn2()" class="btn btn-success mt-4" style="width:70%">ひな型をGETする (Get form_template)</button>
             </a>
-            <div style="width: 30rem;" class="example">
+        </div>
+            <div>
                 <img src="{{ secure_asset('image/csvExam.png')}}" id="example" class="bd-placeholder-img card-img-top">
             </div>
             <div class="margin_bottom_2em example">
@@ -43,7 +44,6 @@
                     }
                 </script>
             </div>
-        </div>
     </div>
 </div>
 @endsection
