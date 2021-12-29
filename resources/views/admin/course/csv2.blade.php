@@ -25,7 +25,7 @@
                 <button type="button" onclick="clickBtn2()" class="btn btn-success mt-4" style="width:70%">ひな型をGETする (Get form_template)</button>
             </a>
         </div>
-            <div>
+            <div class="mt-1">
                 <img src="{{ secure_asset('image/csvExam.png')}}" id="example" class="bd-placeholder-img card-img-top">
             </div>
             <div class="margin_bottom_2em example">
