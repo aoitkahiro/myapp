@@ -11,7 +11,7 @@
                 <form action="{{ action('Admin\CourseController@profileUpdate') }}" method="post" enctype="multipart/form-data">
                     @csrf
                     <p class="col-md-10">
-                       好きな画像を登録して下さい（登録は任意） <input type="file" class="form-control-file" name="image"id="myImage" accept="image/*">
+                       好きな画像を登録して下さい（登録は任意） <input type="file" class="form-control-file" name="image"id="myImage" accept="image">
                         <img id="preview" class="image_width" >
                     </p>
                     <label class="col-md-4">ニックネーム</label>
@@ -22,14 +22,14 @@
                         {{-- FIX ME:--}}
                     <button type="submit" class="btn btn-warning btn-block mt-5">設定完了！</button>
                 </form>
-                        <form action="{{ action('Admin\StatusController@changeIsImageDisplayed') }}" method="post" enctype="multipart/form-data">  {{--  ActionタグにURLを書く--}} 
-                        @csrf
-                        @if( Auth::user()->is_image_displayed == true)
-                            <button type="submit" class="btn btn-secondary margin_bottom_2px primaryBtnWidth" name="is_image_displayed" value=0 >画像を最初は表示しない</button>
-                        @else    
-                            <button type="submit" class="btn btn-primary my-5 primaryBtnWidth" name="is_image_displayed" value=1>画像を最初から表示する</button>
-                        @endif
-                        </form>
+                <form action="{{ action('Admin\StatusController@changeIsImageDisplayed') }}" method="post" enctype="multipart/form-data">  {{--  ActionタグにURLを書く--}} 
+                @csrf
+                @if( Auth::user()->is_image_displayed == true)
+                    <button type="submit" class="btn btn-secondary margin_bottom_2px primaryBtnWidth" name="is_image_displayed" value=0 >画像を最初は表示しない</button>
+                @else    
+                    <button type="submit" class="btn btn-primary my-5 primaryBtnWidth" name="is_image_displayed" value=1>画像を最初から表示する</button>
+                @endif
+                </form>
             </div>
         </div>
     </div>
