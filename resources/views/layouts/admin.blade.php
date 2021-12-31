@@ -23,7 +23,7 @@
         <link href="{{ secure_asset('css/app.css') }}" rel="stylesheet"> {{-- secure_asset()はpublicディレクトリのパスを返す関数 --}} 
         <link href="{{ secure_asset('css/admin.css') }}" rel="stylesheet">
         <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
-            <img class="gazou" style="max-height:30px;" src="{{ secure_asset('image/' . 'Quitan!.png') }}">
+            <a href="{{action('Admin\CourseController@index')}}"><img class="gazou" style="max-height:30px;" src="{{ secure_asset('image/' . 'Quitan!.png') }}"></a>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
