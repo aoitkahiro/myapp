@@ -294,7 +294,6 @@ class CourseController extends Controller
         $hoge->back = $row[3];
         $hoge->kind = $row[4];
         $hoge->memo = $row[5];
-        //$hoge->fill(['front' => $row[3]]);//Course モデルのインスタンスに、
         $hoge->save();
     }
   return redirect('admin/course/csv2')->with('done', count($dataList) . '件のデータを登録しました！');
@@ -308,9 +307,7 @@ class CourseController extends Controller
     $category = urldecode($request->category);
     // $course = Course::find(1);
     $question_quantity = $request->question_quantity;//３は、のちのち20などにする予定
-    // dd($request,urldecode($request->category));
     $courses = Course::inRandomOrder()->where('category',$category)->limit($question_quantity)->get();
-    // dd($courses);
     $dummy_courses = Course::where('id' ,'<>', $courses[0]->id)->
       where('kind',$courses[0]->kind)->inRandomOrder()->limit($question_quantity)->get();
     $dummy_answers = array();
@@ -337,8 +334,9 @@ class CourseController extends Controller
       $your_highscore_rank = UserQuizResult::getRankingInCategoryAndQuestionQuantity($category, $question_quantity);
       $ranking_title = $your_highscore_rank[1];
     // dd($request->forgotten);
-    // dd($latest_user_quiz_result);
-    return view('admin.course.quiz', ['ranking_title'=> $ranking_title, 'latest_user_quiz_result'=>$latest_user_quiz_result,'result'=> $result, 'challenge_id'=>$challenge_id, 'category'=>$request->category, 'question_quantity'=>$question_quantity,
+    // $user = Auth::user();
+    
+    return view('admin.course.quiz', ['user'=>$user, 'ranking_title'=> $ranking_title, 'latest_user_quiz_result'=>$latest_user_quiz_result,'result'=> $result, 'challenge_id'=>$challenge_id, 'category'=>$request->category, 'question_quantity'=>$question_quantity,
     'correct_and_dummy_answers'=>$correct_and_dummy_answers,'dummy_answers'=>$dummy_answers, 'dummy_courses'=>$dummy_courses, 'courses'=>$courses,'forgotten'=>$request->forgotten]); 
   }
   

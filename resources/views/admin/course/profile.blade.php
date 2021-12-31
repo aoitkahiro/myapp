@@ -25,7 +25,7 @@
                 <form action="{{ action('Admin\StatusController@changeIsImageDisplayed') }}" method="post" enctype="multipart/form-data">  {{--  ActionタグにURLを書く--}} 
                 @csrf
                 @if( Auth::user()->is_image_displayed == true)
-                    <button type="submit" class="btn btn-secondary margin_bottom_2px primaryBtnWidth" name="is_image_displayed" value=0 >画像を最初は表示しない</button>
+                    <button type="submit" class="btn btn-secondary my-5 primaryBtnWidth" name="is_image_displayed" value=0 >画像を最初は表示しない</button>
                 @else    
                     <button type="submit" class="btn btn-primary my-5 primaryBtnWidth" name="is_image_displayed" value=1>画像を最初から表示する</button>
                 @endif
