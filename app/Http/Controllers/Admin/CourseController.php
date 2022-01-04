@@ -336,7 +336,7 @@ class CourseController extends Controller
     // dd($request->forgotten);
     // $user = Auth::user();
     
-    return view('admin.course.quiz', ['user'=>$user, 'ranking_title'=> $ranking_title, 'latest_user_quiz_result'=>$latest_user_quiz_result,'result'=> $result, 'challenge_id'=>$challenge_id, 'category'=>$request->category, 'question_quantity'=>$question_quantity,
+    return view('admin.course.quiz', ['ranking_title'=> $ranking_title, 'latest_user_quiz_result'=>$latest_user_quiz_result,'result'=> $result, 'challenge_id'=>$challenge_id, 'category'=>$request->category, 'question_quantity'=>$question_quantity,
     'correct_and_dummy_answers'=>$correct_and_dummy_answers,'dummy_answers'=>$dummy_answers, 'dummy_courses'=>$dummy_courses, 'courses'=>$courses,'forgotten'=>$request->forgotten]); 
   }
   
