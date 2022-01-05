@@ -14,7 +14,7 @@
                 <div class ="col-3"><span class="half_font">暗記率</span></div>
             </div>
         </div>
-        <div class ="col-3">クイズで復習<span class="half_font"></span></div>
+        <div class ="col-6 text-center">クイズで復習<span class="half_font"></span></div>
     </div>
     @for($i = 0; $i < count($unique_categories); $i++)
         <div class="row mt-1">
