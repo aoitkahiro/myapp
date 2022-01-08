@@ -31,7 +31,7 @@
                             <td class= "text-center" style="vertical-align: middle">{{$rank["正解回数"]}}</td>
                             <td style= "vertical-align: middle">{{$rank["タイム"]}}<span class="half_font">秒</span></td>
                             <td style= "vertical-align: middle">{{$rank["挑戦日"]}}</td>
-                            <td style= "vertical-align: middle">{{ \Str::limit($rank["目標"], 15) }}</td>
+                            <td style= "vertical-align: middle">{{ \Str::limit($rank["目標"], 20) }}</td>
                           @else
                             <td class="d-flex align-items-center justify-content-center">
                           　@if($i == 1)
