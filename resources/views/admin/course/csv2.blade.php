@@ -22,7 +22,7 @@
                             {{ session('done') }}
             @endif
             <a href="{{secure_asset('csv/' . 'form.csv')}}" download>
-                <button type="button" onclick="clickBtn2()" class="btn btn-success mt-4" style="width:70%">ひな型をGETする (Get form_template)</button>
+                <button type="button" onclick="clickBtn2()" class="btn btn-success mt-4" style="width:70%">まずはひな型をGETする (Get form_template)</button>
             </a>
         </div>
             <div class="mt-1">
